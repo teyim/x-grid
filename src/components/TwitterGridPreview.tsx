@@ -25,7 +25,7 @@ const defaultUser = {
 
 export default function TwitterGridPreview({ images, user = defaultUser }: Props) {
   return (
-    <div className="max-w-xl mx-auto bg-white rounded-lg shadow p-4 border">
+    <div className="max-w-xl mx-auto bg-white rounded-lg  p-4">
       {/* Fake Twitter header */}
       <div className="flex items-center gap-3 mb-3">
         <Image
@@ -52,7 +52,7 @@ export default function TwitterGridPreview({ images, user = defaultUser }: Props
           height: 'auto',
         }}
       >
-        <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-[1px] rounded-lg overflow-hidden border h-full">
+        <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-[2px] rounded-lg overflow-hidden border h-full">
           {images.map((url, i) => (
             <div key={i} className="relative w-full h-full">
               <Image

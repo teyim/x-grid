@@ -42,21 +42,30 @@ export async function POST(req: NextRequest) {
   const headers = rest.slice(0, 4);
   const footers = rest.slice(4, 8);
 
-  // 5. Split main image into quadrants
-  const mainMeta = await sharp(main).metadata();
-  const w = mainMeta.width ?? 2160;
-  const h = mainMeta.height ?? 2160;
-  const halfW = Math.floor(w / 2);
-  const halfH = Math.floor(h / 2);
+  // 5. Resize main image to 2160x1280 (2x1080, 2x640) to fit the grid perfectly
+  const gridWidth = 1080 * 2;
+  const gridHeight = 640 * 2;
+  const resizedMain = await sharp(main)
+    .resize(gridWidth, gridHeight, { fit: 'cover' }) // 'contain' ensures no cropping, may add padding
+    .toBuffer();
 
+  // 6. Extract 4 tiles of 1080x640 each
   const quadrants = await Promise.all([
-    sharp(main).extract({ left: 0, top: 0, width: halfW, height: halfH }).toBuffer(), // TL
-    sharp(main).extract({ left: halfW, top: 0, width: w - halfW, height: halfH }).toBuffer(), // TR
-    sharp(main).extract({ left: 0, top: halfH, width: halfW, height: h - halfH }).toBuffer(), // BL
-    sharp(main).extract({ left: halfW, top: halfH, width: w - halfW, height: h - halfH }).toBuffer(), // BR
+    sharp(resizedMain)
+      .extract({ left: 0, top: 0, width: 1080, height: 640 })
+      .toBuffer(), // TL
+    sharp(resizedMain)
+      .extract({ left: 1080, top: 0, width: 1080, height: 640 })
+      .toBuffer(), // TR
+    sharp(resizedMain)
+      .extract({ left: 0, top: 640, width: 1080, height: 640 })
+      .toBuffer(), // BL
+    sharp(resizedMain)
+      .extract({ left: 1080, top: 640, width: 1080, height: 640 })
+      .toBuffer(), // BR
   ]);
 
-  // 6. Compose each vertical image
+  // 7. Compose each vertical image
   const positions = ['tl', 'tr', 'bl', 'br'] as const;
   const processedFiles: string[] = [];
 
@@ -91,7 +100,7 @@ export async function POST(req: NextRequest) {
     processedFiles.push(processedPath);
   }
 
-  // 7. Update job as completed
+  // 8. Update job as completed
   await supabase.from('processing_jobs').update({
     status: 'completed',
     processed_files: processedFiles,
