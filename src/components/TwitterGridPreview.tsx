@@ -61,16 +61,16 @@ export default function TwitterGridPreview({ images, user = defaultUser }: Props
       {/* Download links */}
       <div className="mt-4 flex flex-wrap gap-2">
         {images.map((url, i) => (
-          <a
-            key={i}
-          href={`${url}?download=`}
-            download
-            rel="noopener noreferrer"
-          >
-            <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" key={i}>
+            <a
+              href={`${url}?download=`}
+              download
+              rel="noopener noreferrer"
+            >
               Download Image {i + 1}
-            </Button>
-          </a>
+            </a>
+          </Button>
+
         ))}
       </div>
     </div>
