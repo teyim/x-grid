@@ -4,6 +4,17 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { supabase } from '@/lib/supabase';
 
+function sanitizeFileName(filename: string): string {
+  // Remove or replace problematic characters
+  return filename
+    .normalize('NFKD') // Remove accents/diacritics
+    .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+    .replace(/[^a-zA-Z0-9._-]/g, '_') // Replace all non-safe chars with _
+    .replace(/_+/g, '_') // Collapse multiple underscores
+    .replace(/^_+|_+$/g, '') // Trim underscores at start/end
+    .toLowerCase();
+}
+
 export default function ImageUploader({ onUploadComplete }: { onUploadComplete: (jobId: string) => void }) {
   const [uploading, setUploading] = useState(false);
 
@@ -31,7 +42,8 @@ export default function ImageUploader({ onUploadComplete }: { onUploadComplete: 
 
       // 2. Upload files to Supabase storage
       const uploadPromises = files.map(file => {
-        const filePath = `${jobId}/${file.name}`;
+        const safeName = sanitizeFileName(file.name);
+        const filePath = `${jobId}/${safeName}`;
         return supabase.storage.from('raw-uploads').upload(filePath, file);
       });
 
