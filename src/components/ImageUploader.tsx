@@ -54,13 +54,15 @@ export default function ImageUploader({ onUploadComplete }: { onUploadComplete: 
         throw updateError;
       }
 
-      // 4. Trigger the edge function
-      const { error: functionError } = await supabase.functions.invoke('process-twitter-grid', {
-        body: { jobId },
+      // 4. Call the Next.js route handler
+      const response = await fetch('/api/process-twitter-grid', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobId })
       });
-
-      if (functionError) {
-        throw new Error(`Failed to trigger processing function: ${functionError.message}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to trigger processing function');
       }
       
       // 5. Signal completion
