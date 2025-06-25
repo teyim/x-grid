@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import TwitterGridPreview from '@/components/TwitterGridPreview';
+
 
 export default function ProcessingMonitor({ jobId }: { jobId: string }) {
   const [status, setStatus] = useState('processing');

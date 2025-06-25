@@ -63,9 +63,8 @@ export default function TwitterGridPreview({ images, user = defaultUser }: Props
         {images.map((url, i) => (
           <a
             key={i}
-            href={url}
+          href={`${url}?download=`}
             download
-            target="_blank"
             rel="noopener noreferrer"
           >
             <Button variant="outline" size="sm">
