@@ -45,18 +45,26 @@ export default function TwitterGridPreview({ images, user = defaultUser }: Props
         Here&apos;s my new Twitter grid! #twittergrid #mosaic
       </div>
       {/* 2x2 grid */}
-      <div className="grid grid-cols-2 grid-rows-2 gap-1 rounded-lg overflow-hidden border">
-        {images.map((url, i) => (
-          <div key={i} className="relative aspect-square bg-gray-100">
-            <Image
-              src={url}
-              alt={`Grid part ${i + 1}`}
-              fill
-              style={{ objectFit: 'cover' }}
-              sizes="50vw"
-            />
-          </div>
-        ))}
+      <div
+        className="relative w-full max-w-2xl mx-auto"
+        style={{
+          aspectRatio: '1080/640', // or whatever your image aspect ratio is
+          height: 'auto',
+        }}
+      >
+        <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-[1px] rounded-lg overflow-hidden border h-full">
+          {images.map((url, i) => (
+            <div key={i} className="relative w-full h-full">
+              <Image
+                src={url}
+                alt={`Grid part ${i + 1}`}
+                fill
+                style={{ objectFit: 'cover' }}
+                sizes="50vw"
+              />
+            </div>
+          ))}
+        </div>
       </div>
       {/* Download links */}
       <div className="mt-4 flex flex-wrap gap-2">
