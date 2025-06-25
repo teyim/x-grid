@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import TwitterGridPreview from '@/components/TwitterGridPreview';
 
 export default function ProcessingMonitor({ jobId }: { jobId: string }) {
   const [status, setStatus] = useState('processing');
@@ -64,16 +65,7 @@ export default function ProcessingMonitor({ jobId }: { jobId: string }) {
         </div>
       )}
       {status === 'completed' && (
-        <div>
-          <p className="text-green-500 font-semibold mb-4">Processing Complete!</p>
-          <div className="grid grid-cols-2 gap-4">
-            {resultUrls.map((url, index) => (
-              <a key={index} href={url} target="_blank" rel="noopener noreferrer" className="block">
-                <img src={url} alt={`Result ${index + 1}`} className="w-full h-auto rounded-md" />
-              </a>
-            ))}
-          </div>
-        </div>
+        <TwitterGridPreview images={resultUrls} />
       )}
       {status === 'failed' && (
         <div>
