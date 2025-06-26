@@ -8,7 +8,7 @@ const supabase = createClient(
 );
 
 export async function POST(req: NextRequest) {
-  const { jobId } = await req.json();
+  const { jobId, assignments } = await req.json();
 
   await supabase.from('processing_jobs').update({ status: 'processing' }).eq('id', jobId);
 
@@ -23,19 +23,39 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Job not found or not enough files provided' }, { status: 404 });
   }
 
-  const fileBuffers: Buffer[] = [];
+  // Map file name to storage path
+  const fileNameToPath: { [name: string]: string } = {};
   for (const path of job.raw_files) {
+    const name = path.split('/').pop();
+    if (name) fileNameToPath[name] = path;
+  }
+
+  // Download all files and map by filename
+  const fileBuffers: { [name: string]: Buffer } = {};
+  for (const name in fileNameToPath) {
+    const path = fileNameToPath[name];
     const { data, error } = await supabase.storage.from('raw-uploads').download(path);
     if (error || !data) {
       await supabase.from('processing_jobs').update({ status: 'failed' }).eq('id', jobId);
       return NextResponse.json({ error: `Failed to download file: ${path}` }, { status: 500 });
     }
-    fileBuffers.push(Buffer.from(await data.arrayBuffer()));
+    fileBuffers[name] = Buffer.from(await data.arrayBuffer());
   }
 
-  const [main, ...rest] = fileBuffers;
-  const headers = rest.slice(0, 4);
-  const footers = rest.slice(4, 8);
+  // Use assignments to get the correct buffer for each slot
+  const main = fileBuffers[assignments['main']];
+  const headers = [
+    fileBuffers[assignments['header-tl']],
+    fileBuffers[assignments['header-tr']],
+    fileBuffers[assignments['header-bl']],
+    fileBuffers[assignments['header-br']],
+  ];
+  const footers = [
+    fileBuffers[assignments['footer-tl']],
+    fileBuffers[assignments['footer-tr']],
+    fileBuffers[assignments['footer-bl']],
+    fileBuffers[assignments['footer-br']],
+  ];
 
   const gridWidth = 600 * 2;   // 1200
   const gridHeight = 337 * 2;  // 674
