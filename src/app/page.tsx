@@ -52,7 +52,7 @@ export default function Home() {
               <b>Upload and Process:</b> Once all images are assigned, click <span className="font-mono">Upload Images</span>. The app will process your images and generate a Twitter-style grid preview.
             </li>
             <li>
-              <b>Preview and Download:</b> After processing, you'll see a preview of your Twitter grid as it would appear in a tweet. Download each grid image using the provided download buttons.
+              <b>Preview and Download:</b> After processing, you&apos;ll see a preview of your Twitter grid as it would appear in a tweet. Download each grid image using the provided download buttons.
             </li>
             <li>
               <b>Convert Another Grid:</b> Use the <span className="font-mono">Convert Another Image Grid</span> button to start over and create a new grid.

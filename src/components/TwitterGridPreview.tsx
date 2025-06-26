@@ -28,10 +28,10 @@ const defaultUser = {
   time: '2h',
 };
 
-export default function TwitterGridPreview({ images, user = defaultUser, onBack, onConvertAnother }: Props) {
+export default function TwitterGridPreview({ images, user = defaultUser, onConvertAnother }: Props) {
   const [modalIndex, setModalIndex] = useState<number | null>(null);
 
-  const allSlotsAssigned = images.every(f => f !== null);
+  // const allSlotsAssigned = images.every(f => f !== null);
 
   return (
     <div className="max-w-xl w-full mx-auto bg-white rounded-lg p-2 sm:p-4">
