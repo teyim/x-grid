@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { supabase } from '@/lib/supabase';
 import SlotPreview from './SlotPreview';
 import Image from 'next/image';
+import { Image as LucideImage } from 'lucide-react';
 
 function sanitizeFileName(filename: string): string {
   // Remove or replace problematic characters
@@ -35,15 +36,33 @@ export default function ImageUploader({ onUploadComplete }: { onUploadComplete: 
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [slotToAssign, setSlotToAssign] = useState<string | null>(null);
+  const [showTutorial, setShowTutorial] = useState(false);
+  const [tutorialShown, setTutorialShown] = useState(false);
 
   // assignments: { [slot: string]: File | null }
   const [assignments, setAssignments] = useState<{ [slot: string]: File | null }>(
     Object.fromEntries(slots.map(s => [s.key, null]))
   );
 
+  const imagesLeft = 9 - selectedFiles.length;
+  // Check if all slots are assigned
+  const allSlotsAssigned = Object.values(assignments).every(f => f !== null);
+
+  // Show tutorial modal when 9 images are uploaded for the first time
+  useEffect(() => {
+    if (selectedFiles.length === 9 && !tutorialShown) {
+      setShowTutorial(true);
+      setTutorialShown(true);
+    }
+  }, [selectedFiles.length, tutorialShown]);
+
   const handleUpload = async () => {
     if (selectedFiles.length !== 9) {
       setError('Please select exactly 9 images.');
+      return;
+    }
+    if (!allSlotsAssigned) {
+      setError('Please assign all images to the grid quadrants before uploading.');
       return;
     }
     setError(null);
@@ -141,8 +160,6 @@ export default function ImageUploader({ onUploadComplete }: { onUploadComplete: 
     }
   }
 
-  const imagesLeft = 9 - selectedFiles.length;
-
   return (
     <div className="w-full max-w-lg mx-auto p-8 border-2 border-dashed rounded-lg text-center">
       <p className="mb-4 text-muted-foreground">Select 9 images for your grid.</p>
@@ -204,7 +221,7 @@ export default function ImageUploader({ onUploadComplete }: { onUploadComplete: 
             <Button
               className="mt-2"
               onClick={handleUpload}
-              disabled={uploading}
+              disabled={uploading || !allSlotsAssigned}
             >
               Upload Images
             </Button>
@@ -234,6 +251,50 @@ export default function ImageUploader({ onUploadComplete }: { onUploadComplete: 
               ))}
             </div>
             <Button className="mt-4" onClick={() => setSlotToAssign(null)}>Cancel</Button>
+          </div>
+        </div>
+      )}
+      {/* Tutorial Modal */}
+      {showTutorial && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full flex flex-col items-center">
+            <h2 className="text-xl font-bold mb-4">How to Assign Images to Quadrants</h2>
+            {/* Animated Lucide icon dropping into a dashed area */}
+            <div className="mb-4 w-[220px] h-[120px] relative flex items-center justify-center">
+              <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center">
+                <svg width="220" height="120" viewBox="0 0 220 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="60" y="60" width="100" height="50" rx="10" fill="#F3F4F6" stroke="#60A5FA" strokeDasharray="6 4" strokeWidth="2"/>
+                  <text x="110" y="90" textAnchor="middle" fontSize="10" fill="#60A5FA" className=''>Drop image here</text>
+                </svg>
+              </div>
+              <div
+                className="absolute left-0 w-full flex justify-center"
+                style={{
+                  animation: 'dropImageAnim 1.5s infinite',
+                  top: 0,
+                }}
+              >
+                <LucideImage size={48} color="#60A5FA" style={{ background: '#fff', borderRadius: 8, boxShadow: '0 2px 8px #e0e7ef' }} />
+              </div>
+              <style>{`
+                @keyframes dropImageAnim {
+                  0% { transform: translateY(0); }
+                  50% { transform: translateY(30px); }
+                  100% { transform: translateY(0); }
+                }
+              `}</style>
+            </div>
+            <ul className="text-left text-gray-700 mb-4 list-disc pl-5">
+              <li>Click on a quadrant (Header, Main, Footer) to select it.</li>
+              <li>Choose an image from your uploaded images to assign it to that slot.</li>
+              <li>Repeat for all quadrants until each one is filled.</li>
+            </ul>
+            <Button
+              
+              onClick={() => setShowTutorial(false)}
+            >
+              Got it!
+            </Button>
           </div>
         </div>
       )}

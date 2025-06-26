@@ -11,6 +11,11 @@ export default function Home() {
     setJobId(id);
   };
 
+  // Handler to go back to grid selection or start another conversion
+  const handleBackOrConvertAnother = () => {
+    setJobId(null);
+  };
+
   return (
     <div className="bg-background text-foreground min-h-screen">
       <main className="container mx-auto py-12 px-4">
@@ -27,7 +32,7 @@ export default function Home() {
           {!jobId ? (
             <ImageUploader onUploadComplete={handleUploadComplete} />
           ) : (
-            <ProcessingMonitor jobId={jobId} />
+            <ProcessingMonitor jobId={jobId} onBack={handleBackOrConvertAnother} onConvertAnother={handleBackOrConvertAnother} />
           )}
         </div>
       </main>

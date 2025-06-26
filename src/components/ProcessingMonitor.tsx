@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabase';
 import TwitterGridPreview from '@/components/TwitterGridPreview';
 
 
-export default function ProcessingMonitor({ jobId }: { jobId: string }) {
+export default function ProcessingMonitor({ jobId, onBack, onConvertAnother }: { jobId: string, onBack?: () => void, onConvertAnother?: () => void }) {
   const [status, setStatus] = useState('processing');
   const [resultUrls, setResultUrls] = useState<string[]>([]);
 
@@ -67,7 +67,7 @@ export default function ProcessingMonitor({ jobId }: { jobId: string }) {
         </div>
       )}
       {status === 'completed' && (
-        <TwitterGridPreview images={resultUrls} />
+        <TwitterGridPreview images={resultUrls} onBack={onBack} onConvertAnother={onConvertAnother} />
       )}
       {status === 'failed' && (
         <div>

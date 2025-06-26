@@ -16,6 +16,8 @@ type Props = {
     avatarUrl: string;
     time: string;
   };
+  onBack?: () => void;
+  onConvertAnother?: () => void;
 };
 
 const defaultUser = {
@@ -26,8 +28,10 @@ const defaultUser = {
   time: '2h',
 };
 
-export default function TwitterGridPreview({ images, user = defaultUser }: Props) {
+export default function TwitterGridPreview({ images, user = defaultUser, onBack, onConvertAnother }: Props) {
   const [modalIndex, setModalIndex] = useState<number | null>(null);
+
+  const allSlotsAssigned = images.every(f => f !== null);
 
   return (
     <div className="max-w-xl mx-auto bg-white rounded-lg  p-4">
@@ -51,7 +55,7 @@ export default function TwitterGridPreview({ images, user = defaultUser }: Props
       </div>
       {/* 2x2 grid */}
       <div
-        className="relative w-[616px] h-[346.5px] mx-auto rounded-xl overflow-hidden border border-[#222]"
+        className="relative w-[616px] h-[346.5px] mx-auto rounded-xl overflow-hidden "
       >
         <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-[5px]">
           {images.map((url, i) => (
@@ -87,6 +91,15 @@ export default function TwitterGridPreview({ images, user = defaultUser }: Props
           </Button>
 
         ))}
+      </div>
+      {/* Navigation buttons */}
+      <div className="flex gap-2 mt-6 justify-center">
+        
+          <Button variant="ghost" onClick={onBack}>Back to Grid Selection</Button>
+      
+       
+          <Button variant="secondary" onClick={onConvertAnother}>Convert Another Image Grid</Button>
+        
       </div>
       {modalIndex !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70" onClick={() => setModalIndex(null)}>
