@@ -95,8 +95,8 @@ export default function TwitterGridPreview({ images, user = defaultUser, onBack,
       {/* Navigation buttons */}
       <div className="flex gap-2 mt-6 justify-center">
         
-          <Button variant="ghost" onClick={onBack}>Back to Grid Selection</Button>
-      
+          {/* <Button variant="ghost" onClick={onBack}>Back to Grid Selection</Button>
+       */}
        
           <Button variant="secondary" onClick={onConvertAnother}>Convert Another Image Grid</Button>
         
