@@ -10,10 +10,8 @@ const supabase = createClient(
 export async function POST(req: NextRequest) {
   const { jobId } = await req.json();
 
-  // 1. Update job status
   await supabase.from('processing_jobs').update({ status: 'processing' }).eq('id', jobId);
 
-  // 2. Fetch job details
   const { data: job, error: jobError } = await supabase
     .from('processing_jobs')
     .select('raw_files')
@@ -22,90 +20,85 @@ export async function POST(req: NextRequest) {
 
   if (jobError || !job || !job.raw_files || job.raw_files.length < 9) {
     await supabase.from('processing_jobs').update({ status: 'failed' }).eq('id', jobId);
-    return NextResponse.json({ error: 'Job not found or not enough files' }, { status: 404 });
+    return NextResponse.json({ error: 'Job not found or not enough files provided' }, { status: 404 });
   }
 
-  // 3. Download all images
   const fileBuffers: Buffer[] = [];
   for (const path of job.raw_files) {
     const { data, error } = await supabase.storage.from('raw-uploads').download(path);
     if (error || !data) {
       await supabase.from('processing_jobs').update({ status: 'failed' }).eq('id', jobId);
-      return NextResponse.json({ error: 'Failed to download file' }, { status: 500 });
+      return NextResponse.json({ error: `Failed to download file: ${path}` }, { status: 500 });
     }
-    const arrayBuffer = await data.arrayBuffer();
-    fileBuffers.push(Buffer.from(arrayBuffer));
+    fileBuffers.push(Buffer.from(await data.arrayBuffer()));
   }
 
-  // 4. Prepare images
   const [main, ...rest] = fileBuffers;
   const headers = rest.slice(0, 4);
   const footers = rest.slice(4, 8);
 
-  // 5. Resize main image to 2160x1280 (2x1080, 2x640) to fit the grid perfectly
-  const gridWidth = 1080 * 2;
-  const gridHeight = 640 * 2;
-  const resizedMain = await sharp(main)
-    .resize(gridWidth, gridHeight, { fit: 'cover' }) // 'contain' ensures no cropping, may add padding
-    .toBuffer();
-
-  // 6. Extract 4 tiles of 1080x640 each
+  // 1. Resize main image to a square and extract 4 square quadrants
+  const gridSize = 2160;
+  const resizedMain = await sharp(main).resize(gridSize, gridSize, { fit: 'contain' }).toBuffer();
+  const half = gridSize / 2;
   const quadrants = await Promise.all([
-    sharp(resizedMain)
-      .extract({ left: 0, top: 0, width: 1080, height: 640 })
-      .toBuffer(), // TL
-    sharp(resizedMain)
-      .extract({ left: 1080, top: 0, width: 1080, height: 640 })
-      .toBuffer(), // TR
-    sharp(resizedMain)
-      .extract({ left: 0, top: 640, width: 1080, height: 640 })
-      .toBuffer(), // BL
-    sharp(resizedMain)
-      .extract({ left: 1080, top: 640, width: 1080, height: 640 })
-      .toBuffer(), // BR
+    sharp(resizedMain).extract({ left: 0, top: 0, width: half, height: half }).toBuffer(),
+    sharp(resizedMain).extract({ left: half, top: 0, width: half, height: half }).toBuffer(),
+    sharp(resizedMain).extract({ left: 0, top: half, width: half, height: half }).toBuffer(),
+    sharp(resizedMain).extract({ left: half, top: half, width: half, height: half }).toBuffer(),
   ]);
 
-  // 7. Compose each vertical image
+  // 2. Compose each vertical image (1080x1920)
+  const finalWidth = 600;
+  const partHeight = 337;
+  const finalHeight = partHeight * 3; // 1011, but you can use 1012 if you want to add 1px somewhere
+
   const positions = ['tl', 'tr', 'bl', 'br'] as const;
   const processedFiles: string[] = [];
 
   for (let i = 0; i < 4; i++) {
-    const header = await sharp(headers[i]).resize(1080, 640).toBuffer();
-    const footer = await sharp(footers[i]).resize(1080, 640).toBuffer();
-    const quadrant = await sharp(quadrants[i]).resize(1080, 640).toBuffer();
+    const resizedHeader = await sharp(headers[i]).resize(finalWidth, partHeight, { fit: 'contain' }).toBuffer();
+    const resizedQuadrant = await sharp(quadrants[i]).resize(finalWidth, partHeight, { fit: 'contain' }).toBuffer();
+    const resizedFooter = await sharp(footers[i]).resize(finalWidth, partHeight, { fit: 'contain' }).toBuffer();
 
     const composite = await sharp({
-      create: { width: 1080, height: 1920, channels: 3, background: 'white' }
+      create: { width: finalWidth, height: finalHeight, channels: 4, background: { r: 255, g: 255, b: 255, alpha: 1 } }
     })
       .composite([
-        { input: header, top: 0, left: 0 },
-        { input: quadrant, top: 640, left: 0 },
-        { input: footer, top: 1280, left: 0 }
+        { input: resizedHeader, top: 0, left: 0 },
+        { input: resizedQuadrant, top: partHeight, left: 0 },
+        { input: resizedFooter, top: partHeight * 2, left: 0 },
       ])
       .jpeg({ quality: 90 })
       .toBuffer();
 
-    // Upload to processed-results
     const processedPath = `${jobId}/result-${positions[i]}.jpg`;
     const { error: uploadError } = await supabase
       .storage
       .from('processed-results')
-      .upload(processedPath, composite, { upsert: true });
+      .upload(processedPath, composite, { contentType: 'image/jpeg', upsert: true });
 
     if (uploadError) {
       await supabase.from('processing_jobs').update({ status: 'failed' }).eq('id', jobId);
-      return NextResponse.json({ error: 'Failed to upload processed file' }, { status: 500 });
+      return NextResponse.json({ error: `Failed to upload composite image ${positions[i]}` }, { status: 500 });
     }
-
     processedFiles.push(processedPath);
   }
 
-  // 8. Update job as completed
+  // 3. Update job as completed
   await supabase.from('processing_jobs').update({
     status: 'completed',
     processed_files: processedFiles,
     completed_at: new Date().toISOString(),
   }).eq('id', jobId);
 
-  return NextResponse.json({ resultUrls: processedFiles });
+  const resultUrls = processedFiles.map(path => {
+      const { data: { publicUrl } } = supabase.storage.from('processed-results').getPublicUrl(path);
+      return {
+        previewUrl: publicUrl,
+        downloadUrl: `${publicUrl}?download=true`,
+      };
+  });
+
+  return NextResponse.json({ resultUrls });
 }

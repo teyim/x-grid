@@ -46,21 +46,21 @@ export default function TwitterGridPreview({ images, user = defaultUser }: Props
       </div>
       {/* 2x2 grid */}
       <div
-        className="relative w-full max-w-2xl mx-auto"
-        style={{
-          aspectRatio: '1080/640', // or whatever your image aspect ratio is
-          height: 'auto',
-        }}
+        className="relative w-[616px] h-[346.5px] mx-auto bg-black rounded-xl overflow-hidden border border-[#222]"
       >
-        <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-[2px] rounded-lg overflow-hidden border h-full">
+        <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-px">
           {images.map((url, i) => (
-            <div key={i} className="relative w-full h-full">
+            <div
+              key={i}
+              className="relative"
+              style={{ width: 308, height: 173.25 }}
+            >
               <Image
                 src={url}
                 alt={`Grid part ${i + 1}`}
                 fill
                 style={{ objectFit: 'cover' }}
-                sizes="50vw"
+                sizes="308px"
               />
             </div>
           ))}
