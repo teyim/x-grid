@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 
 const cartoonAvatar =
   'data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" fill="%23F9D423"/><ellipse cx="20" cy="25" rx="10" ry="7" fill="%23fff"/><ellipse cx="14" cy="18" rx="3" ry="4" fill="%23000"/><ellipse cx="26" cy="18" rx="3" ry="4" fill="%23000"/><ellipse cx="14" cy="19" rx="1" ry="1.5" fill="%23fff"/><ellipse cx="26" cy="19" rx="1" ry="1.5" fill="%23fff"/><ellipse cx="20" cy="28" rx="4" ry="2" fill="%23F76B1C"/></svg>';
@@ -24,6 +25,8 @@ const defaultUser = {
 };
 
 export default function TwitterGridPreview({ images, user = defaultUser }: Props) {
+  const [modalIndex, setModalIndex] = useState<number | null>(null);
+
   return (
     <div className="max-w-xl mx-auto bg-white rounded-lg  p-4">
       {/* Fake Twitter header */}
@@ -52,8 +55,9 @@ export default function TwitterGridPreview({ images, user = defaultUser }: Props
           {images.map((url, i) => (
             <div
               key={i}
-              className="relative"
-              style={{ width: 308, height: 173.25 }}
+              className="relative w-[308px] h-[173.25px] cursor-pointer transition duration-200 hover:brightness-75"
+              onClick={() => setModalIndex(i)}
+              title="Click to preview"
             >
               <Image
                 src={url}
@@ -62,6 +66,7 @@ export default function TwitterGridPreview({ images, user = defaultUser }: Props
                 style={{ objectFit: 'cover' }}
                 sizes="308px"
               />
+             
             </div>
           ))}
         </div>
@@ -81,6 +86,31 @@ export default function TwitterGridPreview({ images, user = defaultUser }: Props
 
         ))}
       </div>
+      {modalIndex !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70" onClick={() => setModalIndex(null)}>
+         
+          <div
+            className="bg-white rounded-lg shadow-lg p-4 max-w-[90vw] max-h-[90vh] flex flex-col items-center"
+            onClick={e => e.stopPropagation()}
+          >
+             <p className=' font-mono'>Image number: <span className='font-bold'>{modalIndex+1}</span></p>
+            <Image
+              src={typeof images[modalIndex] === 'string' ? images[modalIndex] : images[modalIndex]}
+              alt={`Preview ${modalIndex + 1}`}
+              width={600}
+              height={1012}
+              className=" object-container rounded"
+              style={{ width: '30vw', height: '70vh' }}
+            />
+            <Button
+              className="mt-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-800 cursor:pointer"
+              onClick={() => setModalIndex(null)}
+            >
+              Close
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
