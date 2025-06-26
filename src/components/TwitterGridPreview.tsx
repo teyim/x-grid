@@ -3,13 +3,14 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-
+import { ProcessedImage } from '@/lib/imageProcessor';
 
 const cartoonAvatar =
   'data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" fill="%23F9D423"/><ellipse cx="20" cy="25" rx="10" ry="7" fill="%23fff"/><ellipse cx="14" cy="18" rx="3" ry="4" fill="%23000"/><ellipse cx="26" cy="18" rx="3" ry="4" fill="%23000"/><ellipse cx="14" cy="19" rx="1" ry="1.5" fill="%23fff"/><ellipse cx="26" cy="19" rx="1" ry="1.5" fill="%23fff"/><ellipse cx="20" cy="28" rx="4" ry="2" fill="%23F76B1C"/></svg>';
 
 type Props = {
   images: string[]; // Array of image URLs
+  processedImages?: ProcessedImage[]; // Array of processed images with blobs for download
   user?: {
     name: string;
     username: string;
@@ -28,10 +29,30 @@ const defaultUser = {
   time: '2h',
 };
 
-export default function TwitterGridPreview({ images, user = defaultUser, onConvertAnother }: Props) {
+export default function TwitterGridPreview({ images, processedImages, user = defaultUser, onConvertAnother }: Props) {
   const [modalIndex, setModalIndex] = useState<number | null>(null);
 
-  // const allSlotsAssigned = images.every(f => f !== null);
+  const handleDownload = (index: number) => {
+    if (processedImages && processedImages[index]) {
+      // Create download link for blob
+      const url = URL.createObjectURL(processedImages[index].blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `twitter-grid-${index + 1}.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } else {
+      // Fallback to direct URL download
+      const a = document.createElement('a');
+      a.href = images[index];
+      a.download = `twitter-grid-${index + 1}.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  };
 
   return (
     <div className="max-w-xl w-full mx-auto bg-white rounded-lg p-2 sm:p-4">
@@ -80,26 +101,14 @@ export default function TwitterGridPreview({ images, user = defaultUser, onConve
       {/* Download links */}
       <div className="mt-4 flex flex-wrap gap-2 justify-center">
         {images.map((url, i) => (
-          <Button variant="outline" size="sm" key={i}>
-            <a
-              href={`${url}?download=`}
-              download
-              rel="noopener noreferrer"
-            >
-              Download Image {i + 1}
-            </a>
+          <Button variant="outline" size="sm" key={i} onClick={() => handleDownload(i)}>
+            Download Image {i + 1}
           </Button>
-
         ))}
       </div>
       {/* Navigation buttons */}
       <div className="flex gap-2 mt-6 justify-center flex-wrap">
-        
-          {/* <Button variant="ghost" onClick={onBack}>Back to Grid Selection</Button>
-       */}
-       
-          <Button variant="secondary" onClick={onConvertAnother}>Convert Another Image Grid</Button>
-        
+        <Button variant="secondary" onClick={onConvertAnother}>Convert Another Image Grid</Button>
       </div>
       {modalIndex !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-2" onClick={() => setModalIndex(null)}>
@@ -120,7 +129,7 @@ export default function TwitterGridPreview({ images, user = defaultUser, onConve
               />
             </div>
             <Button
-              className="mt-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-800 cursor:pointer"
+              className="mt-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-800 cursor-pointer"
               onClick={() => setModalIndex(null)}
             >
               Close

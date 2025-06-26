@@ -2,21 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { supabase } from '@/lib/supabase';
 import SlotPreview from './SlotPreview';
 import Image from 'next/image';
 import { Image as LucideImage } from 'lucide-react';
-
-function sanitizeFileName(filename: string): string {
-  // Remove or replace problematic characters
-  return filename
-    .normalize('NFKD') // Remove accents/diacritics
-    .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
-    .replace(/[^a-zA-Z0-9._-]/g, '_') // Replace all non-safe chars with _
-    .replace(/_+/g, '_') // Collapse multiple underscores
-    .replace(/^_+|_+$/g, '') // Trim underscores at start/end
-    .toLowerCase();
-}
+import { ClientImageProcessor, ImageAssignments, ProcessedImage } from '@/lib/imageProcessor';
 
 // Slot names: main, header-tl, header-tr, header-bl, header-br, footer-tl, footer-tr, footer-bl, footer-br
 const slots = [
@@ -31,7 +20,7 @@ const slots = [
   { key: 'footer-br', label: 'Footer BR' },
 ];
 
-export default function ImageUploader({ onUploadComplete }: { onUploadComplete: (jobId: string) => void }) {
+export default function ImageUploader({ onUploadComplete }: { onUploadComplete: (processedImages: ProcessedImage[]) => void }) {
   const [uploading, setUploading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -67,50 +56,27 @@ export default function ImageUploader({ onUploadComplete }: { onUploadComplete: 
     }
     setError(null);
     setUploading(true);
+    
     try {
-      const { data: jobData, error: jobError } = await supabase
-        .from('processing_jobs')
-        .insert([{}])
-        .select('id')
-        .single();
-      if (jobError || !jobData) throw jobError || new Error('Failed to create job.');
-      const jobId = jobData.id;
-      const uploadPromises = selectedFiles.map(file => {
-        const safeName = sanitizeFileName(file.name);
-        const filePath = `${jobId}/${safeName}`;
-        return supabase.storage.from('raw-uploads').upload(filePath, file);
-      });
-      const uploadResults = await Promise.all(uploadPromises);
-      const uploadErrors = uploadResults.filter(result => result.error);
-      if (uploadErrors.length > 0) {
-        throw new Error(`Failed to upload files: ${uploadErrors.map(e => e.error?.message).join(', ')}`);
-      }
-      const filePaths = uploadResults.map(result => result.data?.path).filter((p): p is string => !!p);
-      const { error: updateError } = await supabase
-        .from('processing_jobs')
-        .update({ raw_files: filePaths })
-        .eq('id', jobId);
-      if (updateError) throw updateError;
+      const processor = new ClientImageProcessor();
+      
+      // Convert assignments to the format expected by the processor
+      const imageAssignments: ImageAssignments = {
+        main: assignments.main!,
+        'header-tl': assignments['header-tl']!,
+        'header-tr': assignments['header-tr']!,
+        'header-bl': assignments['header-bl']!,
+        'header-br': assignments['header-br']!,
+        'footer-tl': assignments['footer-tl']!,
+        'footer-tr': assignments['footer-tr']!,
+        'footer-bl': assignments['footer-bl']!,
+        'footer-br': assignments['footer-br']!,
+      };
 
-      // Build assignments mapping: { slot: sanitized file name }
-      const assignmentsMap: { [slot: string]: string } = {};
-      for (const slot of Object.keys(assignments)) {
-        const file = assignments[slot];
-        if (file) {
-          assignmentsMap[slot] = sanitizeFileName(file.name);
-        }
-      }
-
-      const response = await fetch('/api/process-twitter-grid', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jobId, assignments: assignmentsMap })
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to trigger processing.');
-      }
-      onUploadComplete(jobId);
+      const processedImages = await processor.processImages(imageAssignments);
+      processor.dispose();
+      
+      onUploadComplete(processedImages);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unknown error');
     } finally {
@@ -223,7 +189,7 @@ export default function ImageUploader({ onUploadComplete }: { onUploadComplete: 
               onClick={handleUpload}
               disabled={uploading || !allSlotsAssigned}
             >
-              Upload Images
+              {uploading ? 'Processing Images...' : 'Process Images'}
             </Button>
           )}
         </div>

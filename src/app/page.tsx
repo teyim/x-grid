@@ -2,19 +2,20 @@
 
 import { useState } from 'react';
 import ImageUploader from '@/components/ImageUploader';
-import ProcessingMonitor from '@/components/ProcessingMonitor';
+import TwitterGridPreview from '@/components/TwitterGridPreview';
+import { ProcessedImage } from '@/lib/imageProcessor';
 import { Button } from '@/components/ui/button';
 
 export default function Home() {
-  const [jobId, setJobId] = useState<string | null>(null);
+  const [processedImages, setProcessedImages] = useState<ProcessedImage[] | null>(null);
 
-  const handleUploadComplete = (id: string) => {
-    setJobId(id);
+  const handleUploadComplete = (images: ProcessedImage[]) => {
+    setProcessedImages(images);
   };
 
   // Handler to go back to grid selection or start another conversion
   const handleBackOrConvertAnother = () => {
-    setJobId(null);
+    setProcessedImages(null);
   };
 
   return (
@@ -30,10 +31,15 @@ export default function Home() {
         </div>
         
         <div className="max-w-4xl mx-auto">
-          {!jobId ? (
+          {!processedImages ? (
             <ImageUploader onUploadComplete={handleUploadComplete} />
           ) : (
-            <ProcessingMonitor jobId={jobId} onBack={handleBackOrConvertAnother} onConvertAnother={handleBackOrConvertAnother} />
+            <TwitterGridPreview 
+              images={processedImages.map(img => img.url)} 
+              processedImages={processedImages}
+              onBack={handleBackOrConvertAnother} 
+              onConvertAnother={handleBackOrConvertAnother} 
+            />
           )}
         </div>
       </main>
@@ -49,7 +55,7 @@ export default function Home() {
               <b>Assign Images to Grid Quadrants:</b> After uploading, assign each image to a specific slot in the grid (Header, Main, Footer for each quadrant). Click on a slot (e.g., <span className="font-mono">Header TL</span>, <span className="font-mono">Main</span>, <span className="font-mono">Footer BR</span>) and choose an image to assign. All slots must be filled before you can continue.
             </li>
             <li>
-              <b>Upload and Process:</b> Once all images are assigned, click <span className="font-mono">Upload Images</span>. The app will process your images and generate a Twitter-style grid preview.
+              <b>Process Images:</b> Once all images are assigned, click <span className="font-mono">Process Images</span>. The app will process your images client-side and generate a Twitter-style grid preview.
             </li>
             <li>
               <b>Preview and Download:</b> After processing, you&apos;ll see a preview of your Twitter grid as it would appear in a tweet. Download each grid image using the provided download buttons.
@@ -85,7 +91,7 @@ function FaqAccordion() {
     },
     {
       q: 'What happens after I upload and assign all images?',
-      a: 'The app processes your images and displays a Twitter-style preview. You can then download each part of the grid.',
+      a: 'The app processes your images client-side and displays a Twitter-style preview. You can then download each part of the grid.',
     },
     {
       q: 'Can I re-do or change my grid after processing?',
@@ -93,15 +99,15 @@ function FaqAccordion() {
     },
     {
       q: 'My upload failed or processing didn\'t complete. What should I do?',
-      a: 'If processing fails, you&apos;ll see an error message. Please check your internet connection and try again. If the problem persists, check the function logs or contact support.',
+      a: 'If processing fails, you&apos;ll see an error message. Please check your browser supports canvas operations and try again. If the problem persists, try refreshing the page.',
     },
     {
       q: 'Where are my images stored?',
-      a: 'Uploaded images are stored securely using Supabase Storage and are only used for processing your grid.',
+      a: 'All image processing happens in your browser. Your images are never uploaded to any server and remain private.',
     },
     {
       q: 'Is my data private?',
-      a: 'Yes, your images are only used for the grid you create and are not shared with third parties.',
+      a: 'Yes, your images are processed entirely in your browser and are never sent to any server or third party.',
     },
   ];
   const [openIndex, setOpenIndex] = useState<number | null>(null);
