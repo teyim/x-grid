@@ -57,8 +57,8 @@ export default function ProcessingMonitor({ jobId }: { jobId: string }) {
   }, [jobId]);
 
   return (
-    <div className="w-full max-w-lg mx-auto p-8 border rounded-lg text-center">
-      <h2 className="text-2xl font-bold mb-4">Processing Job</h2>
+    <div className="w-full  mx-auto p-8 border rounded-lg text-center">
+      <h2 className="text-2xl font-bold mb-4">Post Preview</h2>
       {status === 'pending' && <p className="text-muted-foreground">Waiting to start...</p>}
       {status === 'processing' && (
         <div>

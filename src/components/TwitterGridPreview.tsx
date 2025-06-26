@@ -17,7 +17,7 @@ type Props = {
 };
 
 const defaultUser = {
-  name: 'Jane Doe',
+  name: 'Teyim Asobo',
   username: 'janedoe',
   avatarUrl: cartoonAvatar,
   time: '2h',
@@ -46,9 +46,9 @@ export default function TwitterGridPreview({ images, user = defaultUser }: Props
       </div>
       {/* 2x2 grid */}
       <div
-        className="relative w-[616px] h-[346.5px] mx-auto bg-black rounded-xl overflow-hidden border border-[#222]"
+        className="relative w-[616px] h-[346.5px] mx-auto rounded-xl overflow-hidden border border-[#222]"
       >
-        <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-px">
+        <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-[5px]">
           {images.map((url, i) => (
             <div
               key={i}

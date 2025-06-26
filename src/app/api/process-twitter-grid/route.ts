@@ -37,15 +37,28 @@ export async function POST(req: NextRequest) {
   const headers = rest.slice(0, 4);
   const footers = rest.slice(4, 8);
 
-  // 1. Resize main image to a square and extract 4 square quadrants
-  const gridSize = 2160;
-  const resizedMain = await sharp(main).resize(gridSize, gridSize, { fit: 'contain' }).toBuffer();
-  const half = gridSize / 2;
+  const gridWidth = 600 * 2;   // 1200
+  const gridHeight = 337 * 2;  // 674
+
+  // 1. Resize main image to 1200x674 (fit: 'fill' to avoid cropping/padding)
+  const resizedMain = await sharp(main)
+    .resize(gridWidth, gridHeight, { fit: 'fill' })
+    .toBuffer();
+
+  // 2. Extract 4 tiles of 600x337 each
   const quadrants = await Promise.all([
-    sharp(resizedMain).extract({ left: 0, top: 0, width: half, height: half }).toBuffer(),
-    sharp(resizedMain).extract({ left: half, top: 0, width: half, height: half }).toBuffer(),
-    sharp(resizedMain).extract({ left: 0, top: half, width: half, height: half }).toBuffer(),
-    sharp(resizedMain).extract({ left: half, top: half, width: half, height: half }).toBuffer(),
+    sharp(resizedMain)
+      .extract({ left: 0, top: 0, width: 600, height: 337 })
+      .toBuffer(), // Top-left
+    sharp(resizedMain)
+      .extract({ left: 600, top: 0, width: 600, height: 337 })
+      .toBuffer(), // Top-right
+    sharp(resizedMain)
+      .extract({ left: 0, top: 337, width: 600, height: 337 })
+      .toBuffer(), // Bottom-left
+    sharp(resizedMain)
+      .extract({ left: 600, top: 337, width: 600, height: 337 })
+      .toBuffer(), // Bottom-right
   ]);
 
   // 2. Compose each vertical image (1080x1920)
@@ -57,9 +70,9 @@ export async function POST(req: NextRequest) {
   const processedFiles: string[] = [];
 
   for (let i = 0; i < 4; i++) {
-    const resizedHeader = await sharp(headers[i]).resize(finalWidth, partHeight, { fit: 'contain' }).toBuffer();
-    const resizedQuadrant = await sharp(quadrants[i]).resize(finalWidth, partHeight, { fit: 'contain' }).toBuffer();
-    const resizedFooter = await sharp(footers[i]).resize(finalWidth, partHeight, { fit: 'contain' }).toBuffer();
+    const resizedHeader = await sharp(headers[i]).resize(finalWidth, partHeight, { fit: 'cover' }).toBuffer();
+    const resizedQuadrant = await sharp(quadrants[i]).resize(finalWidth, partHeight, { fit: 'cover' }).toBuffer();
+    const resizedFooter = await sharp(footers[i]).resize(finalWidth, partHeight, { fit: 'cover' }).toBuffer();
 
     const composite = await sharp({
       create: { width: finalWidth, height: finalHeight, channels: 4, background: { r: 255, g: 255, b: 255, alpha: 1 } }
