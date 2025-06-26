@@ -139,8 +139,8 @@ export default function ImageUploader({ onUploadComplete }: { onUploadComplete: 
           Please remove {selectedFiles.length - 9} image{selectedFiles.length - 9 > 1 ? 's' : ''}.
         </div>
       )}
-      <Button onClick={handleFileSelect} disabled={uploading || selectedFiles.length === 9} >
-        {uploading ? 'Uploading...' : 'Select Images'}
+      <Button onClick={handleFileSelect} disabled={uploading || selectedFiles.length >= 9} >
+        {uploading ? 'Uploading...' : (selectedFiles.length === 0 ? 'Select Images' : 'Add More Images')}
       </Button>
       {selectedFiles.length > 0 && (
         <div className="mt-4">
@@ -263,6 +263,9 @@ export default function ImageUploader({ onUploadComplete }: { onUploadComplete: 
           </div>
         </div>
       )}
+      <p className="text-xs text-gray-500 mt-2">
+        On some mobile devices, you may need to select images one at a time. Keep clicking <span>Add More Images&quot;</span> until you have 9.
+      </p>
     </div>
   );
 }
