@@ -146,7 +146,17 @@ export default function ImageUploader({ onUploadComplete }: { onUploadComplete: 
   return (
     <div className="w-full max-w-lg mx-auto p-8 border-2 border-dashed rounded-lg text-center">
       <p className="mb-4 text-muted-foreground">Select 9 images for your grid.</p>
-      <Button onClick={handleFileSelect} disabled={uploading || selectedFiles.length === 9}>
+      {selectedFiles.length < 9 && (
+        <div className="text-blue-600 text-sm mb-2">
+          {imagesLeft} more image{imagesLeft > 1 ? 's' : ''} needed
+        </div>
+      )}
+      {selectedFiles.length > 9 && (
+        <div className="text-red-500 text-sm mb-2">
+          Please remove {selectedFiles.length - 9} image{selectedFiles.length - 9 > 1 ? 's' : ''}.
+        </div>
+      )}
+      <Button onClick={handleFileSelect} disabled={uploading || selectedFiles.length === 9} >
         {uploading ? 'Uploading...' : 'Select Images'}
       </Button>
       {selectedFiles.length > 0 && (
@@ -188,16 +198,7 @@ export default function ImageUploader({ onUploadComplete }: { onUploadComplete: 
               />
             ))}
           </div>
-          {selectedFiles.length < 9 && (
-            <div className="text-blue-600 text-sm mb-2">
-              {imagesLeft} more image{imagesLeft > 1 ? 's' : ''} needed
-            </div>
-          )}
-          {selectedFiles.length > 9 && (
-            <div className="text-red-500 text-sm mb-2">
-              Please remove {selectedFiles.length - 9} image{selectedFiles.length - 9 > 1 ? 's' : ''}.
-            </div>
-          )}
+
           {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
           {selectedFiles.length === 9 && (
             <Button
