@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 
+
 const cartoonAvatar =
   'data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" fill="%23F9D423"/><ellipse cx="20" cy="25" rx="10" ry="7" fill="%23fff"/><ellipse cx="14" cy="18" rx="3" ry="4" fill="%23000"/><ellipse cx="26" cy="18" rx="3" ry="4" fill="%23000"/><ellipse cx="14" cy="19" rx="1" ry="1.5" fill="%23fff"/><ellipse cx="26" cy="19" rx="1" ry="1.5" fill="%23fff"/><ellipse cx="20" cy="28" rx="4" ry="2" fill="%23F76B1C"/></svg>';
 
@@ -19,8 +20,9 @@ type Props = {
 
 const defaultUser = {
   name: 'Teyim Asobo',
-  username: 'janedoe',
+  username: 'asofex',
   avatarUrl: cartoonAvatar,
+  link:"https://x.com/asofex",
   time: '2h',
 };
 
@@ -40,12 +42,12 @@ export default function TwitterGridPreview({ images, user = defaultUser }: Props
         />
         <div>
           <div className="font-semibold">{user.name}</div>
-          <div className="text-gray-500 text-sm">@{user.username} · {user.time}</div>
+          <a className="text-blue-400 text-sm" href={defaultUser.link}>@{user.username} · <span className='text-gray-700'>{user.time}</span></a>
         </div>
       </div>
       {/* Fake tweet text */}
-      <div className="mb-3 text-gray-800">
-        Here&apos;s my new Twitter grid! #twittergrid #mosaic
+      <div className="mb-3 text-gray-800 text-left px-2">
+        <p>Here is what your tweet will look like to followers</p>
       </div>
       {/* 2x2 grid */}
       <div
