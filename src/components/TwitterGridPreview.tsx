@@ -34,7 +34,7 @@ export default function TwitterGridPreview({ images, user = defaultUser, onBack,
   const allSlotsAssigned = images.every(f => f !== null);
 
   return (
-    <div className="max-w-xl mx-auto bg-white rounded-lg  p-4">
+    <div className="max-w-xl w-full mx-auto bg-white rounded-lg p-2 sm:p-4">
       {/* Fake Twitter header */}
       <div className="flex items-center gap-3 mb-3">
         <Image
@@ -42,7 +42,7 @@ export default function TwitterGridPreview({ images, user = defaultUser, onBack,
           alt="avatar"
           width={40}
           height={40}
-          className="rounded-full"
+          className="rounded-full w-10 h-10"
         />
         <div>
           <div className="font-semibold">{user.name}</div>
@@ -55,13 +55,13 @@ export default function TwitterGridPreview({ images, user = defaultUser, onBack,
       </div>
       {/* 2x2 grid */}
       <div
-        className="relative w-[616px] h-[346.5px] mx-auto rounded-xl overflow-hidden "
+        className="relative w-full max-w-[616px] aspect-[16/9] mx-auto rounded-xl overflow-hidden"
       >
-        <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-[5px]">
+        <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-[3px] sm:gap-[5px] w-full h-full">
           {images.map((url, i) => (
             <div
               key={i}
-              className="relative w-[308px] h-[173.25px] cursor-pointer transition duration-200 hover:brightness-75"
+              className="relative w-full h-full cursor-pointer transition duration-200 hover:brightness-75"
               onClick={() => setModalIndex(i)}
               title="Click to preview"
             >
@@ -70,15 +70,15 @@ export default function TwitterGridPreview({ images, user = defaultUser, onBack,
                 alt={`Grid part ${i + 1}`}
                 fill
                 style={{ objectFit: 'cover' }}
-                sizes="308px"
+                sizes="(max-width: 640px) 50vw, 308px"
+                className="rounded"
               />
-             
             </div>
           ))}
         </div>
       </div>
       {/* Download links */}
-      <div className="mt-4 flex flex-wrap gap-2">
+      <div className="mt-4 flex flex-wrap gap-2 justify-center">
         {images.map((url, i) => (
           <Button variant="outline" size="sm" key={i}>
             <a
@@ -93,7 +93,7 @@ export default function TwitterGridPreview({ images, user = defaultUser, onBack,
         ))}
       </div>
       {/* Navigation buttons */}
-      <div className="flex gap-2 mt-6 justify-center">
+      <div className="flex gap-2 mt-6 justify-center flex-wrap">
         
           {/* <Button variant="ghost" onClick={onBack}>Back to Grid Selection</Button>
        */}
@@ -102,21 +102,23 @@ export default function TwitterGridPreview({ images, user = defaultUser, onBack,
         
       </div>
       {modalIndex !== null && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70" onClick={() => setModalIndex(null)}>
-         
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-2" onClick={() => setModalIndex(null)}>
           <div
-            className="bg-white rounded-lg shadow-lg p-4 max-w-[90vw] max-h-[90vh] flex flex-col items-center"
+            className="bg-white rounded-lg shadow-lg p-2 sm:p-4 max-w-full max-h-full flex flex-col items-center"
+            style={{ width: '100%', maxWidth: 600 }}
             onClick={e => e.stopPropagation()}
           >
-             <p className=' font-mono'>Image number: <span className='font-bold'>{modalIndex+1}</span></p>
-            <Image
-              src={typeof images[modalIndex] === 'string' ? images[modalIndex] : images[modalIndex]}
-              alt={`Preview ${modalIndex + 1}`}
-              width={600}
-              height={1012}
-              className=" object-container rounded"
-              style={{ width: '30vw', height: '70vh' }}
-            />
+            <p className='font-mono mb-2'>Image number: <span className='font-bold'>{modalIndex+1}</span></p>
+            <div className="w-full flex justify-center">
+              <Image
+                src={typeof images[modalIndex] === 'string' ? images[modalIndex] : images[modalIndex]}
+                alt={`Preview ${modalIndex + 1}`}
+                width={600}
+                height={1012}
+                className="object-contain rounded max-h-[60vh] w-auto h-auto"
+                style={{ maxWidth: '100%' }}
+              />
+            </div>
             <Button
               className="mt-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-800 cursor:pointer"
               onClick={() => setModalIndex(null)}

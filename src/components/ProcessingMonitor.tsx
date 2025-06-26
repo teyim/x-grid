@@ -57,7 +57,7 @@ export default function ProcessingMonitor({ jobId, onBack, onConvertAnother }: {
   }, [jobId]);
 
   return (
-    <div className="w-full  mx-auto p-8 border rounded-lg text-center">
+    <div className="w-full mx-auto p-2 sm:p-8 border rounded-lg text-center max-w-2xl">
       <h2 className="text-2xl font-bold mb-4">Post Preview</h2>
       {status === 'pending' && <p className="text-muted-foreground">Waiting to start...</p>}
       {status === 'processing' && (
