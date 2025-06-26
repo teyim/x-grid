@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { PostHogProvider } from "./providers";
+import { Analytics } from "@vercel/analytics/next"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,13 +31,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased font-mono`}
       >
+       
         <PostHogProvider>
         <Navbar />
         <main className="min-h-[80vh] flex flex-col">
           {children}
+           <Analytics></Analytics>
         </main>
         <Footer />
         </PostHogProvider>
+        
       </body>
     </html>
   );
