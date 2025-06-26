@@ -21,10 +21,10 @@ export default function Home() {
       <main className="container mx-auto py-12 px-4">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-            Twitter Grid Image Processor
+            X-Grid
           </h1>
           <p className="mt-4 max-w-2xl mx-auto text-muted-foreground md:text-xl">
-            Upload your images to create stunning grid layouts for your Twitter profile.
+            Upload your images to create stunning grid illusion for your Twitter posts.
           </p>
         </div>
         
