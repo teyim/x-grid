@@ -38,10 +38,10 @@ export default function Home() {
         </div>
       </main>
       {/* How to Use and FAQ Section */}
-      <section className="container mx-auto max-w-3xl my-16 px-4">
+      <section className="container mx-auto max-w-3xl my-16 px-2 sm:px-4">
         <div className="mb-10">
-          <h2 className="text-2xl font-bold mb-4">How to Use</h2>
-          <ol className="list-decimal list-inside space-y-2 text-base text-gray-800">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">How to Use</h2>
+          <ol className="list-decimal list-inside space-y-2 text-base sm:text-lg text-gray-800">
             <li>
               <b>Select Images for Your Twitter Grid:</b> Click the <span className="font-mono">Select Images</span> button to upload images from your device. You must select exactly <b>9 images</b> to proceed.
             </li>
@@ -60,7 +60,7 @@ export default function Home() {
           </ol>
         </div>
         <div>
-          <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions (FAQ)</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">Frequently Asked Questions (FAQ)</h2>
           <FaqAccordion />
         </div>
       </section>
@@ -92,7 +92,7 @@ function FaqAccordion() {
       a: 'Yes! Click "Convert Another Image Grid" to start over and upload a new set of images.',
     },
     {
-      q: 'My upload failed or processing didn&apos;t complete. What should I do?',
+      q: 'My upload failed or processing didn\'t complete. What should I do?',
       a: 'If processing fails, you&apos;ll see an error message. Please check your internet connection and try again. If the problem persists, check the function logs or contact support.',
     },
     {
@@ -108,21 +108,21 @@ function FaqAccordion() {
   return (
     <div className="space-y-2">
       {faqs.map((faq, idx) => (
-        <div key={idx} className="border rounded-lg bg-white/80">
+        <div key={idx} className="border rounded-lg bg-white/80 overflow-x-auto">
           <Button
             variant="ghost"
-            className="w-full flex justify-between items-center text-left px-4 py-3 text-base font-medium"
+            className="w-full flex flex-wrap justify-between items-center text-left px-3 sm:px-4 py-3 text-base sm:text-lg font-medium"
             onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
             aria-expanded={openIndex === idx}
             aria-controls={`faq-panel-${idx}`}
           >
-            <span>{faq.q}</span>
-            <span className="ml-2">{openIndex === idx ? '−' : '+'}</span>
+            <span className="flex-1 min-w-0 truncate pr-2">{faq.q}</span>
+            <span className="ml-2 text-xl sm:text-2xl">{openIndex === idx ? '−' : '+'}</span>
           </Button>
           {openIndex === idx && (
             <div
               id={`faq-panel-${idx}`}
-              className="px-6 pb-4 pt-1 text-gray-700 animate-fade-in"
+              className="px-4 sm:px-6 pb-4 pt-1 text-gray-700 animate-fade-in text-sm sm:text-base break-words"
             >
               {faq.a}
             </div>
