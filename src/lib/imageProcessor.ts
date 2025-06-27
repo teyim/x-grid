@@ -197,6 +197,44 @@ export class ClientImageProcessor {
     }
   }
 
+  /**
+   * Splits a single image into 4 quadrants (2x2 grid) and returns them as ProcessedImage[]
+   * @param file The image file to split
+   */
+  async splitImageToGrid(file: File): Promise<ProcessedImage[]> {
+    // Grid dimensions (same as used in processImages)
+    const gridWidth = 600 * 2;   // 1200
+    const gridHeight = 337 * 2;  // 674
+    const partWidth = 600;
+    const partHeight = 337;
+
+    // 1. Load and resize the image to 1200x674
+    const mainImg = await this.fileToImage(file);
+    const resizedMain = await this.resizeImage(mainImg, gridWidth, gridHeight);
+
+    // 2. Extract 4 quadrants from the resized image
+    const quadrants = await Promise.all([
+      this.extractQuadrant(resizedMain, 0, 0, partWidth, partHeight), // Top-left
+      this.extractQuadrant(resizedMain, partWidth, 0, partWidth, partHeight), // Top-right
+      this.extractQuadrant(resizedMain, 0, partHeight, partWidth, partHeight), // Bottom-left
+      this.extractQuadrant(resizedMain, partWidth, partHeight, partWidth, partHeight), // Bottom-right
+    ]);
+
+    // 3. Convert each quadrant to a blob and URL
+    const results: ProcessedImage[] = [];
+    for (const quadrant of quadrants) {
+      // Render to canvas and get blob
+      const canvas = await this.createCanvas(partWidth, partHeight);
+      canvas.add(quadrant);
+      canvas.renderAll();
+      const blob = await this.canvasToBlob(canvas);
+      const url = URL.createObjectURL(blob);
+      results.push({ url, blob });
+      canvas.dispose();
+    }
+    return results;
+  }
+
   dispose() {
     if (this.canvas) {
       this.canvas.dispose();

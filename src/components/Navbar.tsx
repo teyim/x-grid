@@ -5,14 +5,14 @@ import { GITHUB_URL, X_URL } from "../lib/constants";
 
 export default function Navbar() {
   return (
-    <nav className="w-full flex flex-wrap items-center justify-between px-4 sm:px-6 py-3 border-b bg-white/80 backdrop-blur sticky top-0 z-50 overflow-x-hidden">
-      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+    <nav className="w-full flex flex-col sm:flex-row flex-wrap items-center justify-between px-2 sm:px-6 py-2 sm:py-3 border-b bg-white/80 backdrop-blur sticky top-0 z-50 overflow-x-auto shadow-sm">
+      <div className="flex items-center gap-2 sm:gap-3 min-w-0 w-full sm:w-auto justify-center sm:justify-start">
         <Link href="/">
           <Image src={twitterLogo} alt="Twitter Grid Logo" className="h-8 w-8 sm:h-10 sm:w-10 min-w-0" />
         </Link>
-        <span className="font-bold text-lg sm:text-xl tracking-tight truncate">Twitter Grid Maker</span>
+        <span className="font-bold text-base sm:text-lg md:text-xl tracking-tight truncate max-w-[60vw] sm:max-w-none">Twitter Grid Maker</span>
       </div>
-      <div className="flex items-center gap-3 sm:gap-4 mt-2 sm:mt-0">
+      <div className="flex items-center gap-2 sm:gap-4 mt-2 sm:mt-0 w-full sm:w-auto justify-center sm:justify-end">
         <a href={X_URL} target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.53 3H21.5l-7.19 8.21L22.5 21h-6.56l-5.18-6.18L4.47 21H0.5l7.67-8.76L1 3h6.68l4.74 5.66L17.53 3zm-1.13 15h2.02l-5.47-6.53-1.6-1.91L4.61 5h-2l5.47 6.53 1.6 1.91L16.4 18z" fill="#000"/></svg>
         </a>
