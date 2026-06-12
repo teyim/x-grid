@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { PostHogProvider } from "./providers";
 import { Analytics } from "@vercel/analytics/next"
+import { SITE_URL } from "@/lib/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,8 +18,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "X-grid",
-  description: "Create 2x2 grid illusion for your twitter post",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "X-Grid - X and Instagram Grid Maker",
+    template: "%s | X-Grid",
+  },
+  description:
+    "Create X/Twitter and Instagram photo grids in your browser with private client-side image splitting.",
+  applicationName: "X-Grid",
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    siteName: "X-Grid",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -29,7 +44,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased font-mono`}
+        className={`${geistSans.variable} ${geistMono.variable} overflow-x-hidden antialiased font-sans`}
       >
        
         <PostHogProvider>

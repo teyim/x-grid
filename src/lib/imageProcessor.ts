@@ -1,4 +1,5 @@
 import { fabric } from 'fabric';
+import { FitMode, GridMode } from './gridModes';
 
 export interface ProcessedImage {
   url: string;
@@ -69,6 +70,85 @@ export class ClientImageProcessor {
         .then(res => res.blob())
         .then(blob => resolve(blob));
     });
+  }
+
+  private async htmlCanvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+      canvas.toBlob(
+        (blob) => {
+          if (blob) {
+            resolve(blob);
+          } else {
+            reject(new Error('Unable to export image.'));
+          }
+        },
+        'image/jpeg',
+        0.92
+      );
+    });
+  }
+
+  private drawImageToCanvas(
+    ctx: CanvasRenderingContext2D,
+    image: HTMLImageElement,
+    sourceLeft: number,
+    sourceTop: number,
+    sourceWidth: number,
+    sourceHeight: number,
+    outputWidth: number,
+    outputHeight: number,
+    fit: FitMode
+  ) {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, outputWidth, outputHeight);
+
+    if (fit === 'contain') {
+      const scale = Math.min(outputWidth / sourceWidth, outputHeight / sourceHeight);
+      const drawWidth = sourceWidth * scale;
+      const drawHeight = sourceHeight * scale;
+      const dx = (outputWidth - drawWidth) / 2;
+      const dy = (outputHeight - drawHeight) / 2;
+
+      ctx.drawImage(
+        image,
+        sourceLeft,
+        sourceTop,
+        sourceWidth,
+        sourceHeight,
+        dx,
+        dy,
+        drawWidth,
+        drawHeight
+      );
+      return;
+    }
+
+    const outputRatio = outputWidth / outputHeight;
+    const sourceRatio = sourceWidth / sourceHeight;
+    let cropLeft = sourceLeft;
+    let cropTop = sourceTop;
+    let cropWidth = sourceWidth;
+    let cropHeight = sourceHeight;
+
+    if (sourceRatio > outputRatio) {
+      cropWidth = sourceHeight * outputRatio;
+      cropLeft = sourceLeft + (sourceWidth - cropWidth) / 2;
+    } else if (sourceRatio < outputRatio) {
+      cropHeight = sourceWidth / outputRatio;
+      cropTop = sourceTop + (sourceHeight - cropHeight) / 2;
+    }
+
+    ctx.drawImage(
+      image,
+      cropLeft,
+      cropTop,
+      cropWidth,
+      cropHeight,
+      0,
+      0,
+      outputWidth,
+      outputHeight
+    );
   }
 
   private async extractQuadrant(mainImage: fabric.Image, left: number, top: number, width: number, height: number): Promise<fabric.Image> {
@@ -232,6 +312,69 @@ export class ClientImageProcessor {
       results.push({ url, blob });
       canvas.dispose();
     }
+    return results;
+  }
+
+  async splitImageByMode(
+    file: File,
+    mode: GridMode,
+    fit: FitMode = 'cover'
+  ): Promise<ProcessedImage[]> {
+    const image = await this.fileToImage(file);
+    const stagedCanvas = document.createElement('canvas');
+    stagedCanvas.width = mode.outputWidth * mode.columns;
+    stagedCanvas.height = mode.outputHeight * mode.rows;
+    const stagedContext = stagedCanvas.getContext('2d');
+
+    if (!stagedContext) {
+      throw new Error('Canvas is not supported in this browser.');
+    }
+
+    this.drawImageToCanvas(
+      stagedContext,
+      image,
+      0,
+      0,
+      image.width,
+      image.height,
+      stagedCanvas.width,
+      stagedCanvas.height,
+      fit
+    );
+
+    const results: ProcessedImage[] = [];
+
+    for (let row = 0; row < mode.rows; row++) {
+      for (let column = 0; column < mode.columns; column++) {
+        const canvas = document.createElement('canvas');
+        canvas.width = mode.outputWidth;
+        canvas.height = mode.outputHeight;
+        const ctx = canvas.getContext('2d');
+
+        if (!ctx) {
+          throw new Error('Canvas is not supported in this browser.');
+        }
+
+        ctx.drawImage(
+          stagedCanvas,
+          column * mode.outputWidth,
+          row * mode.outputHeight,
+          mode.outputWidth,
+          mode.outputHeight,
+          0,
+          0,
+          mode.outputWidth,
+          mode.outputHeight
+        );
+
+        const blob = await this.htmlCanvasToBlob(canvas);
+        results.push({
+          blob,
+          url: URL.createObjectURL(blob),
+        });
+      }
+    }
+
     return results;
   }
 

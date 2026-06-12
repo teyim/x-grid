@@ -1,146 +1,150 @@
-'use client';
+import type { Metadata } from 'next';
+import GridTool from '@/components/GridTool';
+import SeoSections from '@/components/SeoSections';
+import StructuredData from '@/components/StructuredData';
+import { SITE_URL } from '@/lib/seo';
 
-import { useState } from 'react';
-import ImageUploader from '@/components/ImageUploader';
-import TwitterGridPreview from '@/components/TwitterGridPreview';
-import { ProcessedImage } from '@/lib/imageProcessor';
-import { Button } from '@/components/ui/button';
+const pageUrl = `${SITE_URL}/`;
+
+const faqs = [
+  {
+    question: 'Is X-Grid private?',
+    answer:
+      'Yes. The image splitter runs in your browser, so your photos are not uploaded to a server.',
+  },
+  {
+    question: 'Can I make Instagram grids too?',
+    answer:
+      'Yes. Use the Instagram grid maker page to split one image into a 3x3 profile grid or square carousel tiles.',
+  },
+  {
+    question: 'What image formats work?',
+    answer:
+      'Modern browser-supported image formats such as JPG, PNG, and WebP work in the uploader.',
+  },
+  {
+    question: 'How do I download the grid?',
+    answer:
+      'After processing, download each tile individually or use the download all button to save every generated image.',
+  },
+];
+
+export const metadata: Metadata = {
+  title: 'X and Instagram Grid Maker - Split Images for Social Posts',
+  description:
+    'Create X/Twitter and Instagram photo grids in your browser. Split images into X 2x2 posts, Instagram 3x3 grids, or carousel tiles with private client-side processing.',
+  alternates: {
+    canonical: pageUrl,
+  },
+  keywords: [
+    'X grid maker',
+    'Twitter grid maker',
+    'split image for X',
+    'Twitter image splitter',
+    'Instagram grid maker',
+    'Instagram carousel splitter',
+    'photo grid maker',
+  ],
+  openGraph: {
+    title: 'X and Instagram Grid Maker',
+    description: 'Split images for X/Twitter and Instagram with a private browser-based grid maker.',
+    url: pageUrl,
+    siteName: 'X-Grid',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'X and Instagram Grid Maker',
+    description: 'Create X/Twitter and Instagram photo grids directly in your browser.',
+  },
+};
 
 export default function Home() {
-  const [processedImages, setProcessedImages] = useState<ProcessedImage[] | null>(null);
-
-  const handleUploadComplete = (images: ProcessedImage[]) => {
-    setProcessedImages(images);
-  };
-
-  // Handler to go back to grid selection or start another conversion
-  const handleBackOrConvertAnother = () => {
-    setProcessedImages(null);
-  };
-
   return (
-    <div className="bg-background text-foreground min-h-screen">
-      <main className="container mx-auto py-6 px-2 sm:py-12 sm:px-4">
-        <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter">
-            X-Grid
-          </h1>
-          <p className="mt-3 sm:mt-4 max-w-xs sm:max-w-2xl mx-auto text-muted-foreground text-base sm:text-xl">
-            Upload your images to create stunning grid illusion for your Twitter posts.
-          </p>
-        </div>
-        <div className="w-full max-w-full sm:max-w-4xl mx-auto">
-          {!processedImages ? (
-            <ImageUploader onUploadComplete={handleUploadComplete} />
-          ) : (
-            <TwitterGridPreview 
-              images={processedImages.map(img => img.url)} 
-              processedImages={processedImages}
-              onBack={handleBackOrConvertAnother} 
-              onConvertAnother={handleBackOrConvertAnother} 
-            />
-          )}
-        </div>
-      </main>
-      {/* How to Use and FAQ Section */}
-      <section className="container mx-auto max-w-full sm:max-w-3xl my-10 sm:my-16 px-1 sm:px-4">
-        <div className="mb-8 sm:mb-10">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4">How to Use</h2>
-          <ol className="list-decimal list-inside space-y-2 text-sm sm:text-base md:text-lg text-gray-800 overflow-x-auto">
-            <li>
-              <b>Choose a Mode:</b> Use the toggle to select between <span className="font-mono">9 Images (Custom Grid)</span> and <span className="font-mono">1 Image (Auto 4-Grid)</span> mode.
-            </li>
-            <li>
-              <b>For 9 Images:</b> Click the <span className="font-mono">Select Images</span> button to upload images from your device. You must select exactly <b>9 images</b> to proceed. Assign each image to a specific slot in the grid (Header, Main, Footer for each quadrant).
-            </li>
-            <li>
-              <b>For 1 Image:</b> Click the <span className="font-mono">Select Image</span> button to upload a single image. The app will automatically split it into a 2x2 grid illusion for you.
-            </li>
-            <li>
-              <b>Process Images:</b> Once ready, click <span className="font-mono">Process Images</span> or <span className="font-mono">Split into Grid</span>. The app will process your images client-side and generate a Twitter-style grid preview.
-            </li>
-            <li>
-              <b>Preview and Download:</b> After processing, you&apos;ll see a preview of your Twitter grid as it would appear in a tweet. Download each grid image using the provided download buttons.
-            </li>
-            <li>
-              <b>Convert Another Grid:</b> Use the <span className="font-mono">Convert Another Image Grid</span> button to start over and create a new grid.
-            </li>
-          </ol>
-        </div>
-        <div>
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4">Frequently Asked Questions (FAQ)</h2>
-          <FaqAccordion />
-        </div>
-      </section>
-    </div>
-  );
-}
-
-// FAQ Accordion Component
-function FaqAccordion() {
-  const faqs = [
-    {
-      q: 'What is the difference between 9-image and 1-image mode?',
-      a: 'In 9-image mode, you upload and assign 9 separate images to create a custom Twitter grid illusion. In 1-image mode, you upload a single image and the app automatically splits it into 4 quadrants for a quick 2x2 grid illusion.'
-    },
-    {
-      q: 'Why do I need to upload exactly 9 images?',
-      a: 'The app is designed to create a 3x3 Twitter grid, which requires 9 images—one for each slot (Header, Main, Footer in each quadrant).'
-    },
-    {
-      q: 'What image formats are supported?',
-      a: 'You can upload any standard image format (JPEG, PNG, etc.). All images must be valid and non-corrupted.'
-    },
-    {
-      q: 'How do I assign images to specific grid slots?',
-      a: 'After uploading, click on a slot (e.g., "Header TL") and select the image you want to assign. Repeat for all slots.'
-    },
-    {
-      q: 'What happens after I upload and assign all images?',
-      a: 'The app processes your images client-side and displays a Twitter-style preview. You can then download each part of the grid.'
-    },
-    {
-      q: 'Can I re-do or change my grid after processing?',
-      a: 'Yes! Click "Convert Another Image Grid" to start over and upload a new set of images.'
-    },
-    {
-      q: 'My upload failed or processing didn\'t complete. What should I do?',
-      a: 'If processing fails, you&apos;ll see an error message. Please check your browser supports canvas operations and try again. If the problem persists, try refreshing the page.'
-    },
-    {
-      q: 'Where are my images stored?',
-      a: 'All image processing happens in your browser. Your images are never uploaded to any server and remain private.'
-    },
-    {
-      q: 'Is my data private?',
-      a: 'Yes, your images are processed entirely in your browser and are never sent to any server or third party.'
-    },
-  ];
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-  return (
-    <div className="space-y-2">
-      {faqs.map((faq, idx) => (
-        <div key={idx} className="border rounded-lg bg-white/80 overflow-x-auto">
-          <Button
-            variant="ghost"
-            className="w-full flex flex-wrap justify-between items-center text-left px-3 sm:px-4 py-3 text-base sm:text-lg font-medium"
-            onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
-            aria-expanded={openIndex === idx}
-            aria-controls={`faq-panel-${idx}`}
-          >
-            <span className="flex-1 min-w-0 truncate pr-2">{faq.q}</span>
-            <span className="ml-2 text-xl sm:text-2xl">{openIndex === idx ? '−' : '+'}</span>
-          </Button>
-          {openIndex === idx && (
-            <div
-              id={`faq-panel-${idx}`}
-              className="px-4 sm:px-6 pb-4 pt-1 text-gray-700 animate-fade-in text-sm sm:text-base break-words"
-            >
-              {faq.a}
+    <>
+      <StructuredData
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'SoftwareApplication',
+          name: 'X-Grid',
+          applicationCategory: 'MultimediaApplication',
+          operatingSystem: 'Web',
+          url: pageUrl,
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'USD',
+          },
+        }}
+      />
+      <StructuredData
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: faqs.map((faq) => ({
+            '@type': 'Question',
+            name: faq.question,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: faq.answer,
+            },
+          })),
+        }}
+      />
+      <main>
+        <section className="border-b bg-zinc-50">
+          <div className="mx-auto max-w-6xl px-2 py-3 min-[380px]:px-3 sm:px-6 sm:py-6 lg:px-8">
+            <div className="mb-3 flex min-w-0 flex-col gap-3 sm:mb-4 sm:flex-row sm:items-end sm:justify-between">
+              <div className="min-w-0">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+                  Free browser grid maker
+                </p>
+                <h1 className="mt-1 text-2xl font-bold tracking-tight text-zinc-950 sm:text-3xl">
+                  X and Instagram Grid Maker
+                </h1>
+                <p className="mt-1 max-w-2xl text-sm leading-6 text-zinc-600">
+                  Switch between X/Twitter and Instagram, preview the layout, and download ready-to-post tiles. Images stay on your device.
+                </p>
+              </div>
             </div>
-          )}
-        </div>
-      ))}
-    </div>
+            <GridTool initialMode="x-single" />
+          </div>
+        </section>
+
+        <SeoSections
+          title="How to create an X photo grid"
+          intro="X-Grid is built for quick image splitting: choose a preset, process the image locally, then post the generated tiles in the order shown by the preview."
+          steps={[
+            {
+              title: 'Choose a grid mode',
+              text: 'Use the 2x2 splitter for one image or the custom illusion mode for the original 9-image workflow.',
+            },
+            {
+              title: 'Upload and preview',
+              text: 'The tool processes your image in the browser and shows an X-style post preview before you download.',
+            },
+            {
+              title: 'Download the tiles',
+              text: 'Save every generated JPG with ordered filenames so the grid is easy to post.',
+            },
+          ]}
+          sections={[
+            {
+              title: 'Private by design',
+              text: 'Canvas processing happens on your device. There are no accounts, uploads, storage buckets, or server-side image jobs.',
+            },
+            {
+              title: 'X 2x2 layout',
+              text: 'The default mode creates four landscape tiles that match the common X image grid preview.',
+            },
+            {
+              title: 'More social grids',
+              text: 'Need a 3x3 Instagram profile grid or carousel split? Use the Instagram grid maker for square exports.',
+            },
+          ]}
+          faqs={faqs}
+        />
+      </main>
+    </>
   );
 }
