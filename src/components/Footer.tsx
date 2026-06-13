@@ -1,10 +1,15 @@
+'use client';
+
 import Image from "next/image";
 import Link from "next/link";
 import { Github } from "lucide-react";
 import twitterLogo from "../../public/twitter-grid-logo.svg";
 import { GITHUB_URL, X_URL } from "@/lib/constants";
+import { useI18n } from "@/lib/i18n";
 
 export default function Footer() {
+  const { t } = useI18n();
+
   return (
     <footer className="border-t bg-white">
       <div className="mx-auto flex max-w-6xl flex-col gap-5 px-4 py-8 sm:px-6 lg:px-8">
@@ -15,10 +20,10 @@ export default function Footer() {
           </Link>
           <div className="flex flex-wrap items-center gap-4 text-sm text-zinc-600">
             <Link href="/twitter-grid-maker" className="hover:text-zinc-950">
-              Twitter Grid Maker
+              {t('nav.xGrid')}
             </Link>
             <Link href="/instagram-grid-maker" className="hover:text-zinc-950">
-              Instagram Grid Maker
+              {t('nav.instagram')}
             </Link>
             <a href={X_URL} target="_blank" rel="noopener noreferrer" aria-label="X profile">
               X
@@ -29,7 +34,7 @@ export default function Footer() {
           </div>
         </div>
         <p className="max-w-2xl text-sm leading-6 text-zinc-500">
-          Free browser-based image splitter for X/Twitter grids, Instagram 3x3 profile grids, and Instagram carousel tiles. Images stay on your device.
+          {t('footer.description')}
         </p>
       </div>
     </footer>

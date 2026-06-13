@@ -7,6 +7,7 @@ import { useEffect } from "react"
 
 import posthog from 'posthog-js'
 import { PostHogProvider as PHProvider } from 'posthog-js/react'
+import { I18nProvider } from '@/lib/i18n'
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -19,7 +20,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <PHProvider client={posthog}>
-      {children}
+      <I18nProvider>{children}</I18nProvider>
     </PHProvider>
   )
 }

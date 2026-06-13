@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import GridTool from '@/components/GridTool';
+import HomeHeroCopy from '@/components/HomeHeroCopy';
 import SeoSections from '@/components/SeoSections';
 import StructuredData from '@/components/StructuredData';
 import { SITE_URL } from '@/lib/seo';
@@ -94,19 +95,7 @@ export default function Home() {
       <main>
         <section className="border-b bg-zinc-50">
           <div className="mx-auto max-w-6xl px-2 py-3 min-[380px]:px-3 sm:px-6 sm:py-6 lg:px-8">
-            <div className="mb-3 flex min-w-0 flex-col gap-3 sm:mb-4 sm:flex-row sm:items-end sm:justify-between">
-              <div className="min-w-0">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
-                  Free browser grid maker
-                </p>
-                <h1 className="mt-1 text-2xl font-bold tracking-tight text-zinc-950 sm:text-3xl">
-                  X and Instagram Grid Maker
-                </h1>
-                <p className="mt-1 max-w-2xl text-sm leading-6 text-zinc-600">
-                  Switch between X/Twitter and Instagram, preview the layout, and download ready-to-post tiles. Images stay on your device.
-                </p>
-              </div>
-            </div>
+            <HomeHeroCopy />
             <GridTool initialMode="x-single" />
           </div>
         </section>

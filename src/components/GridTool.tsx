@@ -28,6 +28,7 @@ import {
   getFilename,
   getGridMode,
 } from '@/lib/gridModes';
+import { useI18n } from '@/lib/i18n';
 
 const customSlots = [
   { key: 'main', label: 'Main image' },
@@ -66,6 +67,7 @@ export default function GridTool({
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [tutorialModeId, setTutorialModeId] = useState<GridModeId | null>(null);
+  const { t } = useI18n();
 
   const mode = getGridMode(modeId);
   const activePlatform = mode.platform;
@@ -209,19 +211,19 @@ export default function GridTool({
     >
       <div className="min-w-0 space-y-4 sm:space-y-5">
         <div className="rounded-md bg-zinc-50 p-3">
-          <p className="text-sm font-semibold text-zinc-950">Create a social media grid</p>
+          <p className="text-sm font-semibold text-zinc-950">{t('tool.title')}</p>
           <p className="mt-1 text-sm leading-6 text-zinc-600">
-            Choose where you want to post, upload an image, then download the generated tiles.
+            {t('tool.subtitle')}
           </p>
         </div>
 
         {hasMultiplePlatforms && (
-          <ToolStep label="1" title="Choose platform">
+          <ToolStep label="1" title={t('tool.choosePlatform')}>
             <PlatformSwitcher activePlatform={activePlatform} onSelect={selectPlatform} />
           </ToolStep>
         )}
 
-        <ToolStep label={hasMultiplePlatforms ? '2' : '1'} title="Choose format">
+        <ToolStep label={hasMultiplePlatforms ? '2' : '1'} title={t('tool.chooseFormat')}>
           <div className="grid grid-cols-1 gap-2 min-[420px]:grid-cols-2">
             {visibleModes.map((item) => (
               <button
@@ -243,29 +245,29 @@ export default function GridTool({
                   ) : (
                     <Grid2X2 className="size-4 shrink-0" />
                   )}
-                  <span className="truncate">{item.shortLabel}</span>
+                  <span className="truncate">{getModeLabel(item.id, t)}</span>
                 </div>
               </button>
             ))}
           </div>
           <div className="mt-2 flex flex-col gap-2 rounded-md bg-zinc-50 px-3 py-2 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-xs leading-5 text-zinc-600">{mode.description}</p>
+            <p className="text-xs leading-5 text-zinc-600">{getModeDescription(mode.id, t)}</p>
             <button
               type="button"
               onClick={() => setTutorialModeId(mode.id)}
               className="inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold text-zinc-900 hover:text-emerald-700"
             >
               <HelpCircle className="size-3.5" />
-              How it works
+              {t('tool.how')}
             </button>
           </div>
         </ToolStep>
 
-        <ToolStep label={hasMultiplePlatforms ? '3' : '2'} title="Upload image">
+        <ToolStep label={hasMultiplePlatforms ? '3' : '2'} title={t('tool.uploadImage')}>
           {mode.id !== 'x-custom' && (
             <div className="rounded-md border border-zinc-200 bg-zinc-50 p-3">
               <div className="mb-3 flex items-center justify-between gap-3">
-                <p className="text-sm font-medium text-zinc-700">Crop</p>
+                <p className="text-sm font-medium text-zinc-700">{t('tool.crop')}</p>
                 <div className="grid grid-cols-2 rounded-md border bg-white p-1">
                   {(['cover', 'contain'] as FitMode[]).map((item) => (
                     <button
@@ -277,14 +279,14 @@ export default function GridTool({
                         fit === item ? 'bg-zinc-950 text-white' : 'text-zinc-600'
                       )}
                     >
-                      {item}
+                      {item === 'cover' ? t('tool.cover') : t('tool.contain')}
                     </button>
                   ))}
                 </div>
               </div>
               <Button onClick={selectSingleFile} variant="outline" className="w-full min-w-0 justify-start bg-white">
                 <Upload className="size-4 shrink-0" />
-                <span className="min-w-0 truncate">{file ? file.name : mode.uploadLabel}</span>
+                <span className="min-w-0 truncate">{file ? file.name : getUploadLabel(mode.id, t)}</span>
               </Button>
             </div>
           )}
@@ -309,11 +311,11 @@ export default function GridTool({
             className="flex-1"
           >
             {processing ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
-            {processing ? 'Processing...' : mode.actionLabel}
+            {processing ? t('tool.processing') : getActionLabel(mode.id, t)}
           </Button>
           <Button variant="secondary" onClick={reset} disabled={processing}>
             <RefreshCcw className="size-4" />
-            Reset
+            {t('tool.reset')}
           </Button>
         </div>
 
@@ -323,7 +325,7 @@ export default function GridTool({
           </p>
         )}
         <p className="text-xs leading-5 text-zinc-500">
-          {mode.inputHint} Images stay on your device.
+          {getModeDescription(mode.id, t)} {t('tool.imagesPrivate')}
         </p>
       </div>
 
@@ -333,7 +335,7 @@ export default function GridTool({
           <div className="mt-4 space-y-3">
             <Button className="w-full" onClick={downloadAll}>
               <Download className="size-4" />
-              Download all images
+              {t('tool.downloadAll')}
             </Button>
             <div className="grid min-w-0 grid-cols-1 gap-2 min-[360px]:grid-cols-2 sm:grid-cols-3">
               {processedImages.map((image, index) => (
@@ -372,6 +374,41 @@ type CustomGridFormProps = {
   onCloseSlot: () => void;
 };
 
+function getModeLabel(modeId: GridModeId, t: ReturnType<typeof useI18n>['t']) {
+  const labels: Record<GridModeId, ReturnType<typeof t>> = {
+    'x-single': t('mode.xSingle'),
+    'x-custom': t('mode.xCustom'),
+    'instagram-grid': t('mode.igGrid'),
+    'instagram-carousel': t('mode.igCarousel'),
+  };
+
+  return labels[modeId];
+}
+
+function getModeDescription(modeId: GridModeId, t: ReturnType<typeof useI18n>['t']) {
+  const descriptions: Record<GridModeId, string> = {
+    'x-single': t('mode.xSingleDesc'),
+    'x-custom': t('mode.xCustomDesc'),
+    'instagram-grid': t('mode.igGridDesc'),
+    'instagram-carousel': t('mode.igCarouselDesc'),
+  };
+
+  return descriptions[modeId];
+}
+
+function getUploadLabel(modeId: GridModeId, t: ReturnType<typeof useI18n>['t']) {
+  if (modeId === 'x-custom') return t('upload.nine');
+  if (modeId === 'instagram-carousel') return t('upload.wide');
+  return t('upload.single');
+}
+
+function getActionLabel(modeId: GridModeId, t: ReturnType<typeof useI18n>['t']) {
+  if (modeId === 'instagram-grid') return t('mode.igGrid');
+  if (modeId === 'instagram-carousel') return t('mode.igCarousel');
+  if (modeId === 'x-custom') return t('mode.xCustom');
+  return t('tool.process');
+}
+
 function ToolStep({
   label,
   title,
@@ -401,6 +438,7 @@ function PlatformSwitcher({
   activePlatform: GridPlatform;
   onSelect: (platform: GridPlatform) => void;
 }) {
+  const { t } = useI18n();
   const options: {
     platform: GridPlatform;
     label: string;
@@ -409,14 +447,14 @@ function PlatformSwitcher({
   }[] = [
     {
       platform: 'x',
-      label: 'X / Twitter',
-      description: '2x2 posts and grid illusions',
+      label: t('platform.x'),
+      description: t('platform.xDesc'),
       icon: Grid2X2,
     },
     {
       platform: 'instagram',
-      label: 'Instagram',
-      description: '3x3 grids and carousel tiles',
+      label: t('platform.instagram'),
+      description: t('platform.instagramDesc'),
       icon: Images,
     },
   ];
@@ -608,6 +646,7 @@ function CustomGridForm({
   onAssign,
   onCloseSlot,
 }: CustomGridFormProps) {
+  const { t } = useI18n();
   const assignedCount = Object.values(assignments).filter(Boolean).length;
   const progress = Math.round((assignedCount / customSlots.length) * 100);
   const slotLabel = slotToAssign
@@ -620,19 +659,19 @@ function CustomGridForm({
         <Button onClick={onSelectFiles} variant="outline" className="w-full min-w-0 justify-start bg-white">
           <Upload className="size-4 shrink-0" />
           <span className="min-w-0 truncate">
-            {files.length ? `${files.length}/9 images selected` : 'Select 9 images'}
+            {files.length ? `${files.length}/9 ${t('tool.uploadImage')}` : t('upload.nine')}
           </span>
         </Button>
         <div className="rounded-md bg-white p-3">
           <div className="flex items-center justify-between gap-3 text-xs font-medium text-zinc-600">
-            <span>{assignedCount}/9 slots assigned</span>
+            <span>{t('custom.progress', { assigned: assignedCount })}</span>
             <span>{progress}%</span>
           </div>
           <div className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-100">
             <div className="h-full rounded-full bg-emerald-600 transition-all" style={{ width: `${progress}%` }} />
           </div>
           <p className="mt-2 text-xs leading-5 text-zinc-600">
-            Tap a slot below, then choose one uploaded image from the popup.
+            {t('custom.tip')}
           </p>
         </div>
         {files.length > 0 && (
@@ -650,7 +689,7 @@ function CustomGridForm({
         )}
       </div>
       <div className="mt-4 rounded-md border bg-white p-3">
-        <p className="mb-2 text-xs font-bold uppercase text-zinc-600">Shared main image</p>
+        <p className="mb-2 text-xs font-bold uppercase text-zinc-600">{t('custom.main')}</p>
         <SlotPreview
           label="Main"
           file={assignments.main}
@@ -682,7 +721,7 @@ function CustomGridForm({
       {slotToAssign && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-3 py-4">
           <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-lg bg-white p-4 shadow-xl">
-            <p className="truncate font-semibold text-zinc-900">Assign image to {slotLabel}</p>
+            <p className="truncate font-semibold text-zinc-900">{t('custom.assign', { slot: slotLabel })}</p>
             <div className="mt-3 grid grid-cols-3 gap-2 min-[360px]:grid-cols-4 sm:grid-cols-5">
               {files.map((item) => (
                 <button
@@ -697,7 +736,7 @@ function CustomGridForm({
               ))}
             </div>
             <Button className="mt-4" variant="secondary" onClick={onCloseSlot}>
-              Cancel
+              {t('custom.cancel')}
             </Button>
           </div>
         </div>
@@ -713,15 +752,17 @@ function GridResultPreview({
   mode: GridMode;
   images: ProcessedImage[] | null;
 }) {
+  const { t } = useI18n();
+
   if (!images) {
     return (
       <div className="flex min-h-[240px] flex-col items-center justify-center rounded-md border border-dashed bg-white p-4 text-center sm:min-h-[340px] sm:p-6">
         <div className="flex size-12 items-center justify-center rounded-md bg-emerald-100 text-emerald-700">
           {mode.previewType === 'instagram-profile' ? <Grid3X3 /> : <Images />}
         </div>
-        <p className="mt-4 text-sm font-semibold text-zinc-950">Preview appears here</p>
+        <p className="mt-4 text-sm font-semibold text-zinc-950">{t('tool.preview')}</p>
         <p className="mt-2 max-w-sm text-sm leading-6 text-zinc-600">
-          Process an image to check ordering, cropping, and platform layout before downloading.
+          {t('tool.previewHelp')}
         </p>
       </div>
     );

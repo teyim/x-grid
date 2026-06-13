@@ -8,6 +8,7 @@ import {
   Github,
   Grid2X2,
   Images,
+  Languages,
   Menu,
   Sparkles,
   X,
@@ -15,35 +16,37 @@ import {
 } from "lucide-react";
 import twitterLogo from "../../public/twitter-grid-logo.svg";
 import { GITHUB_URL, X_URL } from "../lib/constants";
+import { getLocaleLabel, supportedLocales, useI18n, type Locale } from "@/lib/i18n";
 
 const navItems: {
   href: string;
-  label: string;
-  description: string;
+  labelKey: 'nav.xGrid' | 'nav.instagram' | 'nav.create';
+  descriptionKey: 'platform.xDesc' | 'platform.instagramDesc' | 'nav.create';
   icon: LucideIcon;
 }[] = [
   {
     href: "/twitter-grid-maker",
-    label: "X Grid Maker",
-    description: "2x2 posts and custom grid illusions",
+    labelKey: "nav.xGrid",
+    descriptionKey: "platform.xDesc",
     icon: Grid2X2,
   },
   {
     href: "/instagram-grid-maker",
-    label: "Instagram Grid Maker",
-    description: "3x3 grids and carousel tiles",
+    labelKey: "nav.instagram",
+    descriptionKey: "platform.instagramDesc",
     icon: Images,
   },
   {
     href: "/#tool",
-    label: "Create",
-    description: "Open the grid generator",
+    labelKey: "nav.create",
+    descriptionKey: "nav.create",
     icon: Sparkles,
   },
 ];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const { locale, setLocale, t } = useI18n();
 
   const closeMenu = () => setOpen(false);
 
@@ -76,13 +79,14 @@ export default function Navbar() {
                 className="inline-flex h-9 shrink-0 items-center gap-2 rounded-md px-3 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 hover:text-zinc-950"
               >
                 <Icon className="size-4" />
-                <span>{item.label}</span>
+                <span>{t(item.labelKey)}</span>
               </Link>
             );
           })}
         </nav>
 
         <div className="ml-auto hidden shrink-0 items-center gap-1 md:flex">
+          <LanguageSelect locale={locale} setLocale={setLocale} label={t('language')} />
           <a
             href={X_URL}
             target="_blank"
@@ -107,7 +111,7 @@ export default function Navbar() {
           type="button"
           onClick={() => setOpen((current) => !current)}
           className="ml-auto inline-flex size-10 items-center justify-center rounded-md border border-zinc-200 text-zinc-800 transition hover:bg-zinc-100 md:hidden"
-          aria-label={open ? "Close menu" : "Open menu"}
+          aria-label={open ? t('nav.closeMenu') : t('nav.openMenu')}
           aria-expanded={open}
           aria-controls="mobile-menu"
         >
@@ -133,10 +137,10 @@ export default function Navbar() {
                   </span>
                   <span className="min-w-0">
                     <span className="block text-sm font-semibold text-zinc-950">
-                      {item.label}
+                      {t(item.labelKey)}
                     </span>
                     <span className="mt-0.5 block text-xs leading-5 text-zinc-500">
-                      {item.description}
+                      {t(item.descriptionKey)}
                     </span>
                   </span>
                 </Link>
@@ -152,7 +156,7 @@ export default function Navbar() {
                 className="inline-flex h-10 items-center justify-center gap-2 rounded-md border bg-white text-sm font-semibold text-zinc-800"
               >
                 <ExternalLink className="size-4" />
-                X Profile
+                {t('nav.xProfile')}
               </a>
               <a
                 href={GITHUB_URL}
@@ -162,12 +166,43 @@ export default function Navbar() {
                 className="inline-flex h-10 items-center justify-center gap-2 rounded-md border bg-white text-sm font-semibold text-zinc-800"
               >
                 <Github className="size-4" />
-                GitHub
+                {t('nav.github')}
               </a>
             </div>
+            <LanguageSelect locale={locale} setLocale={setLocale} label={t('language')} mobile />
           </nav>
         </div>
       )}
     </header>
+  );
+}
+
+function LanguageSelect({
+  locale,
+  setLocale,
+  label,
+  mobile,
+}: {
+  locale: Locale;
+  setLocale: (locale: Locale) => void;
+  label: string;
+  mobile?: boolean;
+}) {
+  return (
+    <label className={mobile ? 'mt-2 flex items-center gap-2 text-sm font-semibold text-zinc-700' : 'flex items-center gap-1 text-sm font-semibold text-zinc-700'}>
+      <Languages className="size-4" />
+      <span className={mobile ? 'shrink-0' : 'sr-only'}>{label}</span>
+      <select
+        value={locale}
+        onChange={(event) => setLocale(event.target.value as Locale)}
+        className="h-9 rounded-md border border-zinc-200 bg-white px-2 text-sm font-semibold text-zinc-800 outline-none hover:bg-zinc-50"
+      >
+        {supportedLocales.map((item) => (
+          <option key={item} value={item}>
+            {getLocaleLabel(item)}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }
