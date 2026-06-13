@@ -16,7 +16,7 @@ export type GridMode = {
   label: string;
   shortLabel: string;
   description: string;
-  uploadLabel: string;
+  selectLabel: string;
   actionLabel: string;
   outputCount: number;
   outputWidth: number;
@@ -37,7 +37,7 @@ export const GRID_MODES: GridMode[] = [
     shortLabel: "X 2x2",
     description:
       "Split one image into four parts for an X post preview with the familiar 2x2 layout.",
-    uploadLabel: "Select one image",
+    selectLabel: "Select one image",
     actionLabel: "Split for X",
     outputCount: 4,
     outputWidth: 600,
@@ -55,7 +55,7 @@ export const GRID_MODES: GridMode[] = [
     shortLabel: "X Custom",
     description:
       "Use one main image plus header and footer images to build the original X grid illusion.",
-    uploadLabel: "Select 9 images",
+    selectLabel: "Select 9 images",
     actionLabel: "Create X illusion",
     outputCount: 4,
     outputWidth: 600,
@@ -74,7 +74,7 @@ export const GRID_MODES: GridMode[] = [
     shortLabel: "IG 3x3",
     description:
       "Split one image into nine square posts for an Instagram profile grid.",
-    uploadLabel: "Select one image",
+    selectLabel: "Select one image",
     actionLabel: "Split 3x3 grid",
     outputCount: 9,
     outputWidth: 1080,
@@ -92,7 +92,7 @@ export const GRID_MODES: GridMode[] = [
     shortLabel: "IG Carousel",
     description:
       "Split one wide image into square slides for a swipeable Instagram carousel.",
-    uploadLabel: "Select one wide image",
+    selectLabel: "Select one wide image",
     actionLabel: "Split carousel",
     outputCount: 4,
     outputWidth: 1080,

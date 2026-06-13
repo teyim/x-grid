@@ -12,7 +12,7 @@ const faqs = [
   {
     question: 'Is X-Grid private?',
     answer:
-      'Yes. The image splitter runs in your browser, so your photos are not uploaded to a server.',
+      'Yes. The image splitter runs in your browser, so your photos stay on your device.',
   },
   {
     question: 'Can I make Instagram grids too?',
@@ -22,7 +22,7 @@ const faqs = [
   {
     question: 'What image formats work?',
     answer:
-      'Modern browser-supported image formats such as JPG, PNG, and WebP work in the uploader.',
+      'Modern browser-supported image formats such as JPG, PNG, and WebP work with the local file picker.',
   },
   {
     question: 'How do I download the grid?',
@@ -111,7 +111,7 @@ export default function Home() {
               text: 'Use the 2x2 splitter for one image or the custom illusion mode for the original 9-image workflow.',
             },
             {
-              title: 'Upload and preview',
+              title: 'Select and preview',
               text: 'The tool processes your image in the browser and shows an X-style post preview before you download.',
             },
             {
@@ -122,7 +122,7 @@ export default function Home() {
           sections={[
             {
               title: 'Private by design',
-              text: 'Canvas processing happens on your device. There are no accounts, uploads, storage buckets, or server-side image jobs.',
+              text: 'Canvas processing happens on your device. Images never leave the browser.',
             },
             {
               title: 'X 2x2 layout',

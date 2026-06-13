@@ -6,12 +6,12 @@ import {
   Grid2X2,
   Grid3X3,
   HelpCircle,
+  ImagePlus,
   Images,
   Loader2,
   MousePointerClick,
   RefreshCcw,
   Sparkles,
-  Upload,
   X,
   type LucideIcon,
 } from 'lucide-react';
@@ -263,7 +263,7 @@ export default function GridTool({
           </div>
         </ToolStep>
 
-        <ToolStep label={hasMultiplePlatforms ? '3' : '2'} title={t('tool.uploadImage')}>
+        <ToolStep label={hasMultiplePlatforms ? '3' : '2'} title={t('tool.selectImage')}>
           {mode.id !== 'x-custom' && (
             <div className="rounded-md border border-zinc-200 bg-zinc-50 p-3">
               <div className="mb-3 flex items-center justify-between gap-3">
@@ -285,8 +285,8 @@ export default function GridTool({
                 </div>
               </div>
               <Button onClick={selectSingleFile} variant="outline" className="w-full min-w-0 justify-start bg-white">
-                <Upload className="size-4 shrink-0" />
-                <span className="min-w-0 truncate">{file ? file.name : getUploadLabel(mode.id, t)}</span>
+                <ImagePlus className="size-4 shrink-0" />
+                <span className="min-w-0 truncate">{file ? file.name : getSelectLabel(mode.id, t)}</span>
               </Button>
             </div>
           )}
@@ -396,10 +396,10 @@ function getModeDescription(modeId: GridModeId, t: ReturnType<typeof useI18n>['t
   return descriptions[modeId];
 }
 
-function getUploadLabel(modeId: GridModeId, t: ReturnType<typeof useI18n>['t']) {
-  if (modeId === 'x-custom') return t('upload.nine');
-  if (modeId === 'instagram-carousel') return t('upload.wide');
-  return t('upload.single');
+function getSelectLabel(modeId: GridModeId, t: ReturnType<typeof useI18n>['t']) {
+  if (modeId === 'x-custom') return t('select.nine');
+  if (modeId === 'instagram-carousel') return t('select.wide');
+  return t('select.single');
 }
 
 function getActionLabel(modeId: GridModeId, t: ReturnType<typeof useI18n>['t']) {
@@ -575,7 +575,7 @@ function TutorialAnimation({ mode }: { mode: GridMode }) {
     <div className="relative overflow-hidden rounded-lg border bg-zinc-50 p-4">
       <div className="mx-auto flex max-w-xs items-center justify-center gap-4">
         <div className="flex size-14 shrink-0 animate-[tutorialPulse_1.8s_ease-in-out_infinite] items-center justify-center rounded-md border bg-white text-emerald-700 shadow-sm">
-          <Upload className="size-6" />
+          <ImagePlus className="size-6" />
         </div>
         <div className="flex items-center text-zinc-400">
           <MousePointerClick className="size-5 animate-[tutorialTap_1.8s_ease-in-out_infinite]" />
@@ -665,9 +665,9 @@ function CustomGridForm({
     <div className="min-w-0 rounded-md border border-zinc-200 bg-zinc-50 p-3">
       <div className="space-y-3">
         <Button onClick={onSelectFiles} variant="outline" className="w-full min-w-0 justify-start bg-white">
-          <Upload className="size-4 shrink-0" />
+          <ImagePlus className="size-4 shrink-0" />
           <span className="min-w-0 truncate">
-            {files.length ? `${files.length}/9 ${t('tool.uploadImage')}` : t('upload.nine')}
+            {files.length ? `${files.length}/9 ${t('tool.selectImage')}` : t('select.nine')}
           </span>
         </Button>
         <div className="rounded-md bg-white p-3">

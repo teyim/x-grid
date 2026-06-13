@@ -438,7 +438,7 @@ function getLocalizedBlocks(
       home: {
         steps: [
           { title: 'Pilih platform', text: 'Gunakan preset X/Twitter atau Instagram.' },
-          { title: 'Unggah gambar', text: 'Gambar diproses di browser, bukan di server.' },
+          { title: 'Pilih gambar', text: 'Gambar diproses di browser dan tetap di perangkat Anda.' },
           { title: 'Unduh tile', text: 'Posting sesuai urutan nama file.' },
         ],
         sections: [
@@ -492,7 +492,7 @@ function getLocalizedBlocks(
         sections: [
           { title: 'Ukuran praktis', text: 'Tool mengekspor JPG kotak 1080px untuk Instagram.' },
           { title: 'Grid atau carousel', text: 'Grid memakai beberapa posting, carousel tetap dalam satu posting.' },
-          { title: 'Tanpa upload server', text: 'Gambar diproses secara lokal.' },
+          { title: 'Pemrosesan lokal', text: 'Gambar diproses secara lokal.' },
         ],
         faqs: [
           { question: 'Bagaimana membuat grid Instagram 3x3?', answer: 'Unggah gambar dan pilih format IG 3x3.' },
@@ -558,7 +558,7 @@ function getLocalizedBlocks(
         sections: [
           { title: 'Tamanho prático', text: 'A ferramenta exporta JPGs quadrados de 1080px para Instagram.' },
           { title: 'Grade ou carrossel', text: 'A grade usa vários posts; o carrossel fica em um único post.' },
-          { title: 'Sem upload', text: 'As imagens são processadas localmente.' },
+          { title: 'Sem envio ao servidor', text: 'As imagens são processadas localmente.' },
         ],
         faqs: [
           { question: 'Como criar uma grade 3x3 no Instagram?', answer: 'Envie a imagem e escolha o formato IG 3x3.' },

@@ -12,7 +12,7 @@ const faqs = [
   {
     question: 'How do I create a Twitter grid effect?',
     answer:
-      'Choose the X 2x2 splitter for a fast grid effect, upload one image, preview the layout, then download the four image tiles for one Twitter/X post.',
+      'Choose the X 2x2 splitter for a fast grid effect, select one local image, preview the layout, then download the four image tiles for one Twitter/X post.',
   },
   {
     question: 'Can I create a Twitter grid effect from one image?',
@@ -25,7 +25,7 @@ const faqs = [
       'The custom mode uses one shared main image plus header and footer images to create the original X-Grid illusion with taller opened images.',
   },
   {
-    question: 'Are my images uploaded to a server?',
+    question: 'Do my images stay private?',
     answer:
       'No. The Twitter grid effect is created in your browser with client-side canvas processing.',
   },
@@ -88,7 +88,7 @@ export default function CreateTwitterGridEffectPage() {
           name: 'How to create a Twitter grid effect',
           step: [
             'Choose X 2x2 Image Splitter or X Custom Grid Illusion.',
-            'Upload one image or select 9 images for custom mode.',
+            'Select one local image or select 9 images for custom mode.',
             'Preview the Twitter grid effect in the tool.',
             'Download the ordered image tiles and attach them to one Twitter/X post.',
           ].map((text) => ({ '@type': 'HowToStep', text })),
@@ -160,7 +160,7 @@ export default function CreateTwitterGridEffectPage() {
             },
             {
               title: 'Private processing',
-              text: 'All image splitting happens locally in your browser; the source image is not uploaded.',
+              text: 'All image splitting happens locally in your browser; your source image stays on your device.',
             },
           ]}
           faqs={faqs}

@@ -27,7 +27,7 @@ const faqs = [
   {
     question: 'Will my images be stored?',
     answer:
-      'No. The tool processes images in your browser and does not upload them to a server.',
+      'No. The tool processes images in your browser and keeps them on your device.',
   },
 ];
 
@@ -87,7 +87,7 @@ export default function TwitterGridMakerPage() {
           name: 'How to create a Twitter photo grid',
           step: [
             'Choose X 2x2 Image Splitter or X Custom Grid Illusion.',
-            'Upload your image or assign the 9 custom images.',
+            'Select a local image or assign the 9 custom images.',
             'Process the images and preview the Twitter-style layout.',
             'Download the ordered JPG tiles and post them together.',
           ].map((text) => ({ '@type': 'HowToStep', text })),

@@ -11,12 +11,12 @@ const faqs = [
   {
     question: 'How do I split a photo into a 3x3 Instagram grid?',
     answer:
-      'Upload one image, choose Instagram 3x3 Grid Maker, process it, then download the nine square tiles.',
+      'Select one local image, choose Instagram 3x3 Grid Maker, process it, then download the nine square tiles.',
   },
   {
     question: 'What order should I post Instagram grid tiles?',
     answer:
-      'For a profile grid, upload tile 09 first and tile 01 last so the final profile view lines up correctly.',
+      'For a profile grid, publish tile 09 first and tile 01 last so the final profile view lines up correctly.',
   },
   {
     question: 'Can I make Instagram carousel slides?',
@@ -24,9 +24,9 @@ const faqs = [
       'Yes. Choose Instagram Carousel Splitter to divide one wide image into square carousel slides.',
   },
   {
-    question: 'Are my Instagram images uploaded?',
+    question: 'Do my Instagram images stay private?',
     answer:
-      'No. The splitter runs in your browser and does not send your images to a server.',
+      'Yes. The splitter runs in your browser and keeps your images on your device.',
   },
 ];
 
@@ -84,7 +84,7 @@ export default function InstagramGridMakerPage() {
           name: 'How to split a photo into an Instagram grid',
           step: [
             'Choose Instagram 3x3 Grid Maker.',
-            'Upload one image and pick cover or contain.',
+            'Select one local image and pick cover or contain.',
             'Process the image and download the nine tiles.',
             'Post tile 09 first and tile 01 last on Instagram.',
           ].map((text) => ({ '@type': 'HowToStep', text })),
@@ -152,7 +152,7 @@ export default function InstagramGridMakerPage() {
               text: 'A 3x3 grid creates a profile mural across posts. A carousel keeps the visual inside one swipeable post.',
             },
             {
-              title: 'No uploads',
+              title: 'Local processing',
               text: 'Your source image is handled locally by browser canvas APIs, so the site does not store your photo.',
             },
           ]}

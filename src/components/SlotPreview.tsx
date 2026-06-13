@@ -21,7 +21,7 @@ export default function SlotPreview({ label, file, onClick, className, emptyLabe
     >
       <div className="max-w-full truncate text-xs text-gray-500">{label}</div>
       {file ? (
-        <Image src={URL.createObjectURL(file)} className="mt-1 h-10 w-10 rounded object-cover" alt={"upload preview"} width={40} height={40} />
+        <Image src={URL.createObjectURL(file)} className="mt-1 h-10 w-10 rounded object-cover" alt="selected image preview" width={40} height={40} />
       ) : (
         <div className="mt-1 text-xs leading-4 text-gray-400">{emptyLabel}</div>
       )}
