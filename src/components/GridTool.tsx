@@ -440,6 +440,17 @@ function getActionLabel(modeId: GridModeId, t: ReturnType<typeof useI18n>['t']) 
   return t('tool.process');
 }
 
+function getQuadrantLabel(quadrant: string, t: ReturnType<typeof useI18n>['t']) {
+  const labels: Record<string, string> = {
+    tl: t('quadrant.tl'),
+    tr: t('quadrant.tr'),
+    bl: t('quadrant.bl'),
+    br: t('quadrant.br'),
+  };
+
+  return labels[quadrant] || quadrant;
+}
+
 function ToolStep({
   label,
   title,
@@ -699,6 +710,9 @@ function CustomGridForm({
           <p className="mt-2 text-xs leading-5 text-zinc-600">
             {t('custom.tip')}
           </p>
+          <p className="mt-1 text-xs font-semibold text-zinc-800">
+            {t('custom.directAssignTip')}
+          </p>
         </div>
         {files.length > 0 && (
           <div className="flex gap-2 overflow-x-auto pb-1">
@@ -721,7 +735,7 @@ function CustomGridForm({
           label={t('custom.main')}
           file={assignments.main}
           onClick={() => onOpenSlot('main')}
-          className="mx-auto max-w-36"
+          className="mx-auto max-w-64"
           emptyLabel={t('custom.clickAssign')}
         />
       </div>
@@ -729,19 +743,21 @@ function CustomGridForm({
         {['tl', 'tr', 'bl', 'br'].map((quadrant) => (
           <div key={quadrant} className="min-w-0 rounded-md border bg-white p-2">
             <p className="mb-2 text-center text-xs font-bold uppercase text-zinc-600">
-              {quadrant}
+              {getQuadrantLabel(quadrant, t)}
             </p>
             <div className="grid grid-cols-2 gap-2">
               <SlotPreview
                 label={t('custom.header')}
                 file={assignments[`header-${quadrant}`]}
                 onClick={() => onOpenSlot(`header-${quadrant}`)}
+                className="min-h-36 sm:min-h-40"
                 emptyLabel={t('custom.clickAssign')}
               />
               <SlotPreview
                 label={t('custom.footer')}
                 file={assignments[`footer-${quadrant}`]}
                 onClick={() => onOpenSlot(`footer-${quadrant}`)}
+                className="min-h-36 sm:min-h-40"
                 emptyLabel={t('custom.clickAssign')}
               />
             </div>
@@ -823,6 +839,11 @@ function GridResultPreview({
           </div>
         </div>
         <p className="mb-3 text-sm text-zinc-700">{t('preview.xBody')}</p>
+        {mode.id === 'x-custom' && (
+          <p className="mb-3 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold leading-5 text-emerald-800">
+            {t('preview.customRevealPrompt')}
+          </p>
+        )}
         <div className="grid aspect-[16/9] grid-cols-2 grid-rows-2 gap-1 overflow-hidden rounded-xl bg-zinc-200">
           {images.map((image, index) => (
             <PreviewImage

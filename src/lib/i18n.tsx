@@ -65,6 +65,11 @@ type TranslationKey =
   | 'custom.header'
   | 'custom.footer'
   | 'custom.clickAssign'
+  | 'custom.directAssignTip'
+  | 'quadrant.tl'
+  | 'quadrant.tr'
+  | 'quadrant.bl'
+  | 'quadrant.br'
   | 'tutorial.quickGuide'
   | 'tutorial.close'
   | 'tutorial.gotIt'
@@ -90,6 +95,7 @@ type TranslationKey =
   | 'preview.xTitle'
   | 'preview.xMeta'
   | 'preview.xBody'
+  | 'preview.customRevealPrompt'
   | 'preview.openFull'
   | 'preview.fullImage';
 
@@ -158,6 +164,11 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.header': 'Header',
     'custom.footer': 'Footer',
     'custom.clickAssign': 'Click to assign',
+    'custom.directAssignTip': 'Click any slot to choose or replace that image.',
+    'quadrant.tl': 'Top left',
+    'quadrant.tr': 'Top right',
+    'quadrant.bl': 'Bottom left',
+    'quadrant.br': 'Bottom right',
     'tutorial.quickGuide': 'Quick guide',
     'tutorial.close': 'Close tutorial',
     'tutorial.gotIt': 'Got it',
@@ -183,6 +194,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'preview.xTitle': 'Your post preview',
     'preview.xMeta': '@yourhandle · now',
     'preview.xBody': 'Here is how the X grid will look in the feed.',
+    'preview.customRevealPrompt': 'Click any preview tile to open the full stacked image effect.',
     'preview.openFull': 'Open full image',
     'preview.fullImage': 'Full image',
   },
@@ -240,6 +252,11 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.header': '頂部',
     'custom.footer': '底部',
     'custom.clickAssign': '點擊指定',
+    'custom.directAssignTip': '點擊任何位置即可選擇或替換該圖片。',
+    'quadrant.tl': '左上',
+    'quadrant.tr': '右上',
+    'quadrant.bl': '左下',
+    'quadrant.br': '右下',
     'tutorial.quickGuide': '快速指南',
     'tutorial.close': '關閉教學',
     'tutorial.gotIt': '明白',
@@ -265,6 +282,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'preview.xTitle': '你的貼文預覽',
     'preview.xMeta': '@yourhandle · 現在',
     'preview.xBody': '這是 X 網格在動態中的顯示效果。',
+    'preview.customRevealPrompt': '點擊任何預覽圖片，開啟完整堆疊效果。',
     'preview.openFull': '開啟完整圖片',
     'preview.fullImage': '完整圖片',
   },
@@ -322,6 +340,11 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.header': '헤더',
     'custom.footer': '푸터',
     'custom.clickAssign': '눌러서 지정',
+    'custom.directAssignTip': '슬롯을 누르면 해당 이미지를 선택하거나 교체할 수 있습니다.',
+    'quadrant.tl': '왼쪽 위',
+    'quadrant.tr': '오른쪽 위',
+    'quadrant.bl': '왼쪽 아래',
+    'quadrant.br': '오른쪽 아래',
     'tutorial.quickGuide': '빠른 가이드',
     'tutorial.close': '튜토리얼 닫기',
     'tutorial.gotIt': '알겠습니다',
@@ -347,6 +370,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'preview.xTitle': '게시물 미리보기',
     'preview.xMeta': '@yourhandle · 지금',
     'preview.xBody': 'X 피드에서 그리드가 이렇게 보입니다.',
+    'preview.customRevealPrompt': '미리보기 타일을 누르면 전체 스택 이미지 효과를 볼 수 있습니다.',
     'preview.openFull': '전체 이미지 열기',
     'preview.fullImage': '전체 이미지',
   },
@@ -404,6 +428,11 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.header': 'Header',
     'custom.footer': 'Footer',
     'custom.clickAssign': 'Klik untuk menetapkan',
+    'custom.directAssignTip': 'Klik slot mana pun untuk memilih atau mengganti gambar.',
+    'quadrant.tl': 'Kiri atas',
+    'quadrant.tr': 'Kanan atas',
+    'quadrant.bl': 'Kiri bawah',
+    'quadrant.br': 'Kanan bawah',
     'tutorial.quickGuide': 'Panduan cepat',
     'tutorial.close': 'Tutup panduan',
     'tutorial.gotIt': 'Mengerti',
@@ -429,6 +458,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'preview.xTitle': 'Pratinjau posting',
     'preview.xMeta': '@yourhandle · sekarang',
     'preview.xBody': 'Beginilah tampilan grid X di feed.',
+    'preview.customRevealPrompt': 'Klik tile pratinjau untuk membuka efek gambar bertumpuk penuh.',
     'preview.openFull': 'Buka gambar penuh',
     'preview.fullImage': 'Gambar penuh',
   },
@@ -486,6 +516,11 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.header': 'Cabeçalho',
     'custom.footer': 'Rodapé',
     'custom.clickAssign': 'Clique para atribuir',
+    'custom.directAssignTip': 'Clique em qualquer espaço para escolher ou substituir a imagem.',
+    'quadrant.tl': 'Superior esquerdo',
+    'quadrant.tr': 'Superior direito',
+    'quadrant.bl': 'Inferior esquerdo',
+    'quadrant.br': 'Inferior direito',
     'tutorial.quickGuide': 'Guia rápido',
     'tutorial.close': 'Fechar tutorial',
     'tutorial.gotIt': 'Entendi',
@@ -511,6 +546,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'preview.xTitle': 'Prévia do post',
     'preview.xMeta': '@yourhandle · agora',
     'preview.xBody': 'Veja como a grade X aparecerá no feed.',
+    'preview.customRevealPrompt': 'Clique em qualquer tile da prévia para abrir a imagem empilhada completa.',
     'preview.openFull': 'Abrir imagem completa',
     'preview.fullImage': 'Imagem completa',
   },
