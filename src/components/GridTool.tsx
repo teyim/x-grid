@@ -15,6 +15,7 @@ import {
   X,
   type LucideIcon,
 } from 'lucide-react';
+import { usePostHog } from 'posthog-js/react';
 import { Button } from '@/components/ui/button';
 import SlotPreview from './SlotPreview';
 import { ClientImageProcessor, ImageAssignments, ProcessedImage } from '@/lib/imageProcessor';
@@ -68,6 +69,7 @@ export default function GridTool({
   const [error, setError] = useState<string | null>(null);
   const [tutorialModeId, setTutorialModeId] = useState<GridModeId | null>(null);
   const { t } = useI18n();
+  const posthog = usePostHog();
 
   const mode = getGridMode(modeId);
   const activePlatform = mode.platform;
@@ -172,6 +174,14 @@ export default function GridTool({
 
       processor.dispose();
       setProcessedImages(results);
+      posthog.capture('grid_created', {
+        mode_id: mode.id,
+        mode_label: mode.label,
+        platform: mode.platform,
+        tile_count: results.length,
+        fit_mode: mode.id === 'x-custom' ? null : fit,
+        selected_image_count: mode.id === 'x-custom' ? customFiles.length : 1,
+      });
     } catch (caughtError) {
       setError(caughtError instanceof Error ? caughtError.message : 'Unable to process image.');
     } finally {
