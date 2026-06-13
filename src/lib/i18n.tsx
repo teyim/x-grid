@@ -65,6 +65,7 @@ type TranslationKey =
   | 'custom.header'
   | 'custom.footer'
   | 'custom.clickAssign'
+  | 'custom.loadingPreview'
   | 'custom.directAssignTip'
   | 'quadrant.tl'
   | 'quadrant.tr'
@@ -164,6 +165,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.header': 'Header',
     'custom.footer': 'Footer',
     'custom.clickAssign': 'Click to assign',
+    'custom.loadingPreview': 'Loading preview...',
     'custom.directAssignTip': 'Click any slot to choose or replace that image.',
     'quadrant.tl': 'Top left',
     'quadrant.tr': 'Top right',
@@ -252,6 +254,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.header': '頂部',
     'custom.footer': '底部',
     'custom.clickAssign': '點擊指定',
+    'custom.loadingPreview': '正在載入預覽...',
     'custom.directAssignTip': '點擊任何位置即可選擇或替換該圖片。',
     'quadrant.tl': '左上',
     'quadrant.tr': '右上',
@@ -340,6 +343,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.header': '헤더',
     'custom.footer': '푸터',
     'custom.clickAssign': '눌러서 지정',
+    'custom.loadingPreview': '미리보기 로딩 중...',
     'custom.directAssignTip': '슬롯을 누르면 해당 이미지를 선택하거나 교체할 수 있습니다.',
     'quadrant.tl': '왼쪽 위',
     'quadrant.tr': '오른쪽 위',
@@ -428,6 +432,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.header': 'Header',
     'custom.footer': 'Footer',
     'custom.clickAssign': 'Klik untuk menetapkan',
+    'custom.loadingPreview': 'Memuat pratinjau...',
     'custom.directAssignTip': 'Klik slot mana pun untuk memilih atau mengganti gambar.',
     'quadrant.tl': 'Kiri atas',
     'quadrant.tr': 'Kanan atas',
@@ -516,6 +521,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.header': 'Cabeçalho',
     'custom.footer': 'Rodapé',
     'custom.clickAssign': 'Clique para atribuir',
+    'custom.loadingPreview': 'Carregando prévia...',
     'custom.directAssignTip': 'Clique em qualquer espaço para escolher ou substituir a imagem.',
     'quadrant.tl': 'Superior esquerdo',
     'quadrant.tr': 'Superior direito',

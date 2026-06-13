@@ -10,6 +10,7 @@ type SlotPreviewProps = {
   onClick: () => void;
   className?: string;
   emptyLabel?: string;
+  loadingLabel?: string;
 };
 
 export default function SlotPreview({
@@ -18,8 +19,10 @@ export default function SlotPreview({
   onClick,
   className,
   emptyLabel = 'Click to assign',
+  loadingLabel = 'Loading preview...',
 }: SlotPreviewProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -28,8 +31,12 @@ export default function SlotPreview({
     async function createPreview() {
       if (!file) {
         setPreviewUrl(null);
+        setIsLoading(false);
         return;
       }
+
+      setPreviewUrl(null);
+      setIsLoading(true);
 
       try {
         const previewBlob = await normalizeImageFile(file);
@@ -37,11 +44,15 @@ export default function SlotPreview({
 
         if (active) {
           setPreviewUrl(objectUrl);
+          setIsLoading(false);
         } else {
           URL.revokeObjectURL(objectUrl);
         }
       } catch {
-        if (active) setPreviewUrl(null);
+        if (active) {
+          setPreviewUrl(null);
+          setIsLoading(false);
+        }
       }
     }
 
@@ -80,10 +91,22 @@ export default function SlotPreview({
       ) : (
         <>
           <span className="max-w-full truncate text-xs font-semibold text-gray-600">{label}</span>
-          {file ? (
-            <span className="mt-1 max-w-full truncate text-xs leading-4 text-gray-400">
-              {file.name}
-            </span>
+          {file && isLoading ? (
+            <>
+              <span className="mt-2 h-5 w-5 animate-spin rounded-full border-2 border-zinc-200 border-t-blue-600" />
+              <span className="mt-2 max-w-full truncate text-xs font-semibold leading-4 text-zinc-700">
+                {loadingLabel}
+              </span>
+              <span className="mt-1 max-w-full truncate text-[11px] leading-4 text-gray-400">
+                {file.name}
+              </span>
+            </>
+          ) : file ? (
+            <>
+              <span className="mt-1 max-w-full truncate text-xs leading-4 text-gray-400">
+                {file.name}
+              </span>
+            </>
           ) : (
             <span className="mt-1 text-xs leading-4 text-gray-400">{emptyLabel}</span>
           )}

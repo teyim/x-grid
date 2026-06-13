@@ -737,6 +737,7 @@ function CustomGridForm({
           onClick={() => onOpenSlot('main')}
           className="mx-auto max-w-64"
           emptyLabel={t('custom.clickAssign')}
+          loadingLabel={t('custom.loadingPreview')}
         />
       </div>
       <div className="mt-4 grid grid-cols-1 gap-3 min-[420px]:grid-cols-2">
@@ -752,6 +753,7 @@ function CustomGridForm({
                 onClick={() => onOpenSlot(`header-${quadrant}`)}
                 className="min-h-36 sm:min-h-40"
                 emptyLabel={t('custom.clickAssign')}
+                loadingLabel={t('custom.loadingPreview')}
               />
               <SlotPreview
                 label={t('custom.footer')}
@@ -759,6 +761,7 @@ function CustomGridForm({
                 onClick={() => onOpenSlot(`footer-${quadrant}`)}
                 className="min-h-36 sm:min-h-40"
                 emptyLabel={t('custom.clickAssign')}
+                loadingLabel={t('custom.loadingPreview')}
               />
             </div>
           </div>
