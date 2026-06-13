@@ -58,3 +58,6 @@ create index if not exists feedback_submissions_created_at_idx
 
 create index if not exists feedback_submissions_type_status_idx
   on public.feedback_submissions (type, status);
+
+grant usage on schema public to service_role;
+grant select, insert on public.feedback_submissions to service_role;
