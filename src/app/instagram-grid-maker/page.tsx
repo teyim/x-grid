@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import GridTool from '@/components/GridTool';
 import SeoSections from '@/components/SeoSections';
 import StructuredData from '@/components/StructuredData';
+import UsageStats from '@/components/UsageStats';
 import { getLanguageAlternates } from '@/lib/localizedPages';
 import { SITE_URL } from '@/lib/seo';
 
@@ -124,6 +125,8 @@ export default function InstagramGridMakerPage() {
             />
           </div>
         </section>
+
+        <UsageStats />
 
         <SeoSections
           title="How to split an image for Instagram"

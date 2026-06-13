@@ -45,6 +45,12 @@ type TranslationKey =
   | 'tool.previewHelp'
   | 'tool.downloadAll'
   | 'tool.imagesPrivate'
+  | 'stats.kicker'
+  | 'stats.title'
+  | 'stats.description'
+  | 'stats.gridsCreated'
+  | 'stats.imagesTransformed'
+  | 'stats.tilesGenerated'
   | 'platform.x'
   | 'platform.xDesc'
   | 'platform.instagram'
@@ -190,6 +196,12 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'tool.previewHelp': 'Process an image to check ordering, cropping, and platform layout before downloading.',
     'tool.downloadAll': 'Download all images',
     'tool.imagesPrivate': 'Images stay on your device.',
+    'stats.kicker': 'Community activity',
+    'stats.title': 'Total conversions from all users',
+    'stats.description': 'These live totals show how many grids, source images, and generated tiles have been created by everyone using socialgridtool.',
+    'stats.gridsCreated': 'grids created',
+    'stats.imagesTransformed': 'images transformed',
+    'stats.tilesGenerated': 'tiles generated',
     'platform.x': 'X / Twitter',
     'platform.xDesc': '2x2 posts and grid illusions',
     'platform.instagram': 'Instagram',
@@ -324,6 +336,12 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'tool.previewHelp': '先處理圖片，確認排序、裁切和平台版面，再下載。',
     'tool.downloadAll': '下載全部圖片',
     'tool.imagesPrivate': '圖片只會留在你的裝置。',
+    'stats.kicker': '社群使用情況',
+    'stats.title': '所有用戶的總轉換次數',
+    'stats.description': '這些即時統計顯示所有 socialgridtool 用戶已建立的網格、來源圖片和產生圖片數量。',
+    'stats.gridsCreated': '已建立網格',
+    'stats.imagesTransformed': '已轉換圖片',
+    'stats.tilesGenerated': '已產生圖片',
     'platform.x': 'X / Twitter',
     'platform.xDesc': '2x2 貼文和網格幻覺',
     'platform.instagram': 'Instagram',
@@ -458,6 +476,12 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'tool.previewHelp': '다운로드 전에 이미지 순서, 자르기, 플랫폼 레이아웃을 확인하세요.',
     'tool.downloadAll': '모든 이미지 다운로드',
     'tool.imagesPrivate': '이미지는 기기에만 남습니다.',
+    'stats.kicker': '커뮤니티 활동',
+    'stats.title': '모든 사용자의 총 변환 수',
+    'stats.description': '이 실시간 합계는 socialgridtool 사용자가 만든 그리드, 원본 이미지, 생성된 타일 수를 보여줍니다.',
+    'stats.gridsCreated': '생성된 그리드',
+    'stats.imagesTransformed': '변환된 이미지',
+    'stats.tilesGenerated': '생성된 타일',
     'platform.x': 'X / Twitter',
     'platform.xDesc': '2x2 게시물과 그리드 효과',
     'platform.instagram': 'Instagram',
@@ -592,6 +616,12 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'tool.previewHelp': 'Proses gambar untuk memeriksa urutan, potongan, dan tata letak sebelum mengunduh.',
     'tool.downloadAll': 'Unduh semua gambar',
     'tool.imagesPrivate': 'Gambar tetap di perangkat Anda.',
+    'stats.kicker': 'Aktivitas komunitas',
+    'stats.title': 'Total konversi dari semua pengguna',
+    'stats.description': 'Total langsung ini menunjukkan jumlah grid, gambar sumber, dan tile yang dibuat oleh semua pengguna socialgridtool.',
+    'stats.gridsCreated': 'grid dibuat',
+    'stats.imagesTransformed': 'gambar diubah',
+    'stats.tilesGenerated': 'tile dibuat',
     'platform.x': 'X / Twitter',
     'platform.xDesc': 'Posting 2x2 dan ilusi grid',
     'platform.instagram': 'Instagram',
@@ -726,6 +756,12 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'tool.previewHelp': 'Processe uma imagem para conferir ordem, corte e layout antes de baixar.',
     'tool.downloadAll': 'Baixar todas as imagens',
     'tool.imagesPrivate': 'As imagens ficam no seu dispositivo.',
+    'stats.kicker': 'Atividade da comunidade',
+    'stats.title': 'Total de conversões de todos os usuários',
+    'stats.description': 'Esses totais ao vivo mostram quantas grades, imagens de origem e tiles foram criados por todos que usam o socialgridtool.',
+    'stats.gridsCreated': 'grades criadas',
+    'stats.imagesTransformed': 'imagens transformadas',
+    'stats.tilesGenerated': 'tiles gerados',
     'platform.x': 'X / Twitter',
     'platform.xDesc': 'Posts 2x2 e ilusões de grade',
     'platform.instagram': 'Instagram',

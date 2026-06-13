@@ -215,6 +215,11 @@ export default function GridTool({
         fit_mode: mode.id === 'x-custom' ? null : fit,
         selected_image_count: mode.id === 'x-custom' ? customFiles.length : 1,
       });
+      recordUsageStats({
+        platform: mode.platform,
+        tileCount: results.length,
+        inputImageCount: mode.id === 'x-custom' ? 9 : 1,
+      });
     } catch (caughtError) {
       setError(caughtError instanceof Error ? caughtError.message : 'Unable to process image.');
     } finally {
@@ -419,6 +424,26 @@ export default function GridTool({
       )}
     </section>
   );
+}
+
+function recordUsageStats(payload: {
+  platform: GridPlatform;
+  tileCount: number;
+  inputImageCount: number;
+}) {
+  fetch('/api/stats', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => {
+      if (response.ok) {
+        window.dispatchEvent(new Event('usage-stats-updated'));
+      }
+    })
+    .catch((error) => {
+      console.warn('Unable to record usage stats:', error);
+    });
 }
 
 type CustomGridFormProps = {

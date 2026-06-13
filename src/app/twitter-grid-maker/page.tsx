@@ -3,6 +3,7 @@ import Link from 'next/link';
 import GridTool from '@/components/GridTool';
 import SeoSections from '@/components/SeoSections';
 import StructuredData from '@/components/StructuredData';
+import UsageStats from '@/components/UsageStats';
 import { getLanguageAlternates } from '@/lib/localizedPages';
 import { SITE_URL } from '@/lib/seo';
 
@@ -130,6 +131,8 @@ export default function TwitterGridMakerPage() {
             <GridTool initialMode="x-single" allowedModes={['x-single', 'x-custom']} />
           </div>
         </section>
+
+        <UsageStats />
 
         <SeoSections
           title="How Twitter and X display photo grids"

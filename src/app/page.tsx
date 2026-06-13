@@ -3,6 +3,7 @@ import GridTool from '@/components/GridTool';
 import HomeHeroCopy from '@/components/HomeHeroCopy';
 import SeoSections from '@/components/SeoSections';
 import StructuredData from '@/components/StructuredData';
+import UsageStats from '@/components/UsageStats';
 import { getLanguageAlternates } from '@/lib/localizedPages';
 import { SITE_URL } from '@/lib/seo';
 
@@ -101,6 +102,8 @@ export default function Home() {
             <GridTool initialMode="x-single" />
           </div>
         </section>
+
+        <UsageStats />
 
         <SeoSections
           title="How to create an X photo grid"

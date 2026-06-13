@@ -1,6 +1,7 @@
 import GridTool from '@/components/GridTool';
 import SeoSections from '@/components/SeoSections';
 import StructuredData from '@/components/StructuredData';
+import UsageStats from '@/components/UsageStats';
 import {
   getLocalizedContent,
   getLocalizedPath,
@@ -69,6 +70,8 @@ export default function LocalizedToolPage({ locale, kind }: LocalizedToolPagePro
             />
           </div>
         </section>
+
+        <UsageStats />
 
         <SeoSections
           title={content.seoTitle}
