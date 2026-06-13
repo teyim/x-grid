@@ -2,9 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Github } from "lucide-react";
 import logo from "../../public/logo.png";
-import { GITHUB_URL, X_URL } from "@/lib/constants";
+import { CONTACT_EMAIL } from "@/lib/contact";
 import { useI18n } from "@/lib/i18n";
 import { localizePath } from "./Navbar";
 
@@ -29,11 +28,8 @@ export default function Footer() {
             <Link href={localizePath('/instagram-grid-maker', locale)} className="hover:text-zinc-950">
               {t('nav.instagram')}
             </Link>
-            <a href={X_URL} target="_blank" rel="noopener noreferrer" aria-label="X profile">
-              X
-            </a>
-            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-              <Github className="size-5" />
+            <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-zinc-950">
+              {CONTACT_EMAIL}
             </a>
           </div>
         </div>

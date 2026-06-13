@@ -17,8 +17,8 @@ type TranslationKey =
   | 'nav.twitterEffect'
   | 'nav.instagram'
   | 'nav.create'
-  | 'nav.xProfile'
-  | 'nav.github'
+  | 'nav.tools'
+  | 'nav.feedback'
   | 'nav.openMenu'
   | 'nav.closeMenu'
   | 'hero.kicker'
@@ -111,7 +111,39 @@ type TranslationKey =
   | 'look.stackTitle'
   | 'look.header'
   | 'look.sharedMain'
-  | 'look.footer';
+  | 'look.footer'
+  | 'feedback.title'
+  | 'feedback.description'
+  | 'feedback.close'
+  | 'feedback.successTitle'
+  | 'feedback.successBody'
+  | 'feedback.emailInstead'
+  | 'feedback.privateNote'
+  | 'feedback.type'
+  | 'feedback.option'
+  | 'feedback.rating'
+  | 'feedback.message'
+  | 'feedback.messagePlaceholder'
+  | 'feedback.email'
+  | 'feedback.emailPlaceholder'
+  | 'feedback.submit'
+  | 'feedback.submitting'
+  | 'feedback.error'
+  | 'feedback.typeFeedback'
+  | 'feedback.typeBug'
+  | 'feedback.typeSuggestion'
+  | 'feedback.optionEasy'
+  | 'feedback.optionConfusing'
+  | 'feedback.optionDesign'
+  | 'feedback.optionMissing'
+  | 'feedback.optionUpload'
+  | 'feedback.optionPreview'
+  | 'feedback.optionDownload'
+  | 'feedback.optionMobile'
+  | 'feedback.optionGridType'
+  | 'feedback.optionCropZoom'
+  | 'feedback.optionPlatforms'
+  | 'feedback.optionSeo';
 
 const localeLabels: Record<Locale, string> = {
   en: 'English',
@@ -128,8 +160,8 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'nav.twitterEffect': 'Twitter Grid Effect',
     'nav.instagram': 'Instagram Grid Maker',
     'nav.create': 'Create',
-    'nav.xProfile': 'X Profile',
-    'nav.github': 'GitHub',
+    'nav.tools': 'Tools',
+    'nav.feedback': 'Feedback',
     'nav.openMenu': 'Open menu',
     'nav.closeMenu': 'Close menu',
     'hero.kicker': 'Free browser grid maker',
@@ -225,6 +257,38 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'look.header': 'Header image',
     'look.sharedMain': 'Shared main image',
     'look.footer': 'Footer image',
+    'feedback.title': 'Send feedback',
+    'feedback.description': 'Report a bug, suggest a feature, or tell us what is confusing.',
+    'feedback.close': 'Close',
+    'feedback.successTitle': 'Thanks for the feedback.',
+    'feedback.successBody': 'Your note was saved and will help improve socialgridtool.',
+    'feedback.emailInstead': 'Email us instead',
+    'feedback.privateNote': 'Feedback is stored securely.',
+    'feedback.type': 'Type',
+    'feedback.option': 'Option',
+    'feedback.rating': 'Rating',
+    'feedback.message': 'Message',
+    'feedback.messagePlaceholder': 'Add details, steps, or context...',
+    'feedback.email': 'Email for follow-up',
+    'feedback.emailPlaceholder': 'you@example.com',
+    'feedback.submit': 'Submit',
+    'feedback.submitting': 'Submitting...',
+    'feedback.error': 'Unable to submit feedback right now.',
+    'feedback.typeFeedback': 'Feedback',
+    'feedback.typeBug': 'Bug',
+    'feedback.typeSuggestion': 'Suggestion',
+    'feedback.optionEasy': 'Easy to use',
+    'feedback.optionConfusing': 'Confusing',
+    'feedback.optionDesign': 'Design feedback',
+    'feedback.optionMissing': 'Missing feature',
+    'feedback.optionUpload': 'Upload issue',
+    'feedback.optionPreview': 'Preview issue',
+    'feedback.optionDownload': 'Download issue',
+    'feedback.optionMobile': 'Mobile layout issue',
+    'feedback.optionGridType': 'New grid type',
+    'feedback.optionCropZoom': 'Better crop/zoom',
+    'feedback.optionPlatforms': 'More platforms',
+    'feedback.optionSeo': 'SEO/content idea',
   },
   'zh-HK': {
     language: '語言',
@@ -232,8 +296,8 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'nav.twitterEffect': 'Twitter 網格效果',
     'nav.instagram': 'Instagram 網格工具',
     'nav.create': '開始製作',
-    'nav.xProfile': 'X 個人頁',
-    'nav.github': 'GitHub',
+    'nav.tools': '工具',
+    'nav.feedback': '意見回饋',
     'nav.openMenu': '開啟選單',
     'nav.closeMenu': '關閉選單',
     'hero.kicker': '免費瀏覽器網格工具',
@@ -327,6 +391,38 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'look.header': '頂部圖片',
     'look.sharedMain': '共用主圖',
     'look.footer': '底部圖片',
+    'feedback.title': '提交意見',
+    'feedback.description': '回報錯誤、提出功能建議，或告訴我們哪裡不清楚。',
+    'feedback.close': '關閉',
+    'feedback.successTitle': '感謝你的回饋。',
+    'feedback.successBody': '你的意見已儲存，會幫助改進 socialgridtool。',
+    'feedback.emailInstead': '改用電郵聯絡',
+    'feedback.privateNote': '回饋會安全儲存。',
+    'feedback.type': '類型',
+    'feedback.option': '選項',
+    'feedback.rating': '評分',
+    'feedback.message': '訊息',
+    'feedback.messagePlaceholder': '加入細節、步驟或背景...',
+    'feedback.email': '回覆電郵',
+    'feedback.emailPlaceholder': 'you@example.com',
+    'feedback.submit': '提交',
+    'feedback.submitting': '提交中...',
+    'feedback.error': '暫時無法提交回饋。',
+    'feedback.typeFeedback': '回饋',
+    'feedback.typeBug': '錯誤',
+    'feedback.typeSuggestion': '建議',
+    'feedback.optionEasy': '容易使用',
+    'feedback.optionConfusing': '令人困惑',
+    'feedback.optionDesign': '設計回饋',
+    'feedback.optionMissing': '缺少功能',
+    'feedback.optionUpload': '上載問題',
+    'feedback.optionPreview': '預覽問題',
+    'feedback.optionDownload': '下載問題',
+    'feedback.optionMobile': '手機版面問題',
+    'feedback.optionGridType': '新網格類型',
+    'feedback.optionCropZoom': '改善裁切/縮放',
+    'feedback.optionPlatforms': '更多平台',
+    'feedback.optionSeo': 'SEO/內容想法',
   },
   ko: {
     language: '언어',
@@ -334,8 +430,8 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'nav.twitterEffect': 'Twitter 그리드 효과',
     'nav.instagram': 'Instagram 그리드',
     'nav.create': '만들기',
-    'nav.xProfile': 'X 프로필',
-    'nav.github': 'GitHub',
+    'nav.tools': '도구',
+    'nav.feedback': '피드백',
     'nav.openMenu': '메뉴 열기',
     'nav.closeMenu': '메뉴 닫기',
     'hero.kicker': '무료 브라우저 그리드 도구',
@@ -429,6 +525,38 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'look.header': '헤더 이미지',
     'look.sharedMain': '공유 메인 이미지',
     'look.footer': '푸터 이미지',
+    'feedback.title': '피드백 보내기',
+    'feedback.description': '버그를 신고하거나 기능을 제안하거나 헷갈리는 부분을 알려주세요.',
+    'feedback.close': '닫기',
+    'feedback.successTitle': '피드백 감사합니다.',
+    'feedback.successBody': '내용이 저장되었고 socialgridtool 개선에 사용됩니다.',
+    'feedback.emailInstead': '이메일로 보내기',
+    'feedback.privateNote': '피드백은 안전하게 저장됩니다.',
+    'feedback.type': '유형',
+    'feedback.option': '옵션',
+    'feedback.rating': '평점',
+    'feedback.message': '메시지',
+    'feedback.messagePlaceholder': '자세한 내용, 단계, 상황을 적어주세요...',
+    'feedback.email': '답변 받을 이메일',
+    'feedback.emailPlaceholder': 'you@example.com',
+    'feedback.submit': '제출',
+    'feedback.submitting': '제출 중...',
+    'feedback.error': '지금은 피드백을 제출할 수 없습니다.',
+    'feedback.typeFeedback': '피드백',
+    'feedback.typeBug': '버그',
+    'feedback.typeSuggestion': '제안',
+    'feedback.optionEasy': '사용하기 쉬움',
+    'feedback.optionConfusing': '헷갈림',
+    'feedback.optionDesign': '디자인 피드백',
+    'feedback.optionMissing': '없는 기능',
+    'feedback.optionUpload': '업로드 문제',
+    'feedback.optionPreview': '미리보기 문제',
+    'feedback.optionDownload': '다운로드 문제',
+    'feedback.optionMobile': '모바일 레이아웃 문제',
+    'feedback.optionGridType': '새 그리드 유형',
+    'feedback.optionCropZoom': '자르기/줌 개선',
+    'feedback.optionPlatforms': '더 많은 플랫폼',
+    'feedback.optionSeo': 'SEO/콘텐츠 아이디어',
   },
   id: {
     language: 'Bahasa',
@@ -436,8 +564,8 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'nav.twitterEffect': 'Efek Grid Twitter',
     'nav.instagram': 'Grid Instagram',
     'nav.create': 'Buat',
-    'nav.xProfile': 'Profil X',
-    'nav.github': 'GitHub',
+    'nav.tools': 'Alat',
+    'nav.feedback': 'Masukan',
     'nav.openMenu': 'Buka menu',
     'nav.closeMenu': 'Tutup menu',
     'hero.kicker': 'Pembuat grid gratis di browser',
@@ -531,6 +659,38 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'look.header': 'Gambar header',
     'look.sharedMain': 'Gambar utama bersama',
     'look.footer': 'Gambar footer',
+    'feedback.title': 'Kirim masukan',
+    'feedback.description': 'Laporkan bug, sarankan fitur, atau beri tahu bagian yang membingungkan.',
+    'feedback.close': 'Tutup',
+    'feedback.successTitle': 'Terima kasih atas masukannya.',
+    'feedback.successBody': 'Catatan Anda tersimpan dan akan membantu memperbaiki socialgridtool.',
+    'feedback.emailInstead': 'Kirim email saja',
+    'feedback.privateNote': 'Masukan disimpan dengan aman.',
+    'feedback.type': 'Jenis',
+    'feedback.option': 'Opsi',
+    'feedback.rating': 'Rating',
+    'feedback.message': 'Pesan',
+    'feedback.messagePlaceholder': 'Tambahkan detail, langkah, atau konteks...',
+    'feedback.email': 'Email untuk tindak lanjut',
+    'feedback.emailPlaceholder': 'you@example.com',
+    'feedback.submit': 'Kirim',
+    'feedback.submitting': 'Mengirim...',
+    'feedback.error': 'Masukan belum bisa dikirim saat ini.',
+    'feedback.typeFeedback': 'Masukan',
+    'feedback.typeBug': 'Bug',
+    'feedback.typeSuggestion': 'Saran',
+    'feedback.optionEasy': 'Mudah digunakan',
+    'feedback.optionConfusing': 'Membingungkan',
+    'feedback.optionDesign': 'Masukan desain',
+    'feedback.optionMissing': 'Fitur belum ada',
+    'feedback.optionUpload': 'Masalah upload',
+    'feedback.optionPreview': 'Masalah pratinjau',
+    'feedback.optionDownload': 'Masalah unduhan',
+    'feedback.optionMobile': 'Masalah layout mobile',
+    'feedback.optionGridType': 'Jenis grid baru',
+    'feedback.optionCropZoom': 'Crop/zoom lebih baik',
+    'feedback.optionPlatforms': 'Platform lain',
+    'feedback.optionSeo': 'Ide SEO/konten',
   },
   'pt-BR': {
     language: 'Idioma',
@@ -538,8 +698,8 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'nav.twitterEffect': 'Efeito de Grade Twitter',
     'nav.instagram': 'Grade Instagram',
     'nav.create': 'Criar',
-    'nav.xProfile': 'Perfil no X',
-    'nav.github': 'GitHub',
+    'nav.tools': 'Ferramentas',
+    'nav.feedback': 'Feedback',
     'nav.openMenu': 'Abrir menu',
     'nav.closeMenu': 'Fechar menu',
     'hero.kicker': 'Criador de grades grátis no navegador',
@@ -633,6 +793,38 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'look.header': 'Imagem de cabeçalho',
     'look.sharedMain': 'Imagem principal compartilhada',
     'look.footer': 'Imagem de rodapé',
+    'feedback.title': 'Enviar feedback',
+    'feedback.description': 'Reporte um bug, sugira uma função ou diga o que está confuso.',
+    'feedback.close': 'Fechar',
+    'feedback.successTitle': 'Obrigado pelo feedback.',
+    'feedback.successBody': 'Sua mensagem foi salva e vai ajudar a melhorar o socialgridtool.',
+    'feedback.emailInstead': 'Enviar por email',
+    'feedback.privateNote': 'O feedback é armazenado com segurança.',
+    'feedback.type': 'Tipo',
+    'feedback.option': 'Opção',
+    'feedback.rating': 'Avaliação',
+    'feedback.message': 'Mensagem',
+    'feedback.messagePlaceholder': 'Adicione detalhes, passos ou contexto...',
+    'feedback.email': 'Email para retorno',
+    'feedback.emailPlaceholder': 'you@example.com',
+    'feedback.submit': 'Enviar',
+    'feedback.submitting': 'Enviando...',
+    'feedback.error': 'Não foi possível enviar feedback agora.',
+    'feedback.typeFeedback': 'Feedback',
+    'feedback.typeBug': 'Bug',
+    'feedback.typeSuggestion': 'Sugestão',
+    'feedback.optionEasy': 'Fácil de usar',
+    'feedback.optionConfusing': 'Confuso',
+    'feedback.optionDesign': 'Feedback de design',
+    'feedback.optionMissing': 'Função ausente',
+    'feedback.optionUpload': 'Problema no upload',
+    'feedback.optionPreview': 'Problema na prévia',
+    'feedback.optionDownload': 'Problema no download',
+    'feedback.optionMobile': 'Problema no layout mobile',
+    'feedback.optionGridType': 'Novo tipo de grade',
+    'feedback.optionCropZoom': 'Melhor corte/zoom',
+    'feedback.optionPlatforms': 'Mais plataformas',
+    'feedback.optionSeo': 'Ideia de SEO/conteúdo',
   },
 };
 
