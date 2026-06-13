@@ -1,10 +1,11 @@
 import type { MetadataRoute } from 'next';
 import { SITE_URL } from '@/lib/seo';
+import { getLocalizedPath, pagePaths, seoLocales, type PageKind } from '@/lib/localizedPages';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  return [
+  const basePages: MetadataRoute.Sitemap = [
     {
       url: `${SITE_URL}/`,
       lastModified: now,
@@ -30,4 +31,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
   ];
+
+  const localizedPages: MetadataRoute.Sitemap = seoLocales.flatMap((locale) =>
+    (Object.keys(pagePaths) as PageKind[]).map((kind) => ({
+      url: `${SITE_URL}${getLocalizedPath(locale, kind)}`,
+      lastModified: now,
+      changeFrequency: 'weekly' as const,
+      priority: kind === 'effect' ? 0.9 : 0.8,
+    }))
+  );
+
+  return [...basePages, ...localizedPages];
 }

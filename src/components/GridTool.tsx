@@ -31,15 +31,15 @@ import {
 import { useI18n } from '@/lib/i18n';
 
 const customSlots = [
-  { key: 'main', label: 'Main image' },
-  { key: 'header-tl', label: 'Header TL' },
-  { key: 'header-tr', label: 'Header TR' },
-  { key: 'header-bl', label: 'Header BL' },
-  { key: 'header-br', label: 'Header BR' },
-  { key: 'footer-tl', label: 'Footer TL' },
-  { key: 'footer-tr', label: 'Footer TR' },
-  { key: 'footer-bl', label: 'Footer BL' },
-  { key: 'footer-br', label: 'Footer BR' },
+  { key: 'main' },
+  { key: 'header-tl' },
+  { key: 'header-tr' },
+  { key: 'header-bl' },
+  { key: 'header-br' },
+  { key: 'footer-tl' },
+  { key: 'footer-tr' },
+  { key: 'footer-bl' },
+  { key: 'footer-br' },
 ];
 
 type GridToolProps = {
@@ -409,6 +409,15 @@ function getActionLabel(modeId: GridModeId, t: ReturnType<typeof useI18n>['t']) 
   return t('tool.process');
 }
 
+function getCustomSlotLabel(slot: string, t: ReturnType<typeof useI18n>['t']) {
+  const quadrant = slot.split('-').slice(1).join('-').toUpperCase();
+
+  if (slot === 'main') return t('custom.main');
+  if (slot.startsWith('header')) return `${t('custom.header')} ${quadrant}`;
+  if (slot.startsWith('footer')) return `${t('custom.footer')} ${quadrant}`;
+  return slot;
+}
+
 function ToolStep({
   label,
   title,
@@ -509,7 +518,8 @@ function ModeTutorialModal({
   onClose: () => void;
 }) {
   const isCustom = mode.id === 'x-custom';
-  const steps = getTutorialSteps(mode);
+  const { t } = useI18n();
+  const steps = getTutorialSteps(mode, t);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-3 py-4">
@@ -517,15 +527,15 @@ function ModeTutorialModal({
         <div className="flex items-start justify-between gap-4 border-b p-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
-              Quick guide
+              {t('tutorial.quickGuide')}
             </p>
-            <h2 className="mt-1 text-lg font-bold text-zinc-950">{mode.label}</h2>
+            <h2 className="mt-1 text-lg font-bold text-zinc-950">{getModeLabel(mode.id, t)}</h2>
           </div>
           <button
             type="button"
             onClick={onClose}
             className="inline-flex size-8 shrink-0 items-center justify-center rounded-md text-zinc-500 hover:bg-zinc-100 hover:text-zinc-950"
-            aria-label="Close tutorial"
+            aria-label={t('tutorial.close')}
           >
             <X className="size-4" />
           </button>
@@ -545,11 +555,11 @@ function ModeTutorialModal({
           </ol>
           {isCustom && (
             <p className="mt-4 rounded-md bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-800">
-              Tip: the Main image is shared across the four X preview tiles. Headers and footers become the tall images people see when they open each tile.
+              {t('tutorial.customTip')}
             </p>
           )}
           <Button className="mt-4 w-full" onClick={onClose}>
-            Got it
+            {t('tutorial.gotIt')}
           </Button>
         </div>
       </div>
@@ -601,39 +611,39 @@ function TutorialAnimation({ mode }: { mode: GridMode }) {
   );
 }
 
-function getTutorialSteps(mode: GridMode) {
+function getTutorialSteps(mode: GridMode, t: ReturnType<typeof useI18n>['t']) {
   if (mode.id === 'x-custom') {
     return [
-      'Select exactly 9 images.',
-      'Assign the shared Main image once.',
-      'Tap each Header and Footer slot, then choose one uploaded image.',
-      'When every slot is filled, create and download the 4 X grid images.',
+      t('tutorial.xCustom1'),
+      t('tutorial.xCustom2'),
+      t('tutorial.xCustom3'),
+      t('tutorial.xCustom4'),
     ];
   }
 
   if (mode.id === 'instagram-grid') {
     return [
-      'Upload one image you want to spread across your profile.',
-      'Choose cover to fill the squares or contain to keep the full image visible.',
-      'Download the 9 tiles.',
-      'Post tile 09 first and tile 01 last so the profile grid lines up.',
+      t('tutorial.igGrid1'),
+      t('tutorial.igGrid2'),
+      t('tutorial.igGrid3'),
+      t('tutorial.igGrid4'),
     ];
   }
 
   if (mode.id === 'instagram-carousel') {
     return [
-      'Upload one wide image or design.',
-      'Choose cover or contain based on how much cropping you want.',
-      'Download the square carousel slides.',
-      'Upload them to Instagram from 01 to the last tile.',
+      t('tutorial.igCarousel1'),
+      t('tutorial.igCarousel2'),
+      t('tutorial.igCarousel3'),
+      t('tutorial.igCarousel4'),
     ];
   }
 
   return [
-    'Upload one image for your X/Twitter post.',
-    'Choose cover to fill the post grid or contain to avoid cropping.',
-    'Preview the 2x2 layout.',
-    'Download all 4 images and attach them to one post.',
+    t('tutorial.xSingle1'),
+    t('tutorial.xSingle2'),
+    t('tutorial.xSingle3'),
+    t('tutorial.xSingle4'),
   ];
 }
 
@@ -649,9 +659,7 @@ function CustomGridForm({
   const { t } = useI18n();
   const assignedCount = Object.values(assignments).filter(Boolean).length;
   const progress = Math.round((assignedCount / customSlots.length) * 100);
-  const slotLabel = slotToAssign
-    ? customSlots.find((slot) => slot.key === slotToAssign)?.label || slotToAssign
-    : '';
+  const slotLabel = slotToAssign ? getCustomSlotLabel(slotToAssign, t) : '';
 
   return (
     <div className="min-w-0 rounded-md border border-zinc-200 bg-zinc-50 p-3">
@@ -691,10 +699,11 @@ function CustomGridForm({
       <div className="mt-4 rounded-md border bg-white p-3">
         <p className="mb-2 text-xs font-bold uppercase text-zinc-600">{t('custom.main')}</p>
         <SlotPreview
-          label="Main"
+          label={t('custom.main')}
           file={assignments.main}
           onClick={() => onOpenSlot('main')}
           className="mx-auto max-w-36"
+          emptyLabel={t('custom.clickAssign')}
         />
       </div>
       <div className="mt-4 grid grid-cols-1 gap-3 min-[420px]:grid-cols-2">
@@ -705,14 +714,16 @@ function CustomGridForm({
             </p>
             <div className="grid grid-cols-2 gap-2">
               <SlotPreview
-                label="Header"
+                label={t('custom.header')}
                 file={assignments[`header-${quadrant}`]}
                 onClick={() => onOpenSlot(`header-${quadrant}`)}
+                emptyLabel={t('custom.clickAssign')}
               />
               <SlotPreview
-                label="Footer"
+                label={t('custom.footer')}
                 file={assignments[`footer-${quadrant}`]}
                 onClick={() => onOpenSlot(`footer-${quadrant}`)}
+                emptyLabel={t('custom.clickAssign')}
               />
             </div>
           </div>
@@ -777,7 +788,7 @@ function GridResultPreview({
           ))}
         </div>
         <p className="mt-3 text-xs text-zinc-600">
-          Instagram profile grids appear newest-first. Upload tile 09 first and tile 01 last.
+          {t('preview.igGridOrder')}
         </p>
       </div>
     );
@@ -797,7 +808,7 @@ function GridResultPreview({
           ))}
         </div>
         <p className="mt-3 text-xs text-zinc-600">
-          Carousel tiles are ordered left to right. Upload them from 01 to {String(images.length).padStart(2, '0')}.
+          {t('preview.carouselOrder', { count: String(images.length).padStart(2, '0') })}
         </p>
       </div>
     );
@@ -808,11 +819,11 @@ function GridResultPreview({
       <div className="mb-3 flex items-center gap-3">
         <div className="size-9 shrink-0 rounded-full bg-zinc-950 sm:size-10" />
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-zinc-950">Your post preview</p>
-          <p className="text-xs text-zinc-500">@yourhandle · now</p>
+          <p className="text-sm font-semibold text-zinc-950">{t('preview.xTitle')}</p>
+          <p className="text-xs text-zinc-500">{t('preview.xMeta')}</p>
         </div>
       </div>
-      <p className="mb-3 text-sm text-zinc-700">Here is how the X grid will look in the feed.</p>
+      <p className="mb-3 text-sm text-zinc-700">{t('preview.xBody')}</p>
       <div className="grid aspect-[16/9] grid-cols-2 grid-rows-2 gap-1 overflow-hidden rounded-xl bg-zinc-200">
         {images.map((image, index) => (
           <PreviewImage key={image.url} image={image} index={index} className="h-full w-full" />

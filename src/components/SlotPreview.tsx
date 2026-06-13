@@ -7,9 +7,10 @@ type SlotPreviewProps = {
   file: File | null;
   onClick: () => void;
   className?: string;
+  emptyLabel?: string;
 };
 
-export default function SlotPreview({ label, file, onClick, className }:SlotPreviewProps) {
+export default function SlotPreview({ label, file, onClick, className, emptyLabel = 'Click to assign' }:SlotPreviewProps) {
   return (
     <div
       className={cn(
@@ -22,7 +23,7 @@ export default function SlotPreview({ label, file, onClick, className }:SlotPrev
       {file ? (
         <Image src={URL.createObjectURL(file)} className="mt-1 h-10 w-10 rounded object-cover" alt={"upload preview"} width={40} height={40} />
       ) : (
-        <div className="mt-1 text-xs leading-4 text-gray-400">Click to assign</div>
+        <div className="mt-1 text-xs leading-4 text-gray-400">{emptyLabel}</div>
       )}
     </div>
   );

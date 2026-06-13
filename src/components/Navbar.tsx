@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import {
   ExternalLink,
   Github,
@@ -10,11 +11,13 @@ import {
   Images,
   Languages,
   Menu,
+  Check,
+  ChevronDown,
   Sparkles,
   X,
   type LucideIcon,
 } from "lucide-react";
-import twitterLogo from "../../public/twitter-grid-logo.svg";
+import logo from "../../public/logo.png";
 import { GITHUB_URL, X_URL } from "../lib/constants";
 import { getLocaleLabel, supportedLocales, useI18n, type Locale } from "@/lib/i18n";
 
@@ -66,9 +69,9 @@ export default function Navbar() {
           onClick={closeMenu}
         >
           <Image
-            src={twitterLogo}
+            src={logo}
             alt=""
-            className="size-8 shrink-0"
+            className="size-8 shrink-0 object-contain"
             priority
           />
           <span className="font-bold tracking-tight">X-Grid</span>
@@ -81,7 +84,7 @@ export default function Navbar() {
             return (
               <Link
                 key={item.href}
-                href={item.href}
+                href={localizePath(item.href, locale)}
                 className="inline-flex h-9 shrink-0 items-center gap-2 rounded-md px-3 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 hover:text-zinc-950"
               >
                 <Icon className="size-4" />
@@ -134,7 +137,7 @@ export default function Navbar() {
               return (
                 <Link
                   key={item.href}
-                  href={item.href}
+                  href={localizePath(item.href, locale)}
                   onClick={closeMenu}
                   className="flex items-center gap-3 rounded-md border border-zinc-100 bg-zinc-50 px-3 py-3 text-left transition hover:border-zinc-200 hover:bg-white"
                 >
@@ -194,21 +197,123 @@ function LanguageSelect({
   label: string;
   mobile?: boolean;
 }) {
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+  const currentLabel = getLocaleLabel(locale);
+
+  const chooseLocale = (nextLocale: Locale) => {
+    setLocale(nextLocale);
+    setOpen(false);
+    router.push(localizePath(pathname, nextLocale));
+  };
+
   return (
-    <label className={mobile ? 'mt-2 flex items-center gap-2 text-sm font-semibold text-zinc-700' : 'flex items-center gap-1 text-sm font-semibold text-zinc-700'}>
-      <Languages className="size-4" />
-      <span className={mobile ? 'shrink-0' : 'sr-only'}>{label}</span>
-      <select
-        value={locale}
-        onChange={(event) => setLocale(event.target.value as Locale)}
-        className="h-9 rounded-md border border-zinc-200 bg-white px-2 text-sm font-semibold text-zinc-800 outline-none hover:bg-zinc-50"
+    <div className={mobile ? 'relative mt-2' : 'relative'}>
+      <button
+        type="button"
+        onClick={() => setOpen((current) => !current)}
+        className={
+          mobile
+            ? 'flex w-full items-center justify-between gap-3 rounded-md border border-zinc-200 bg-white px-3 py-2 text-left text-sm font-semibold text-zinc-800'
+            : 'inline-flex h-9 items-center gap-2 rounded-md border border-zinc-200 bg-white px-3 text-sm font-semibold text-zinc-800 transition hover:bg-zinc-50'
+        }
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-label={label}
       >
-        {supportedLocales.map((item) => (
-          <option key={item} value={item}>
-            {getLocaleLabel(item)}
-          </option>
-        ))}
-      </select>
-    </label>
+        <span className="flex min-w-0 items-center gap-2">
+          <Languages className="size-4 shrink-0 text-zinc-500" />
+          <span className={mobile ? 'truncate' : 'hidden max-w-24 truncate lg:inline'}>
+            {currentLabel}
+          </span>
+          {!mobile && <span className="lg:hidden">{localeToShortLabel(locale)}</span>}
+        </span>
+        <ChevronDown className="size-4 shrink-0 text-zinc-500" />
+      </button>
+
+      {open && (
+        <div
+          className={
+            mobile
+              ? 'mt-2 overflow-hidden rounded-md border border-zinc-200 bg-white shadow-sm'
+              : 'absolute right-0 top-11 z-50 w-56 overflow-hidden rounded-md border border-zinc-200 bg-white shadow-lg'
+          }
+          role="listbox"
+          aria-label={label}
+        >
+          <div className="border-b border-zinc-100 px-3 py-2 text-xs font-semibold text-zinc-500">
+            {label}
+          </div>
+          {supportedLocales.map((item) => {
+            const selected = item === locale;
+
+            return (
+              <button
+                key={item}
+                type="button"
+                onClick={() => chooseLocale(item)}
+                className="flex w-full items-center justify-between gap-3 px-3 py-2 text-left text-sm transition hover:bg-zinc-50"
+                role="option"
+                aria-selected={selected}
+              >
+                <span className="min-w-0">
+                  <span className="block truncate font-semibold text-zinc-900">
+                    {getLocaleLabel(item)}
+                  </span>
+                  <span className="block text-xs text-zinc-500">{localeToRegion(item)}</span>
+                </span>
+                {selected && <Check className="size-4 shrink-0 text-emerald-600" />}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
   );
+}
+
+export function localizePath(pathname: string, locale: Locale) {
+  const localeSlugs = ['zh-hk', 'ko', 'id', 'pt-br'];
+  const segments = pathname.split('/').filter(Boolean);
+  const hasLocale = segments[0] && localeSlugs.includes(segments[0]);
+  const rest = hasLocale ? segments.slice(1) : segments;
+
+  if (locale === 'en') {
+    return `/${rest.join('/')}` || '/';
+  }
+
+  const slug: Record<Locale, string> = {
+    en: '',
+    'zh-HK': 'zh-hk',
+    ko: 'ko',
+    id: 'id',
+    'pt-BR': 'pt-br',
+  };
+
+  return `/${[slug[locale], ...rest].filter(Boolean).join('/')}`;
+}
+
+function localeToShortLabel(locale: Locale) {
+  const labels: Record<Locale, string> = {
+    en: 'EN',
+    'zh-HK': '繁',
+    ko: 'KO',
+    id: 'ID',
+    'pt-BR': 'PT',
+  };
+
+  return labels[locale];
+}
+
+function localeToRegion(locale: Locale) {
+  const labels: Record<Locale, string> = {
+    en: 'Global',
+    'zh-HK': 'Hong Kong',
+    ko: 'South Korea',
+    id: 'Indonesia',
+    'pt-BR': 'Brazil',
+  };
+
+  return labels[locale];
 }

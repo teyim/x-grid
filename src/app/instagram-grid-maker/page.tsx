@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import GridTool from '@/components/GridTool';
 import SeoSections from '@/components/SeoSections';
 import StructuredData from '@/components/StructuredData';
+import { getLanguageAlternates } from '@/lib/localizedPages';
 import { SITE_URL } from '@/lib/seo';
 
 const pageUrl = `${SITE_URL}/instagram-grid-maker`;
@@ -35,6 +36,7 @@ export const metadata: Metadata = {
     'Free Instagram grid maker and carousel splitter. Split one photo into a 3x3 profile grid or square carousel slides directly in your browser.',
   alternates: {
     canonical: pageUrl,
+    languages: getLanguageAlternates('instagram'),
   },
   keywords: [
     'Instagram grid maker',

@@ -3,6 +3,7 @@ import GridTool from '@/components/GridTool';
 import HomeHeroCopy from '@/components/HomeHeroCopy';
 import SeoSections from '@/components/SeoSections';
 import StructuredData from '@/components/StructuredData';
+import { getLanguageAlternates } from '@/lib/localizedPages';
 import { SITE_URL } from '@/lib/seo';
 
 const pageUrl = `${SITE_URL}/`;
@@ -36,6 +37,7 @@ export const metadata: Metadata = {
     'Create X/Twitter and Instagram photo grids in your browser. Split images into X 2x2 posts, Instagram 3x3 grids, or carousel tiles with private client-side processing.',
   alternates: {
     canonical: pageUrl,
+    languages: getLanguageAlternates('home'),
   },
   keywords: [
     'X grid maker',

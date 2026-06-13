@@ -3,6 +3,7 @@ import Link from 'next/link';
 import GridTool from '@/components/GridTool';
 import SeoSections from '@/components/SeoSections';
 import StructuredData from '@/components/StructuredData';
+import { getLanguageAlternates } from '@/lib/localizedPages';
 import { SITE_URL } from '@/lib/seo';
 
 const pageUrl = `${SITE_URL}/create-twitter-grid-effect`;
@@ -36,6 +37,7 @@ export const metadata: Metadata = {
     'Create a Twitter grid effect online. Split images for X/Twitter posts, preview the layout, and download grid tiles privately in your browser.',
   alternates: {
     canonical: pageUrl,
+    languages: getLanguageAlternates('effect'),
   },
   keywords: [
     'create twitter grid effect',

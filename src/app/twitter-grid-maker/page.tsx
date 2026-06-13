@@ -3,6 +3,7 @@ import Link from 'next/link';
 import GridTool from '@/components/GridTool';
 import SeoSections from '@/components/SeoSections';
 import StructuredData from '@/components/StructuredData';
+import { getLanguageAlternates } from '@/lib/localizedPages';
 import { SITE_URL } from '@/lib/seo';
 
 const pageUrl = `${SITE_URL}/twitter-grid-maker`;
@@ -36,6 +37,7 @@ export const metadata: Metadata = {
     'Free Twitter grid maker for 2x2 photo posts, custom X grid illusions, and Twitter grid effects. Split and download images privately in your browser.',
   alternates: {
     canonical: pageUrl,
+    languages: getLanguageAlternates('twitter'),
   },
   keywords: [
     'Twitter grid maker',

@@ -62,8 +62,36 @@ type TranslationKey =
   | 'custom.progress'
   | 'custom.tip'
   | 'custom.main'
+  | 'custom.header'
+  | 'custom.footer'
   | 'custom.assign'
-  | 'custom.cancel';
+  | 'custom.cancel'
+  | 'custom.clickAssign'
+  | 'tutorial.quickGuide'
+  | 'tutorial.close'
+  | 'tutorial.gotIt'
+  | 'tutorial.customTip'
+  | 'tutorial.xSingle1'
+  | 'tutorial.xSingle2'
+  | 'tutorial.xSingle3'
+  | 'tutorial.xSingle4'
+  | 'tutorial.xCustom1'
+  | 'tutorial.xCustom2'
+  | 'tutorial.xCustom3'
+  | 'tutorial.xCustom4'
+  | 'tutorial.igGrid1'
+  | 'tutorial.igGrid2'
+  | 'tutorial.igGrid3'
+  | 'tutorial.igGrid4'
+  | 'tutorial.igCarousel1'
+  | 'tutorial.igCarousel2'
+  | 'tutorial.igCarousel3'
+  | 'tutorial.igCarousel4'
+  | 'preview.igGridOrder'
+  | 'preview.carouselOrder'
+  | 'preview.xTitle'
+  | 'preview.xMeta'
+  | 'preview.xBody';
 
 const localeLabels: Record<Locale, string> = {
   en: 'English',
@@ -127,8 +155,36 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.progress': '{assigned}/9 slots assigned',
     'custom.tip': 'Tap a slot below, then choose one uploaded image from the popup.',
     'custom.main': 'Shared main image',
+    'custom.header': 'Header',
+    'custom.footer': 'Footer',
     'custom.assign': 'Assign image to {slot}',
     'custom.cancel': 'Cancel',
+    'custom.clickAssign': 'Click to assign',
+    'tutorial.quickGuide': 'Quick guide',
+    'tutorial.close': 'Close tutorial',
+    'tutorial.gotIt': 'Got it',
+    'tutorial.customTip': 'Tip: the Main image is shared across the four X preview tiles. Headers and footers become the tall images people see when they open each tile.',
+    'tutorial.xSingle1': 'Upload one image for your X/Twitter post.',
+    'tutorial.xSingle2': 'Choose cover to fill the post grid or contain to avoid cropping.',
+    'tutorial.xSingle3': 'Preview the 2x2 layout.',
+    'tutorial.xSingle4': 'Download all 4 images and attach them to one post.',
+    'tutorial.xCustom1': 'Select exactly 9 images.',
+    'tutorial.xCustom2': 'Assign the shared Main image once.',
+    'tutorial.xCustom3': 'Tap each Header and Footer slot, then choose one uploaded image.',
+    'tutorial.xCustom4': 'When every slot is filled, create and download the 4 X grid images.',
+    'tutorial.igGrid1': 'Upload one image you want to spread across your profile.',
+    'tutorial.igGrid2': 'Choose cover to fill the squares or contain to keep the full image visible.',
+    'tutorial.igGrid3': 'Download the 9 tiles.',
+    'tutorial.igGrid4': 'Post tile 09 first and tile 01 last so the profile grid lines up.',
+    'tutorial.igCarousel1': 'Upload one wide image or design.',
+    'tutorial.igCarousel2': 'Choose cover or contain based on how much cropping you want.',
+    'tutorial.igCarousel3': 'Download the square carousel slides.',
+    'tutorial.igCarousel4': 'Upload them to Instagram from 01 to the last tile.',
+    'preview.igGridOrder': 'Instagram profile grids appear newest-first. Upload tile 09 first and tile 01 last.',
+    'preview.carouselOrder': 'Carousel tiles are ordered left to right. Upload them from 01 to {count}.',
+    'preview.xTitle': 'Your post preview',
+    'preview.xMeta': '@yourhandle · now',
+    'preview.xBody': 'Here is how the X grid will look in the feed.',
   },
   'zh-HK': {
     language: '語言',
@@ -181,8 +237,36 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.progress': '已指定 {assigned}/9 個位置',
     'custom.tip': '點擊下方位置，然後在彈窗選擇已上傳圖片。',
     'custom.main': '共用主圖',
+    'custom.header': '頂部',
+    'custom.footer': '底部',
     'custom.assign': '指定圖片到 {slot}',
     'custom.cancel': '取消',
+    'custom.clickAssign': '點擊指定',
+    'tutorial.quickGuide': '快速指南',
+    'tutorial.close': '關閉教學',
+    'tutorial.gotIt': '明白',
+    'tutorial.customTip': '提示：主圖會共用於四個 X 預覽圖片。頂部和底部圖片會成為開啟每張圖片後看到的長圖內容。',
+    'tutorial.xSingle1': '上傳一張用於 X/Twitter 貼文的圖片。',
+    'tutorial.xSingle2': '選擇填滿網格，或完整保留以避免裁切。',
+    'tutorial.xSingle3': '預覽 2x2 版面。',
+    'tutorial.xSingle4': '下載 4 張圖片並附加到同一篇貼文。',
+    'tutorial.xCustom1': '選擇剛好 9 張圖片。',
+    'tutorial.xCustom2': '先指定一次共用主圖。',
+    'tutorial.xCustom3': '點擊每個頂部和底部位置，然後選擇已上傳圖片。',
+    'tutorial.xCustom4': '所有位置填好後，建立並下載 4 張 X 網格圖片。',
+    'tutorial.igGrid1': '上傳要延伸到個人頁網格的一張圖片。',
+    'tutorial.igGrid2': '選擇填滿方格，或完整保留圖片。',
+    'tutorial.igGrid3': '下載 9 張圖片。',
+    'tutorial.igGrid4': '先發佈第 09 張，最後發佈第 01 張，個人頁網格才會對齊。',
+    'tutorial.igCarousel1': '上傳一張寬圖或設計圖。',
+    'tutorial.igCarousel2': '根據需要選擇填滿或完整保留。',
+    'tutorial.igCarousel3': '下載方形輪播圖片。',
+    'tutorial.igCarousel4': '從 01 到最後一張依序上傳到 Instagram。',
+    'preview.igGridOrder': 'Instagram 個人頁網格是最新貼文在前。請先上傳 09，最後上傳 01。',
+    'preview.carouselOrder': '輪播圖片由左至右排序。請從 01 上傳到 {count}。',
+    'preview.xTitle': '你的貼文預覽',
+    'preview.xMeta': '@yourhandle · 現在',
+    'preview.xBody': '這是 X 網格在動態中的顯示效果。',
   },
   ko: {
     language: '언어',
@@ -235,8 +319,36 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.progress': '{assigned}/9 슬롯 지정됨',
     'custom.tip': '아래 슬롯을 누른 뒤 팝업에서 업로드한 이미지를 선택하세요.',
     'custom.main': '공유 메인 이미지',
+    'custom.header': '헤더',
+    'custom.footer': '푸터',
     'custom.assign': '{slot}에 이미지 지정',
     'custom.cancel': '취소',
+    'custom.clickAssign': '눌러서 지정',
+    'tutorial.quickGuide': '빠른 가이드',
+    'tutorial.close': '튜토리얼 닫기',
+    'tutorial.gotIt': '알겠습니다',
+    'tutorial.customTip': '팁: 메인 이미지는 네 개의 X 미리보기 타일에 공유됩니다. 헤더와 푸터는 각 타일을 열었을 때 보이는 긴 이미지가 됩니다.',
+    'tutorial.xSingle1': 'X/Twitter 게시물용 이미지 한 장을 업로드하세요.',
+    'tutorial.xSingle2': '채우기 또는 전체 보기를 선택하세요.',
+    'tutorial.xSingle3': '2x2 레이아웃을 미리보세요.',
+    'tutorial.xSingle4': '4개 이미지를 다운로드해 한 게시물에 첨부하세요.',
+    'tutorial.xCustom1': '정확히 9장의 이미지를 선택하세요.',
+    'tutorial.xCustom2': '공유 메인 이미지를 한 번 지정하세요.',
+    'tutorial.xCustom3': '각 헤더와 푸터 슬롯을 누르고 업로드한 이미지를 선택하세요.',
+    'tutorial.xCustom4': '모든 슬롯을 채운 뒤 4개의 X 그리드 이미지를 만드세요.',
+    'tutorial.igGrid1': '프로필에 펼칠 이미지 한 장을 업로드하세요.',
+    'tutorial.igGrid2': '정사각형 채우기 또는 전체 보기를 선택하세요.',
+    'tutorial.igGrid3': '9개 타일을 다운로드하세요.',
+    'tutorial.igGrid4': '09번 타일부터 올리고 01번을 마지막에 올리세요.',
+    'tutorial.igCarousel1': '가로 이미지나 디자인을 업로드하세요.',
+    'tutorial.igCarousel2': '원하는 자르기 방식으로 채우기 또는 전체 보기를 선택하세요.',
+    'tutorial.igCarousel3': '정사각형 캐러셀 슬라이드를 다운로드하세요.',
+    'tutorial.igCarousel4': '01번부터 마지막 타일까지 Instagram에 업로드하세요.',
+    'preview.igGridOrder': 'Instagram 프로필 그리드는 최신 게시물이 먼저 보입니다. 09번을 먼저, 01번을 마지막에 올리세요.',
+    'preview.carouselOrder': '캐러셀 타일은 왼쪽에서 오른쪽 순서입니다. 01부터 {count}까지 업로드하세요.',
+    'preview.xTitle': '게시물 미리보기',
+    'preview.xMeta': '@yourhandle · 지금',
+    'preview.xBody': 'X 피드에서 그리드가 이렇게 보입니다.',
   },
   id: {
     language: 'Bahasa',
@@ -289,8 +401,36 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.progress': '{assigned}/9 slot terisi',
     'custom.tip': 'Ketuk slot di bawah, lalu pilih gambar yang sudah diunggah dari popup.',
     'custom.main': 'Gambar utama bersama',
+    'custom.header': 'Header',
+    'custom.footer': 'Footer',
     'custom.assign': 'Tetapkan gambar ke {slot}',
     'custom.cancel': 'Batal',
+    'custom.clickAssign': 'Klik untuk menetapkan',
+    'tutorial.quickGuide': 'Panduan cepat',
+    'tutorial.close': 'Tutup panduan',
+    'tutorial.gotIt': 'Mengerti',
+    'tutorial.customTip': 'Tips: gambar utama dipakai bersama di empat tile pratinjau X. Header dan footer menjadi gambar tinggi saat tile dibuka.',
+    'tutorial.xSingle1': 'Unggah satu gambar untuk posting X/Twitter.',
+    'tutorial.xSingle2': 'Pilih penuhi atau tampilkan penuh untuk mengatur potongan.',
+    'tutorial.xSingle3': 'Pratinjau tata letak 2x2.',
+    'tutorial.xSingle4': 'Unduh 4 gambar dan lampirkan ke satu posting.',
+    'tutorial.xCustom1': 'Pilih tepat 9 gambar.',
+    'tutorial.xCustom2': 'Tetapkan gambar utama bersama satu kali.',
+    'tutorial.xCustom3': 'Ketuk setiap slot header dan footer, lalu pilih gambar.',
+    'tutorial.xCustom4': 'Setelah semua slot terisi, buat dan unduh 4 gambar grid X.',
+    'tutorial.igGrid1': 'Unggah satu gambar untuk ditampilkan di profil.',
+    'tutorial.igGrid2': 'Pilih penuhi kotak atau tampilkan gambar penuh.',
+    'tutorial.igGrid3': 'Unduh 9 tile.',
+    'tutorial.igGrid4': 'Posting tile 09 dulu dan tile 01 terakhir agar grid sejajar.',
+    'tutorial.igCarousel1': 'Unggah satu gambar lebar atau desain.',
+    'tutorial.igCarousel2': 'Pilih penuhi atau tampilkan penuh sesuai kebutuhan.',
+    'tutorial.igCarousel3': 'Unduh slide carousel kotak.',
+    'tutorial.igCarousel4': 'Unggah ke Instagram dari 01 sampai tile terakhir.',
+    'preview.igGridOrder': 'Grid profil Instagram menampilkan yang terbaru lebih dulu. Unggah tile 09 dulu dan tile 01 terakhir.',
+    'preview.carouselOrder': 'Tile carousel berurutan dari kiri ke kanan. Unggah dari 01 sampai {count}.',
+    'preview.xTitle': 'Pratinjau posting',
+    'preview.xMeta': '@yourhandle · sekarang',
+    'preview.xBody': 'Beginilah tampilan grid X di feed.',
   },
   'pt-BR': {
     language: 'Idioma',
@@ -343,8 +483,36 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.progress': '{assigned}/9 espaços preenchidos',
     'custom.tip': 'Toque em um espaço abaixo e escolha uma imagem enviada no popup.',
     'custom.main': 'Imagem principal compartilhada',
+    'custom.header': 'Cabeçalho',
+    'custom.footer': 'Rodapé',
     'custom.assign': 'Atribuir imagem a {slot}',
     'custom.cancel': 'Cancelar',
+    'custom.clickAssign': 'Clique para atribuir',
+    'tutorial.quickGuide': 'Guia rápido',
+    'tutorial.close': 'Fechar tutorial',
+    'tutorial.gotIt': 'Entendi',
+    'tutorial.customTip': 'Dica: a imagem principal é compartilhada nos quatro tiles de prévia do X. Cabeçalhos e rodapés viram as imagens altas vistas ao abrir cada tile.',
+    'tutorial.xSingle1': 'Envie uma imagem para o post no X/Twitter.',
+    'tutorial.xSingle2': 'Escolha preencher ou mostrar tudo para controlar o corte.',
+    'tutorial.xSingle3': 'Visualize o layout 2x2.',
+    'tutorial.xSingle4': 'Baixe as 4 imagens e anexe todas em um post.',
+    'tutorial.xCustom1': 'Selecione exatamente 9 imagens.',
+    'tutorial.xCustom2': 'Atribua a imagem principal compartilhada uma vez.',
+    'tutorial.xCustom3': 'Toque em cada cabeçalho e rodapé e escolha uma imagem enviada.',
+    'tutorial.xCustom4': 'Quando todos os espaços estiverem preenchidos, crie e baixe as 4 imagens da grade X.',
+    'tutorial.igGrid1': 'Envie uma imagem para espalhar no perfil.',
+    'tutorial.igGrid2': 'Escolha preencher os quadrados ou mostrar a imagem inteira.',
+    'tutorial.igGrid3': 'Baixe os 9 tiles.',
+    'tutorial.igGrid4': 'Publique o tile 09 primeiro e o tile 01 por último para alinhar a grade.',
+    'tutorial.igCarousel1': 'Envie uma imagem larga ou um design.',
+    'tutorial.igCarousel2': 'Escolha preencher ou mostrar tudo conforme o corte desejado.',
+    'tutorial.igCarousel3': 'Baixe os slides quadrados do carrossel.',
+    'tutorial.igCarousel4': 'Envie ao Instagram do 01 até o último tile.',
+    'preview.igGridOrder': 'Grades de perfil do Instagram mostram o mais recente primeiro. Envie o tile 09 primeiro e o tile 01 por último.',
+    'preview.carouselOrder': 'Tiles de carrossel seguem da esquerda para a direita. Envie de 01 até {count}.',
+    'preview.xTitle': 'Prévia do post',
+    'preview.xMeta': '@yourhandle · agora',
+    'preview.xBody': 'Veja como a grade X aparecerá no feed.',
   },
 };
 
@@ -362,6 +530,9 @@ export const getLocaleLabel = (locale: Locale) => localeLabels[locale];
 function detectLocale(): Locale {
   if (typeof window === 'undefined') return 'en';
 
+  const pathLocale = pathSlugToLocale(window.location.pathname.split('/')[1]);
+  if (pathLocale) return pathLocale;
+
   const stored = window.localStorage.getItem('x-grid-locale') as Locale | null;
   if (stored && supportedLocales.includes(stored)) return stored;
 
@@ -371,6 +542,17 @@ function detectLocale(): Locale {
   if (language.startsWith('id')) return 'id';
   if (language.startsWith('pt-br') || language.startsWith('pt')) return 'pt-BR';
   return 'en';
+}
+
+function pathSlugToLocale(slug: string): Locale | null {
+  const map: Record<string, Locale> = {
+    'zh-hk': 'zh-HK',
+    ko: 'ko',
+    id: 'id',
+    'pt-br': 'pt-BR',
+  };
+
+  return map[slug] || null;
 }
 
 export function I18nProvider({ children }: { children: ReactNode }) {
@@ -384,6 +566,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     const setLocale = (nextLocale: Locale) => {
       setLocaleState(nextLocale);
       window.localStorage.setItem('x-grid-locale', nextLocale);
+      document.cookie = `x-grid-locale=${nextLocale}; path=/; max-age=31536000; SameSite=Lax`;
       document.documentElement.lang = nextLocale;
     };
 
