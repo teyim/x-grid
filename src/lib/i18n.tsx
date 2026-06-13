@@ -37,6 +37,7 @@ type TranslationKey =
   | 'tool.cover'
   | 'tool.contain'
   | 'tool.how'
+  | 'tool.howLook'
   | 'tool.process'
   | 'tool.processing'
   | 'tool.reset'
@@ -98,7 +99,19 @@ type TranslationKey =
   | 'preview.xBody'
   | 'preview.customRevealPrompt'
   | 'preview.openFull'
-  | 'preview.fullImage';
+  | 'preview.fullImage'
+  | 'look.title'
+  | 'look.close'
+  | 'look.xSingleDesc'
+  | 'look.xCustomDesc'
+  | 'look.igGridDesc'
+  | 'look.igCarouselDesc'
+  | 'look.customPrompt'
+  | 'look.openStack'
+  | 'look.stackTitle'
+  | 'look.header'
+  | 'look.sharedMain'
+  | 'look.footer';
 
 const localeLabels: Record<Locale, string> = {
   en: 'English',
@@ -137,6 +150,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'tool.cover': 'Cover',
     'tool.contain': 'Contain',
     'tool.how': 'How it works',
+    'tool.howLook': 'How it will look',
     'tool.process': 'Process images',
     'tool.processing': 'Processing...',
     'tool.reset': 'Reset',
@@ -199,6 +213,18 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'preview.customRevealPrompt': 'Click any preview tile to open the full stacked image effect.',
     'preview.openFull': 'Open full image',
     'preview.fullImage': 'Full image',
+    'look.title': 'Result preview',
+    'look.close': 'Close result preview',
+    'look.xSingleDesc': 'The final X post appears as one 2x2 image grid.',
+    'look.xCustomDesc': 'The feed shows four tiles, and each opened tile reveals a tall stacked image.',
+    'look.igGridDesc': 'The downloads line up as a 3x3 Instagram profile grid.',
+    'look.igCarouselDesc': 'The downloads become square slides in one swipeable carousel.',
+    'look.customPrompt': 'Click a tile to see the stacked image people see when they open it.',
+    'look.openStack': 'Open stacked image',
+    'look.stackTitle': 'Opened tile:',
+    'look.header': 'Header image',
+    'look.sharedMain': 'Shared main image',
+    'look.footer': 'Footer image',
   },
   'zh-HK': {
     language: '語言',
@@ -226,6 +252,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'tool.cover': '填滿',
     'tool.contain': '完整保留',
     'tool.how': '使用方式',
+    'tool.howLook': '效果預覽',
     'tool.process': '處理圖片',
     'tool.processing': '處理中...',
     'tool.reset': '重設',
@@ -288,6 +315,18 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'preview.customRevealPrompt': '點擊任何預覽圖片，開啟完整堆疊效果。',
     'preview.openFull': '開啟完整圖片',
     'preview.fullImage': '完整圖片',
+    'look.title': '結果預覽',
+    'look.close': '關閉結果預覽',
+    'look.xSingleDesc': '最終 X 貼文會顯示成一個 2x2 圖片網格。',
+    'look.xCustomDesc': '動態會顯示四張圖片；開啟每張後會看到一張直向堆疊長圖。',
+    'look.igGridDesc': '下載的圖片會排列成 Instagram 個人頁 3x3 網格。',
+    'look.igCarouselDesc': '下載的圖片會成為同一個可滑動輪播的方形圖片。',
+    'look.customPrompt': '點擊圖片，查看別人開啟後會看到的堆疊長圖。',
+    'look.openStack': '開啟堆疊圖片',
+    'look.stackTitle': '已開啟圖片：',
+    'look.header': '頂部圖片',
+    'look.sharedMain': '共用主圖',
+    'look.footer': '底部圖片',
   },
   ko: {
     language: '언어',
@@ -315,6 +354,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'tool.cover': '채우기',
     'tool.contain': '전체 보기',
     'tool.how': '사용 방법',
+    'tool.howLook': '결과 모습',
     'tool.process': '이미지 처리',
     'tool.processing': '처리 중...',
     'tool.reset': '초기화',
@@ -377,6 +417,18 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'preview.customRevealPrompt': '미리보기 타일을 누르면 전체 스택 이미지 효과를 볼 수 있습니다.',
     'preview.openFull': '전체 이미지 열기',
     'preview.fullImage': '전체 이미지',
+    'look.title': '결과 미리보기',
+    'look.close': '결과 미리보기 닫기',
+    'look.xSingleDesc': '완성된 X 게시물은 하나의 2x2 이미지 그리드처럼 보입니다.',
+    'look.xCustomDesc': '피드에는 네 개의 타일이 보이고, 각 타일을 열면 긴 스택 이미지가 나타납니다.',
+    'look.igGridDesc': '다운로드한 이미지는 Instagram 프로필의 3x3 그리드로 맞춰집니다.',
+    'look.igCarouselDesc': '다운로드한 이미지는 하나의 스와이프 캐러셀 슬라이드가 됩니다.',
+    'look.customPrompt': '타일을 눌러 사람들이 열었을 때 보는 스택 이미지를 확인하세요.',
+    'look.openStack': '스택 이미지 열기',
+    'look.stackTitle': '열린 타일:',
+    'look.header': '헤더 이미지',
+    'look.sharedMain': '공유 메인 이미지',
+    'look.footer': '푸터 이미지',
   },
   id: {
     language: 'Bahasa',
@@ -404,6 +456,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'tool.cover': 'Penuhi',
     'tool.contain': 'Tampilkan penuh',
     'tool.how': 'Cara kerja',
+    'tool.howLook': 'Tampilan hasil',
     'tool.process': 'Proses gambar',
     'tool.processing': 'Memproses...',
     'tool.reset': 'Reset',
@@ -466,6 +519,18 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'preview.customRevealPrompt': 'Klik tile pratinjau untuk membuka efek gambar bertumpuk penuh.',
     'preview.openFull': 'Buka gambar penuh',
     'preview.fullImage': 'Gambar penuh',
+    'look.title': 'Pratinjau hasil',
+    'look.close': 'Tutup pratinjau hasil',
+    'look.xSingleDesc': 'Posting X akhir tampil sebagai satu grid gambar 2x2.',
+    'look.xCustomDesc': 'Feed menampilkan empat tile, dan tiap tile terbuka menjadi gambar bertumpuk tinggi.',
+    'look.igGridDesc': 'Unduhan tersusun sebagai grid profil Instagram 3x3.',
+    'look.igCarouselDesc': 'Unduhan menjadi slide kotak dalam satu carousel geser.',
+    'look.customPrompt': 'Klik tile untuk melihat gambar bertumpuk yang terlihat saat dibuka.',
+    'look.openStack': 'Buka gambar bertumpuk',
+    'look.stackTitle': 'Tile terbuka:',
+    'look.header': 'Gambar header',
+    'look.sharedMain': 'Gambar utama bersama',
+    'look.footer': 'Gambar footer',
   },
   'pt-BR': {
     language: 'Idioma',
@@ -493,6 +558,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'tool.cover': 'Preencher',
     'tool.contain': 'Mostrar tudo',
     'tool.how': 'Como funciona',
+    'tool.howLook': 'Como vai ficar',
     'tool.process': 'Processar imagens',
     'tool.processing': 'Processando...',
     'tool.reset': 'Redefinir',
@@ -555,6 +621,18 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'preview.customRevealPrompt': 'Clique em qualquer tile da prévia para abrir a imagem empilhada completa.',
     'preview.openFull': 'Abrir imagem completa',
     'preview.fullImage': 'Imagem completa',
+    'look.title': 'Prévia do resultado',
+    'look.close': 'Fechar prévia do resultado',
+    'look.xSingleDesc': 'O post final no X aparece como uma grade 2x2 de imagens.',
+    'look.xCustomDesc': 'O feed mostra quatro tiles, e cada tile aberto revela uma imagem alta empilhada.',
+    'look.igGridDesc': 'Os downloads se alinham como uma grade 3x3 no perfil do Instagram.',
+    'look.igCarouselDesc': 'Os downloads viram slides quadrados em um carrossel deslizável.',
+    'look.customPrompt': 'Clique em um tile para ver a imagem empilhada que aparece ao abrir.',
+    'look.openStack': 'Abrir imagem empilhada',
+    'look.stackTitle': 'Tile aberto:',
+    'look.header': 'Imagem de cabeçalho',
+    'look.sharedMain': 'Imagem principal compartilhada',
+    'look.footer': 'Imagem de rodapé',
   },
 };
 

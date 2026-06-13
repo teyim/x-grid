@@ -3,6 +3,7 @@
 import { useMemo, useState, type ReactNode } from 'react';
 import {
   Download,
+  Eye,
   Grid2X2,
   Grid3X3,
   HelpCircle,
@@ -44,6 +45,10 @@ const customSlots = [
 ];
 
 const imageAccept = 'image/*,.heic,.heif';
+const sampleImages = {
+  landscape: '/samples/social-grid-landscape.jpg',
+  carousel: '/samples/social-grid-carousel.jpg',
+};
 
 type GridToolProps = {
   initialMode?: GridModeId;
@@ -69,6 +74,7 @@ export default function GridTool({
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [tutorialModeId, setTutorialModeId] = useState<GridModeId | null>(null);
+  const [lookModeId, setLookModeId] = useState<GridModeId | null>(null);
   const { t } = useI18n();
   const posthog = usePostHog();
 
@@ -289,14 +295,24 @@ export default function GridTool({
           </div>
           <div className="mt-2 flex flex-col gap-2 rounded-md bg-zinc-50 px-3 py-2 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-xs leading-5 text-zinc-600">{getModeDescription(mode.id, t)}</p>
-            <button
-              type="button"
-              onClick={() => setTutorialModeId(mode.id)}
-              className="inline-flex shrink-0 items-center gap-1.5 text-xs font-semibold text-zinc-900 hover:text-emerald-700"
-            >
-              <HelpCircle className="size-3.5" />
-              {t('tool.how')}
-            </button>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setTutorialModeId(mode.id)}
+                className="inline-flex shrink-0 items-center gap-1.5 rounded border border-zinc-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm hover:border-emerald-300 hover:text-emerald-700"
+              >
+                <HelpCircle className="size-3.5" />
+                {t('tool.how')}
+              </button>
+              <button
+                type="button"
+                onClick={() => setLookModeId(mode.id)}
+                className="inline-flex shrink-0 items-center gap-1.5 rounded border border-zinc-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm hover:border-blue-300 hover:text-blue-700"
+              >
+                <Eye className="size-3.5" />
+                {t('tool.howLook')}
+              </button>
+            </div>
           </div>
         </ToolStep>
 
@@ -392,6 +408,13 @@ export default function GridTool({
         <ModeTutorialModal
           mode={getGridMode(tutorialModeId)}
           onClose={() => setTutorialModeId(null)}
+        />
+      )}
+
+      {lookModeId && (
+        <ModeLookPreviewModal
+          mode={getGridMode(lookModeId)}
+          onClose={() => setLookModeId(null)}
         />
       )}
     </section>
@@ -596,6 +619,290 @@ function ModeTutorialModal({
           </Button>
         </div>
       </div>
+    </div>
+  );
+}
+
+function ModeLookPreviewModal({
+  mode,
+  onClose,
+}: {
+  mode: GridMode;
+  onClose: () => void;
+}) {
+  const { t } = useI18n();
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-3 py-4">
+      <div className="flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-lg bg-white shadow-xl">
+        <div className="flex items-start justify-between gap-4 border-b p-4">
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-700">
+              {t('look.title')}
+            </p>
+            <h2 className="mt-1 truncate text-lg font-bold text-zinc-950">{getModeLabel(mode.id, t)}</h2>
+            <p className="mt-1 text-sm leading-6 text-zinc-600">{getLookDescription(mode.id, t)}</p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex size-8 shrink-0 items-center justify-center rounded-md text-zinc-500 hover:bg-zinc-100 hover:text-zinc-950"
+            aria-label={t('look.close')}
+          >
+            <X className="size-4" />
+          </button>
+        </div>
+
+        <div className="min-h-0 overflow-auto p-4">
+          <LookPreview mode={mode} />
+          <Button className="mt-4 w-full" onClick={onClose}>
+            {t('tutorial.gotIt')}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function getLookDescription(modeId: GridModeId, t: ReturnType<typeof useI18n>['t']) {
+  const descriptions: Record<GridModeId, string> = {
+    'x-single': t('look.xSingleDesc'),
+    'x-custom': t('look.xCustomDesc'),
+    'instagram-grid': t('look.igGridDesc'),
+    'instagram-carousel': t('look.igCarouselDesc'),
+  };
+
+  return descriptions[modeId];
+}
+
+function LookPreview({ mode }: { mode: GridMode }) {
+  if (mode.id === 'instagram-grid') return <InstagramGridLook />;
+  if (mode.id === 'instagram-carousel') return <InstagramCarouselLook />;
+  if (mode.id === 'x-custom') return <XCustomLook />;
+  return <XSingleLook />;
+}
+
+function XSingleLook() {
+  const { t } = useI18n();
+
+  return (
+    <div className="rounded-xl border bg-zinc-50 p-3">
+      <XPostShell>
+        <div className="grid aspect-[16/9] grid-cols-2 grid-rows-2 gap-1 overflow-hidden rounded-xl bg-zinc-200">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <PhotoSliceTile
+              key={index}
+              src={sampleImages.landscape}
+              index={index}
+              columns={2}
+              rows={2}
+              className="h-full w-full"
+            />
+          ))}
+        </div>
+      </XPostShell>
+      <p className="mt-3 text-xs leading-5 text-zinc-600">{t('look.xSingleDesc')}</p>
+    </div>
+  );
+}
+
+function XCustomLook() {
+  const { t } = useI18n();
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const quadrants = ['tl', 'tr', 'bl', 'br'];
+  const selectedQuadrant = quadrants[selectedIndex];
+
+  return (
+    <div className="rounded-xl border bg-zinc-50 p-3">
+      <p className="mb-3 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold leading-5 text-emerald-800">
+        {t('look.customPrompt')}
+      </p>
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(220px,0.75fr)]">
+        <XPostShell>
+          <div className="grid aspect-[16/9] grid-cols-2 grid-rows-2 gap-1 overflow-hidden rounded-xl bg-zinc-200">
+            {quadrants.map((quadrant, index) => (
+              <button
+                type="button"
+                key={quadrant}
+                onClick={() => setSelectedIndex(index)}
+                aria-label={`${t('look.openStack')} ${getQuadrantLabel(quadrant, t)}`}
+                className={cn(
+                  'relative min-h-24 overflow-hidden text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600',
+                  selectedIndex === index ? 'ring-4 ring-emerald-500' : 'hover:brightness-95'
+                )}
+              >
+                <PhotoSliceTile
+                  src={sampleImages.landscape}
+                  index={index}
+                  columns={2}
+                  rows={2}
+                  className="h-full w-full"
+                />
+                <span className="absolute inset-x-2 bottom-2 truncate rounded bg-white/90 px-2 py-1 text-[11px] font-bold text-zinc-950">
+                  {getQuadrantLabel(quadrant, t)}
+                </span>
+              </button>
+            ))}
+          </div>
+        </XPostShell>
+        <StackedCardLook
+          title={`${t('look.stackTitle')} ${getQuadrantLabel(selectedQuadrant, t)}`}
+          index={selectedIndex}
+        />
+      </div>
+    </div>
+  );
+}
+
+function InstagramGridLook() {
+  const { t } = useI18n();
+
+  return (
+    <div className="rounded-xl border bg-zinc-50 p-3">
+      <div className="mx-auto max-w-md rounded-xl bg-white p-3 shadow-sm">
+        <div className="mb-3 flex items-center gap-3">
+          <div className="size-10 rounded-full bg-zinc-950" />
+          <div className="min-w-0">
+            <p className="text-sm font-bold text-zinc-950">socialgridtool</p>
+            <p className="text-xs text-zinc-500">3x3 grid preview</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-3 gap-1 overflow-hidden rounded bg-zinc-100 p-1">
+          {Array.from({ length: 9 }).map((_, index) => (
+            <PhotoSliceTile
+              key={index}
+              src={sampleImages.landscape}
+              index={index}
+              columns={3}
+              rows={3}
+              className="aspect-square"
+            />
+          ))}
+        </div>
+      </div>
+      <p className="mt-3 text-xs leading-5 text-zinc-600">{t('preview.igGridOrder')}</p>
+    </div>
+  );
+}
+
+function InstagramCarouselLook() {
+  const { t } = useI18n();
+
+  return (
+    <div className="rounded-xl border bg-zinc-50 p-3">
+      <div className="flex snap-x gap-2 overflow-x-auto rounded-xl bg-white p-2 shadow-sm">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <PhotoSliceTile
+            key={index}
+            src={sampleImages.carousel}
+            index={index}
+            columns={4}
+            rows={1}
+            className="aspect-square min-w-[78%] snap-start min-[420px]:min-w-[47%] sm:min-w-[32%]"
+          />
+        ))}
+      </div>
+      <p className="mt-3 text-xs leading-5 text-zinc-600">
+        {t('preview.carouselOrder', { count: '04' })}
+      </p>
+    </div>
+  );
+}
+
+function XPostShell({ children }: { children: ReactNode }) {
+  const { t } = useI18n();
+
+  return (
+    <div className="min-w-0 rounded-xl bg-white p-3 shadow-sm">
+      <div className="mb-3 flex items-center gap-3">
+        <div className="size-9 shrink-0 rounded-full bg-zinc-950" />
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-zinc-950">{t('preview.xTitle')}</p>
+          <p className="text-xs text-zinc-500">{t('preview.xMeta')}</p>
+        </div>
+      </div>
+      <p className="mb-3 text-sm text-zinc-700">{t('preview.xBody')}</p>
+      {children}
+    </div>
+  );
+}
+
+function PhotoSliceTile({
+  src,
+  index,
+  columns,
+  rows,
+  className,
+}: {
+  src: string;
+  index: number;
+  columns: number;
+  rows: number;
+  className?: string;
+}) {
+  const column = index % columns;
+  const row = Math.floor(index / columns);
+  const x = columns === 1 ? 50 : (column / (columns - 1)) * 100;
+  const y = rows === 1 ? 50 : (row / (rows - 1)) * 100;
+
+  return (
+    <div
+      className={cn('relative overflow-hidden bg-zinc-200 bg-no-repeat', className)}
+      style={{
+        backgroundImage: `url(${src})`,
+        backgroundPosition: `${x}% ${y}%`,
+        backgroundSize: `${columns * 100}% ${rows * 100}%`,
+      }}
+    >
+      <span className="absolute left-2 top-2 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+        {String(index + 1).padStart(2, '0')}
+      </span>
+    </div>
+  );
+}
+
+function StackedCardLook({
+  title,
+  index,
+}: {
+  title: string;
+  index: number;
+}) {
+  const { t } = useI18n();
+
+  return (
+    <div className="rounded-xl border bg-white p-3 shadow-sm">
+      <p className="mb-3 text-sm font-bold text-zinc-950">{title}</p>
+      <div className="mx-auto grid max-w-56 overflow-hidden rounded-lg border bg-zinc-100">
+        <StackSection label={t('look.header')} className="h-24" index={index + 1} />
+        <StackSection label={t('look.sharedMain')} className="h-36" index={index + 4} />
+        <StackSection label={t('look.footer')} className="h-24" index={index + 5} />
+      </div>
+    </div>
+  );
+}
+
+function StackSection({
+  label,
+  className,
+  index,
+}: {
+  label: string;
+  className: string;
+  index: number;
+}) {
+  return (
+    <div className={cn('relative overflow-hidden border-b last:border-b-0', className)}>
+      <PhotoSliceTile
+        src={sampleImages.landscape}
+        index={index}
+        columns={3}
+        rows={3}
+        className="h-full w-full"
+      />
+      <span className="absolute inset-x-2 bottom-2 truncate rounded bg-white/90 px-2 py-1 text-center text-[11px] font-bold text-zinc-950 shadow-sm">
+        {label}
+      </span>
     </div>
   );
 }
