@@ -20,8 +20,8 @@ import { getLocaleLabel, supportedLocales, useI18n, type Locale } from "@/lib/i1
 
 const navItems: {
   href: string;
-  labelKey: 'nav.xGrid' | 'nav.instagram' | 'nav.create';
-  descriptionKey: 'platform.xDesc' | 'platform.instagramDesc' | 'nav.create';
+  labelKey: 'nav.xGrid' | 'nav.twitterEffect' | 'nav.instagram' | 'nav.create';
+  descriptionKey: 'platform.xDesc' | 'mode.xCustomDesc' | 'platform.instagramDesc' | 'nav.create';
   icon: LucideIcon;
 }[] = [
   {
@@ -29,6 +29,12 @@ const navItems: {
     labelKey: "nav.xGrid",
     descriptionKey: "platform.xDesc",
     icon: Grid2X2,
+  },
+  {
+    href: "/create-twitter-grid-effect",
+    labelKey: "nav.twitterEffect",
+    descriptionKey: "mode.xCustomDesc",
+    icon: Sparkles,
   },
   {
     href: "/instagram-grid-maker",

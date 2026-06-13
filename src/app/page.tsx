@@ -124,7 +124,7 @@ export default function Home() {
             },
             {
               title: 'X 2x2 layout',
-              text: 'The default mode creates four landscape tiles that match the common X image grid preview.',
+              text: 'The default mode creates four landscape tiles that match the common X image grid preview and helps create a Twitter grid effect.',
             },
             {
               title: 'More social grids',

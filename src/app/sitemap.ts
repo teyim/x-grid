@@ -18,6 +18,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${SITE_URL}/create-twitter-grid-effect`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.95,
+    },
+    {
       url: `${SITE_URL}/instagram-grid-maker`,
       lastModified: now,
       changeFrequency: 'weekly',

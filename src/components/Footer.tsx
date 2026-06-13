@@ -22,6 +22,9 @@ export default function Footer() {
             <Link href="/twitter-grid-maker" className="hover:text-zinc-950">
               {t('nav.xGrid')}
             </Link>
+            <Link href="/create-twitter-grid-effect" className="hover:text-zinc-950">
+              {t('nav.twitterEffect')}
+            </Link>
             <Link href="/instagram-grid-maker" className="hover:text-zinc-950">
               {t('nav.instagram')}
             </Link>

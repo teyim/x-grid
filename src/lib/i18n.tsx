@@ -14,6 +14,7 @@ export type Locale = 'en' | 'zh-HK' | 'ko' | 'id' | 'pt-BR';
 type TranslationKey =
   | 'language'
   | 'nav.xGrid'
+  | 'nav.twitterEffect'
   | 'nav.instagram'
   | 'nav.create'
   | 'nav.xProfile'
@@ -76,6 +77,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
   en: {
     language: 'Language',
     'nav.xGrid': 'X Grid Maker',
+    'nav.twitterEffect': 'Twitter Grid Effect',
     'nav.instagram': 'Instagram Grid Maker',
     'nav.create': 'Create',
     'nav.xProfile': 'X Profile',
@@ -131,6 +133,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
   'zh-HK': {
     language: '語言',
     'nav.xGrid': 'X 網格工具',
+    'nav.twitterEffect': 'Twitter 網格效果',
     'nav.instagram': 'Instagram 網格工具',
     'nav.create': '開始製作',
     'nav.xProfile': 'X 個人頁',
@@ -184,6 +187,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
   ko: {
     language: '언어',
     'nav.xGrid': 'X 그리드 만들기',
+    'nav.twitterEffect': 'Twitter 그리드 효과',
     'nav.instagram': 'Instagram 그리드',
     'nav.create': '만들기',
     'nav.xProfile': 'X 프로필',
@@ -237,6 +241,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
   id: {
     language: 'Bahasa',
     'nav.xGrid': 'Pembuat Grid X',
+    'nav.twitterEffect': 'Efek Grid Twitter',
     'nav.instagram': 'Grid Instagram',
     'nav.create': 'Buat',
     'nav.xProfile': 'Profil X',
@@ -290,6 +295,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
   'pt-BR': {
     language: 'Idioma',
     'nav.xGrid': 'Grade para X',
+    'nav.twitterEffect': 'Efeito de Grade Twitter',
     'nav.instagram': 'Grade Instagram',
     'nav.create': 'Criar',
     'nav.xProfile': 'Perfil no X',

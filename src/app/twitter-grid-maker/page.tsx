@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import GridTool from '@/components/GridTool';
 import SeoSections from '@/components/SeoSections';
 import StructuredData from '@/components/StructuredData';
@@ -30,9 +31,9 @@ const faqs = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Twitter Grid Maker - Create 2x2 Twitter Photo Grids',
+  title: 'Twitter Grid Maker - Create Twitter Grid Effect',
   description:
-    'Free Twitter grid maker for 2x2 photo posts and custom X grid illusions. Split and download images privately in your browser.',
+    'Free Twitter grid maker for 2x2 photo posts, custom X grid illusions, and Twitter grid effects. Split and download images privately in your browser.',
   alternates: {
     canonical: pageUrl,
   },
@@ -42,10 +43,12 @@ export const metadata: Metadata = {
     'X grid maker',
     'Twitter image splitter',
     'Twitter 2x2 grid',
+    'create twitter grid effect',
+    'Twitter grid effect',
   ],
   openGraph: {
     title: 'Twitter Grid Maker',
-    description: 'Create 2x2 Twitter/X photo grids and custom grid illusions.',
+    description: 'Create 2x2 Twitter/X photo grids, grid effects, and custom grid illusions.',
     url: pageUrl,
     siteName: 'X-Grid',
     type: 'website',
@@ -53,7 +56,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Twitter Grid Maker',
-    description: 'Split and preview Twitter/X photo grids directly in your browser.',
+    description: 'Split and preview Twitter/X photo grids and grid effects directly in your browser.',
   },
 };
 
@@ -115,6 +118,12 @@ export default function TwitterGridMakerPage() {
               <p className="mt-3 text-base leading-7 text-zinc-600 sm:mt-4 sm:text-lg sm:leading-8">
                 Create a 2x2 Twitter photo grid from one image or use the advanced custom grid illusion workflow. Your images stay in your browser.
               </p>
+              <Link
+                href="/create-twitter-grid-effect"
+                className="mt-3 inline-flex text-sm font-semibold text-emerald-700 underline-offset-4 hover:underline"
+              >
+                Create Twitter Grid Effect
+              </Link>
             </div>
             <GridTool initialMode="x-single" allowedModes={['x-single', 'x-custom']} />
           </div>
