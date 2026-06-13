@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const canonicalUrl = (
-  process.env.NEXT_PUBLIC_SITE_URL || 'https://socialgridtool.xyz'
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://www.socialgridtool.xyz'
 ).replace(/\/$/, '');
 
 const nextConfig: NextConfig = {
