@@ -64,8 +64,6 @@ type TranslationKey =
   | 'custom.main'
   | 'custom.header'
   | 'custom.footer'
-  | 'custom.assign'
-  | 'custom.cancel'
   | 'custom.clickAssign'
   | 'tutorial.quickGuide'
   | 'tutorial.close'
@@ -157,8 +155,6 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.main': 'Shared main image',
     'custom.header': 'Header',
     'custom.footer': 'Footer',
-    'custom.assign': 'Assign image to {slot}',
-    'custom.cancel': 'Cancel',
     'custom.clickAssign': 'Click to assign',
     'tutorial.quickGuide': 'Quick guide',
     'tutorial.close': 'Close tutorial',
@@ -239,8 +235,6 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.main': '共用主圖',
     'custom.header': '頂部',
     'custom.footer': '底部',
-    'custom.assign': '指定圖片到 {slot}',
-    'custom.cancel': '取消',
     'custom.clickAssign': '點擊指定',
     'tutorial.quickGuide': '快速指南',
     'tutorial.close': '關閉教學',
@@ -321,8 +315,6 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.main': '공유 메인 이미지',
     'custom.header': '헤더',
     'custom.footer': '푸터',
-    'custom.assign': '{slot}에 이미지 지정',
-    'custom.cancel': '취소',
     'custom.clickAssign': '눌러서 지정',
     'tutorial.quickGuide': '빠른 가이드',
     'tutorial.close': '튜토리얼 닫기',
@@ -403,8 +395,6 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.main': 'Gambar utama bersama',
     'custom.header': 'Header',
     'custom.footer': 'Footer',
-    'custom.assign': 'Tetapkan gambar ke {slot}',
-    'custom.cancel': 'Batal',
     'custom.clickAssign': 'Klik untuk menetapkan',
     'tutorial.quickGuide': 'Panduan cepat',
     'tutorial.close': 'Tutup panduan',
@@ -485,8 +475,6 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'custom.main': 'Imagem principal compartilhada',
     'custom.header': 'Cabeçalho',
     'custom.footer': 'Rodapé',
-    'custom.assign': 'Atribuir imagem a {slot}',
-    'custom.cancel': 'Cancelar',
     'custom.clickAssign': 'Clique para atribuir',
     'tutorial.quickGuide': 'Guia rápido',
     'tutorial.close': 'Fechar tutorial',

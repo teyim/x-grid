@@ -43,6 +43,8 @@ const customSlots = [
   { key: 'footer-br' },
 ];
 
+const imageAccept = 'image/*,.heic,.heif';
+
 type GridToolProps = {
   initialMode?: GridModeId;
   allowedModes?: GridModeId[];
@@ -60,7 +62,6 @@ export default function GridTool({
   const [fit, setFit] = useState<FitMode>('cover');
   const [file, setFile] = useState<File | null>(null);
   const [customFiles, setCustomFiles] = useState<File[]>([]);
-  const [slotToAssign, setSlotToAssign] = useState<string | null>(null);
   const [assignments, setAssignments] = useState<{ [slot: string]: File | null }>(
     Object.fromEntries(customSlots.map((slot) => [slot.key, null]))
   );
@@ -83,7 +84,6 @@ export default function GridTool({
     setModeId(nextMode.id);
     setFile(null);
     setCustomFiles([]);
-    setSlotToAssign(null);
     setAssignments(Object.fromEntries(customSlots.map((slot) => [slot.key, null])));
     setProcessedImages(null);
     setError(null);
@@ -100,7 +100,7 @@ export default function GridTool({
   const selectSingleFile = () => {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = 'image/*';
+    input.accept = imageAccept;
     input.onchange = (event) => {
       const files = (event.target as HTMLInputElement).files;
       if (files?.[0]) {
@@ -116,7 +116,7 @@ export default function GridTool({
     const input = document.createElement('input');
     input.type = 'file';
     input.multiple = true;
-    input.accept = 'image/*';
+    input.accept = imageAccept;
     input.onchange = (event) => {
       const files = (event.target as HTMLInputElement).files;
       if (files) {
@@ -124,18 +124,45 @@ export default function GridTool({
           new Map([...customFiles, ...Array.from(files)].map((item) => [item.name, item])).values()
         ).slice(0, 9);
         setCustomFiles(uniqueFiles);
+        setAssignments((current) => {
+          const next = { ...current };
+          const emptySlots = customSlots
+            .map((slot) => slot.key)
+            .filter((slot) => !next[slot]);
+
+          Array.from(files).slice(0, emptySlots.length).forEach((item, index) => {
+            next[emptySlots[index]] = item;
+          });
+
+          return next;
+        });
         setProcessedImages(null);
-        setError(uniqueFiles.length === 9 ? null : `Add ${9 - uniqueFiles.length} more image${9 - uniqueFiles.length === 1 ? '' : 's'}.`);
+        setError(null);
       }
     };
     input.click();
   };
 
-  const assignToSlot = (selectedFile: File) => {
-    if (!slotToAssign) return;
-    setAssignments((current) => ({ ...current, [slotToAssign]: selectedFile }));
-    setSlotToAssign(null);
-    setError(null);
+  const selectFileForSlot = (slot: string) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = imageAccept;
+    input.onchange = (event) => {
+      const files = (event.target as HTMLInputElement).files;
+      const selectedFile = files?.[0];
+
+      if (!selectedFile) return;
+
+      setCustomFiles((current) => {
+        const next = new Map(current.map((item) => [item.name, item]));
+        next.set(selectedFile.name, selectedFile);
+        return Array.from(next.values()).slice(0, 9);
+      });
+      setAssignments((current) => ({ ...current, [slot]: selectedFile }));
+      setProcessedImages(null);
+      setError(null);
+    };
+    input.click();
   };
 
   const processImages = async () => {
@@ -147,7 +174,7 @@ export default function GridTool({
       let results: ProcessedImage[];
 
       if (mode.id === 'x-custom') {
-        if (customFiles.length !== 9 || !allSlotsAssigned) {
+        if (!allSlotsAssigned) {
           throw new Error('Select 9 images and assign every custom grid slot.');
         }
 
@@ -305,11 +332,8 @@ export default function GridTool({
             <CustomGridForm
               files={customFiles}
               assignments={assignments}
-              slotToAssign={slotToAssign}
               onSelectFiles={selectCustomFiles}
-              onOpenSlot={setSlotToAssign}
-              onAssign={assignToSlot}
-              onCloseSlot={() => setSlotToAssign(null)}
+              onOpenSlot={selectFileForSlot}
             />
           )}
         </ToolStep>
@@ -317,7 +341,7 @@ export default function GridTool({
         <div className="flex flex-col gap-2 sm:flex-row">
           <Button
             onClick={processImages}
-            disabled={processing || (mode.id === 'x-custom' ? !allSlotsAssigned || customFiles.length !== 9 : !file)}
+            disabled={processing || (mode.id === 'x-custom' ? !allSlotsAssigned : !file)}
             className="flex-1"
           >
             {processing ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
@@ -377,11 +401,8 @@ export default function GridTool({
 type CustomGridFormProps = {
   files: File[];
   assignments: { [slot: string]: File | null };
-  slotToAssign: string | null;
   onSelectFiles: () => void;
   onOpenSlot: (slot: string) => void;
-  onAssign: (file: File) => void;
-  onCloseSlot: () => void;
 };
 
 function getModeLabel(modeId: GridModeId, t: ReturnType<typeof useI18n>['t']) {
@@ -417,15 +438,6 @@ function getActionLabel(modeId: GridModeId, t: ReturnType<typeof useI18n>['t']) 
   if (modeId === 'instagram-carousel') return t('mode.igCarousel');
   if (modeId === 'x-custom') return t('mode.xCustom');
   return t('tool.process');
-}
-
-function getCustomSlotLabel(slot: string, t: ReturnType<typeof useI18n>['t']) {
-  const quadrant = slot.split('-').slice(1).join('-').toUpperCase();
-
-  if (slot === 'main') return t('custom.main');
-  if (slot.startsWith('header')) return `${t('custom.header')} ${quadrant}`;
-  if (slot.startsWith('footer')) return `${t('custom.footer')} ${quadrant}`;
-  return slot;
 }
 
 function ToolStep({
@@ -660,16 +672,12 @@ function getTutorialSteps(mode: GridMode, t: ReturnType<typeof useI18n>['t']) {
 function CustomGridForm({
   files,
   assignments,
-  slotToAssign,
   onSelectFiles,
   onOpenSlot,
-  onAssign,
-  onCloseSlot,
 }: CustomGridFormProps) {
   const { t } = useI18n();
   const assignedCount = Object.values(assignments).filter(Boolean).length;
   const progress = Math.round((assignedCount / customSlots.length) * 100);
-  const slotLabel = slotToAssign ? getCustomSlotLabel(slotToAssign, t) : '';
 
   return (
     <div className="min-w-0 rounded-md border border-zinc-200 bg-zinc-50 p-3">
@@ -695,11 +703,12 @@ function CustomGridForm({
         {files.length > 0 && (
           <div className="flex gap-2 overflow-x-auto pb-1">
             {files.map((item, index) => (
-              <div key={item.name} className="relative size-12 shrink-0 overflow-hidden rounded border bg-white">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={URL.createObjectURL(item)} alt="" className="h-full w-full object-cover" />
-                <span className="absolute left-1 top-1 rounded bg-black/70 px-1 text-[9px] font-semibold text-white">
-                  {index + 1}
+              <div key={`${item.name}-${index}`} className="min-w-24 max-w-36 shrink-0 rounded border bg-white px-2 py-1.5">
+                <span className="block text-[10px] font-bold text-zinc-500">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <span className="block truncate text-xs font-medium text-zinc-800">
+                  {item.name}
                 </span>
               </div>
             ))}
@@ -739,29 +748,6 @@ function CustomGridForm({
           </div>
         ))}
       </div>
-      {slotToAssign && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-3 py-4">
-          <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-lg bg-white p-4 shadow-xl">
-            <p className="truncate font-semibold text-zinc-900">{t('custom.assign', { slot: slotLabel })}</p>
-            <div className="mt-3 grid grid-cols-3 gap-2 min-[360px]:grid-cols-4 sm:grid-cols-5">
-              {files.map((item) => (
-                <button
-                  type="button"
-                  key={item.name}
-                  onClick={() => onAssign(item)}
-                  className="aspect-square overflow-hidden rounded border"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={URL.createObjectURL(item)} alt="" className="h-full w-full object-cover" />
-                </button>
-              ))}
-            </div>
-            <Button className="mt-4" variant="secondary" onClick={onCloseSlot}>
-              {t('custom.cancel')}
-            </Button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

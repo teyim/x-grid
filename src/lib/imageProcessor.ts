@@ -1,5 +1,6 @@
 import { fabric } from 'fabric';
 import { FitMode, GridMode } from './gridModes';
+import { normalizeImageFile } from './imageFiles';
 
 export interface ProcessedImage {
   url: string;
@@ -27,25 +28,53 @@ export class ClientImageProcessor {
   }
 
   private async fileToImage(file: File): Promise<HTMLImageElement> {
+    const imageBlob = await normalizeImageFile(file);
+
     return new Promise((resolve, reject) => {
       const img = new Image();
-      img.onload = () => resolve(img);
-      img.onerror = reject;
-      img.src = URL.createObjectURL(file);
+      const url = URL.createObjectURL(imageBlob);
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        resolve(img);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error(`Unable to read image: ${file.name}`));
+      };
+      img.src = url;
     });
   }
 
   private async resizeImage(image: HTMLImageElement, width: number, height: number): Promise<fabric.Image> {
-    return new Promise((resolve) => {
-      const fabricImage = new fabric.Image(image, {
-        left: 0,
-        top: 0,
-        width: width,
-        height: height,
-        scaleX: width / image.width,
-        scaleY: height / image.height,
-      });
-      resolve(fabricImage);
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      throw new Error('Canvas is not supported in this browser.');
+    }
+
+    this.drawImageToCanvas(
+      ctx,
+      image,
+      0,
+      0,
+      image.width,
+      image.height,
+      width,
+      height,
+      'cover'
+    );
+
+    const blob = await this.htmlCanvasToBlob(canvas);
+    const normalizedImage = await this.blobToImage(blob);
+
+    return new fabric.Image(normalizedImage, {
+      left: 0,
+      top: 0,
+      width,
+      height,
     });
   }
 
