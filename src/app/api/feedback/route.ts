@@ -83,7 +83,11 @@ export async function POST(request: NextRequest) {
     if (error) {
       console.error('Feedback insert failed:', error);
       return NextResponse.json(
-        { ok: false, error: 'Unable to submit feedback right now.' },
+        {
+          ok: false,
+          error: 'Unable to submit feedback right now.',
+          code: 'feedback_insert_failed',
+        },
         { status: 500 }
       );
     }
@@ -94,7 +98,11 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Feedback submission failed:', error);
     return NextResponse.json(
-      { ok: false, error: 'Unable to submit feedback right now.' },
+      {
+        ok: false,
+        error: 'Unable to submit feedback right now.',
+        code: 'feedback_unexpected_error',
+      },
       { status: 500 }
     );
   }
