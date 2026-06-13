@@ -89,7 +89,9 @@ type TranslationKey =
   | 'preview.carouselOrder'
   | 'preview.xTitle'
   | 'preview.xMeta'
-  | 'preview.xBody';
+  | 'preview.xBody'
+  | 'preview.openFull'
+  | 'preview.fullImage';
 
 const localeLabels: Record<Locale, string> = {
   en: 'English',
@@ -181,6 +183,8 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'preview.xTitle': 'Your post preview',
     'preview.xMeta': '@yourhandle · now',
     'preview.xBody': 'Here is how the X grid will look in the feed.',
+    'preview.openFull': 'Open full image',
+    'preview.fullImage': 'Full image',
   },
   'zh-HK': {
     language: '語言',
@@ -261,6 +265,8 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'preview.xTitle': '你的貼文預覽',
     'preview.xMeta': '@yourhandle · 現在',
     'preview.xBody': '這是 X 網格在動態中的顯示效果。',
+    'preview.openFull': '開啟完整圖片',
+    'preview.fullImage': '完整圖片',
   },
   ko: {
     language: '언어',
@@ -341,6 +347,8 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'preview.xTitle': '게시물 미리보기',
     'preview.xMeta': '@yourhandle · 지금',
     'preview.xBody': 'X 피드에서 그리드가 이렇게 보입니다.',
+    'preview.openFull': '전체 이미지 열기',
+    'preview.fullImage': '전체 이미지',
   },
   id: {
     language: 'Bahasa',
@@ -421,6 +429,8 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'preview.xTitle': 'Pratinjau posting',
     'preview.xMeta': '@yourhandle · sekarang',
     'preview.xBody': 'Beginilah tampilan grid X di feed.',
+    'preview.openFull': 'Buka gambar penuh',
+    'preview.fullImage': 'Gambar penuh',
   },
   'pt-BR': {
     language: 'Idioma',
@@ -501,6 +511,8 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'preview.xTitle': 'Prévia do post',
     'preview.xMeta': '@yourhandle · agora',
     'preview.xBody': 'Veja como a grade X aparecerá no feed.',
+    'preview.openFull': 'Abrir imagem completa',
+    'preview.fullImage': 'Imagem completa',
   },
 };
 

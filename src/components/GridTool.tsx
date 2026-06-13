@@ -760,6 +760,8 @@ function GridResultPreview({
   images: ProcessedImage[] | null;
 }) {
   const { t } = useI18n();
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const selectedImage = selectedImageIndex !== null ? images?.[selectedImageIndex] : null;
 
   if (!images) {
     return (
@@ -811,21 +813,58 @@ function GridResultPreview({
   }
 
   return (
-    <div className="min-w-0 rounded-xl bg-white p-2 shadow-sm sm:p-3">
-      <div className="mb-3 flex items-center gap-3">
-        <div className="size-9 shrink-0 rounded-full bg-zinc-950 sm:size-10" />
-        <div className="min-w-0">
-          <p className="text-sm font-semibold text-zinc-950">{t('preview.xTitle')}</p>
-          <p className="text-xs text-zinc-500">{t('preview.xMeta')}</p>
+    <>
+      <div className="min-w-0 rounded-xl bg-white p-2 shadow-sm sm:p-3">
+        <div className="mb-3 flex items-center gap-3">
+          <div className="size-9 shrink-0 rounded-full bg-zinc-950 sm:size-10" />
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-zinc-950">{t('preview.xTitle')}</p>
+            <p className="text-xs text-zinc-500">{t('preview.xMeta')}</p>
+          </div>
+        </div>
+        <p className="mb-3 text-sm text-zinc-700">{t('preview.xBody')}</p>
+        <div className="grid aspect-[16/9] grid-cols-2 grid-rows-2 gap-1 overflow-hidden rounded-xl bg-zinc-200">
+          {images.map((image, index) => (
+            <PreviewImage
+              key={image.url}
+              image={image}
+              index={index}
+              className="h-full w-full"
+              onClick={mode.id === 'x-custom' ? () => setSelectedImageIndex(index) : undefined}
+              ariaLabel={mode.id === 'x-custom' ? `${t('preview.openFull')} ${index + 1}` : undefined}
+            />
+          ))}
         </div>
       </div>
-      <p className="mb-3 text-sm text-zinc-700">{t('preview.xBody')}</p>
-      <div className="grid aspect-[16/9] grid-cols-2 grid-rows-2 gap-1 overflow-hidden rounded-xl bg-zinc-200">
-        {images.map((image, index) => (
-          <PreviewImage key={image.url} image={image} index={index} className="h-full w-full" />
-        ))}
-      </div>
-    </div>
+
+      {selectedImage && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-3 py-4">
+          <div className="flex max-h-[92vh] w-full max-w-md flex-col overflow-hidden rounded-lg bg-white shadow-xl">
+            <div className="flex items-center justify-between gap-3 border-b px-4 py-3">
+              <p className="min-w-0 truncate text-sm font-semibold text-zinc-950">
+                {t('preview.fullImage')} {String(selectedImageIndex! + 1).padStart(2, '0')}
+              </p>
+              <button
+                type="button"
+                onClick={() => setSelectedImageIndex(null)}
+                className="inline-flex size-8 shrink-0 items-center justify-center rounded-md text-zinc-500 hover:bg-zinc-100 hover:text-zinc-950"
+                aria-label={t('tutorial.close')}
+              >
+                <X className="size-4" />
+              </button>
+            </div>
+            <div className="min-h-0 overflow-auto bg-zinc-100 p-3">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={selectedImage.url}
+                alt={`${t('preview.fullImage')} ${selectedImageIndex! + 1}`}
+                className="mx-auto max-h-[78vh] w-auto max-w-full rounded bg-white object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -833,13 +872,17 @@ function PreviewImage({
   image,
   index,
   className,
+  onClick,
+  ariaLabel,
 }: {
   image: ProcessedImage;
   index: number;
   className?: string;
+  onClick?: () => void;
+  ariaLabel?: string;
 }) {
-  return (
-    <div className={cn('relative overflow-hidden bg-zinc-100', className)}>
+  const content = (
+    <>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={image.url}
@@ -849,6 +892,25 @@ function PreviewImage({
       <span className="absolute left-2 top-2 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-semibold text-white">
         {String(index + 1).padStart(2, '0')}
       </span>
+    </>
+  );
+
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        aria-label={ariaLabel}
+        className={cn('relative overflow-hidden bg-zinc-100 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600', className)}
+      >
+        {content}
+      </button>
+    );
+  }
+
+  return (
+    <div className={cn('relative overflow-hidden bg-zinc-100', className)}>
+      {content}
     </div>
   );
 }
