@@ -26,6 +26,14 @@ export const metadata: Metadata = {
   description:
     "Create X/Twitter and Instagram photo grids in your browser with private client-side image splitting.",
   applicationName: "X-Grid",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "16x16 32x32", type: "image/x-icon" },
+      { url: "/logo.png", sizes: "500x500", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/logo.png", sizes: "500x500", type: "image/png" }],
+  },
   robots: {
     index: true,
     follow: true,
