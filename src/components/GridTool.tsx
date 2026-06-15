@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, type ReactNode } from 'react';
+import { useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   Download,
   Eye,
@@ -75,8 +75,9 @@ export default function GridTool({
   const [error, setError] = useState<string | null>(null);
   const [tutorialModeId, setTutorialModeId] = useState<GridModeId | null>(null);
   const [lookModeId, setLookModeId] = useState<GridModeId | null>(null);
-  const { t } = useI18n();
+  const { locale, t } = useI18n();
   const posthog = usePostHog();
+  const toolStartedRef = useRef(false);
 
   const mode = getGridMode(modeId);
   const activePlatform = mode.platform;
@@ -93,6 +94,7 @@ export default function GridTool({
     setAssignments(Object.fromEntries(customSlots.map((slot) => [slot.key, null])));
     setProcessedImages(null);
     setError(null);
+    toolStartedRef.current = false;
   };
 
   const selectPlatform = (platform: GridPlatform) => {
@@ -113,6 +115,7 @@ export default function GridTool({
         setFile(files[0]);
         setProcessedImages(null);
         setError(null);
+        trackToolStarted();
       }
     };
     input.click();
@@ -144,6 +147,7 @@ export default function GridTool({
         });
         setProcessedImages(null);
         setError(null);
+        trackToolStarted();
       }
     };
     input.click();
@@ -167,8 +171,24 @@ export default function GridTool({
       setAssignments((current) => ({ ...current, [slot]: selectedFile }));
       setProcessedImages(null);
       setError(null);
+      trackToolStarted();
     };
     input.click();
+  };
+
+  const trackToolStarted = () => {
+    if (toolStartedRef.current) return;
+
+    toolStartedRef.current = true;
+    recordUsageEvent({
+      eventType: 'tool_started',
+      platform: mode.platform,
+      modeId: mode.id,
+      modeLabel: mode.label,
+      fitMode: mode.id === 'x-custom' ? null : fit,
+      route: window.location.pathname,
+      locale,
+    });
   };
 
   const processImages = async () => {
@@ -219,6 +239,11 @@ export default function GridTool({
         platform: mode.platform,
         tileCount: results.length,
         inputImageCount: mode.id === 'x-custom' ? 9 : 1,
+        modeId: mode.id,
+        modeLabel: mode.label,
+        fitMode: mode.id === 'x-custom' ? null : fit,
+        route: window.location.pathname,
+        locale,
       });
     } catch (caughtError) {
       setError(caughtError instanceof Error ? caughtError.message : 'Unable to process image.');
@@ -227,7 +252,25 @@ export default function GridTool({
     }
   };
 
-  const downloadImage = (image: ProcessedImage, index: number) => {
+  const trackDownloadStarted = (downloadCount: number) => {
+    recordUsageEvent({
+      eventType: 'download_started',
+      platform: mode.platform,
+      modeId: mode.id,
+      modeLabel: mode.label,
+      tileCount: downloadCount,
+      inputImageCount: mode.id === 'x-custom' ? 9 : 1,
+      fitMode: mode.id === 'x-custom' ? null : fit,
+      route: window.location.pathname,
+      locale,
+    });
+  };
+
+  const downloadImage = (image: ProcessedImage, index: number, track = true) => {
+    if (track) {
+      trackDownloadStarted(1);
+    }
+
     const url = URL.createObjectURL(image.blob);
     const anchor = document.createElement('a');
     anchor.href = url;
@@ -239,8 +282,12 @@ export default function GridTool({
   };
 
   const downloadAll = () => {
+    if (processedImages?.length) {
+      trackDownloadStarted(processedImages.length);
+    }
+
     processedImages?.forEach((image, index) => {
-      window.setTimeout(() => downloadImage(image, index), index * 180);
+      window.setTimeout(() => downloadImage(image, index, false), index * 180);
     });
   };
 
@@ -250,6 +297,7 @@ export default function GridTool({
     setAssignments(Object.fromEntries(customSlots.map((slot) => [slot.key, null])));
     setProcessedImages(null);
     setError(null);
+    toolStartedRef.current = false;
   };
 
   return (
@@ -430,6 +478,11 @@ function recordUsageStats(payload: {
   platform: GridPlatform;
   tileCount: number;
   inputImageCount: number;
+  modeId: GridModeId;
+  modeLabel: string;
+  fitMode: FitMode | null;
+  route: string;
+  locale: string;
 }) {
   fetch('/api/stats', {
     method: 'POST',
@@ -444,6 +497,26 @@ function recordUsageStats(payload: {
     .catch((error) => {
       console.warn('Unable to record usage stats:', error);
     });
+}
+
+function recordUsageEvent(payload: {
+  eventType: 'tool_started' | 'download_started';
+  platform: GridPlatform;
+  modeId: GridModeId;
+  modeLabel: string;
+  tileCount?: number;
+  inputImageCount?: number;
+  fitMode: FitMode | null;
+  route: string;
+  locale: string;
+}) {
+  fetch('/api/usage/events', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  }).catch((error) => {
+    console.warn('Unable to record usage event:', error);
+  });
 }
 
 type CustomGridFormProps = {

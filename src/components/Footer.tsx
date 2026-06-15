@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import logo from "../../public/logo.png";
 import { CONTACT_EMAIL } from "@/lib/contact";
 import { useI18n } from "@/lib/i18n";
@@ -9,6 +10,9 @@ import { localizePath } from "./Navbar";
 
 export default function Footer() {
   const { locale, t } = useI18n();
+  const pathname = usePathname();
+
+  if (pathname.startsWith('/admin')) return null;
 
   return (
     <footer className="border-t bg-white">

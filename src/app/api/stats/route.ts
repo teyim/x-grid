@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdminClient } from '@/lib/supabaseAdmin';
+import { buildUsageEventRow, cleanString, truncate } from '@/lib/usageMetadata';
 
 export const runtime = 'nodejs';
 
@@ -22,6 +23,11 @@ type StatsPayload = {
   platform?: string;
   tileCount?: number;
   inputImageCount?: number;
+  modeId?: string;
+  modeLabel?: string;
+  fitMode?: string | null;
+  route?: string;
+  locale?: string;
 };
 
 export async function GET() {
@@ -105,18 +111,33 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const usageRow = buildUsageEventRow(
+    request,
+    {
+      ...payload,
+      eventType: 'grid_created',
+      platform,
+      tileCount,
+      inputImageCount,
+      modeId: truncate(cleanString(payload.modeId), 64) || undefined,
+      modeLabel: truncate(cleanString(payload.modeLabel), 120) || undefined,
+      route: truncate(cleanString(payload.route), 500) || undefined,
+      locale: truncate(cleanString(payload.locale), 32) || undefined,
+    },
+    'grid_created'
+  );
+
+  const { error: usageError } = await supabase.from('usage_events').insert(usageRow);
+
+  if (usageError) {
+    console.error('Grid usage event insert failed:', usageError);
+  }
+
   return NextResponse.json({ ok: true });
 }
 
 function getSupabaseClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!supabaseUrl || !supabaseServiceRoleKey) return null;
-
-  return createClient(supabaseUrl, supabaseServiceRoleKey, {
-    auth: { persistSession: false },
-  });
+  return getSupabaseAdminClient();
 }
 
 function emptyStats(): Record<UsageMetric, number> {

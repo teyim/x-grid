@@ -54,6 +54,8 @@ export default function Navbar() {
   const { locale, setLocale, t } = useI18n();
   const pathname = usePathname();
 
+  if (pathname.startsWith('/admin')) return null;
+
   const closeMenu = () => {
     setOpen(false);
     setToolsOpen(false);
