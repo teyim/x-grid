@@ -17,6 +17,15 @@ import {
   Users,
   type LucideIcon,
 } from 'lucide-react';
+import {
+  CartesianGrid,
+  Line,
+  LineChart as RechartsLineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 import type { ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { GRID_MODES } from '@/lib/gridModes';
@@ -432,13 +441,6 @@ function Panel({
 }
 
 function LineChart({ data, loading }: { data: { date: string; value: number }[]; loading: boolean }) {
-  const max = Math.max(...data.map((item) => item.value), 1);
-  const points = data.map((item, index) => {
-    const x = data.length <= 1 ? 0 : (index / (data.length - 1)) * 100;
-    const y = 100 - (item.value / max) * 88 - 6;
-    return `${x},${y}`;
-  });
-
   if (loading) return <div className="h-64 animate-pulse rounded-md bg-zinc-100" />;
 
   if (!data.length) {
@@ -447,19 +449,44 @@ function LineChart({ data, loading }: { data: { date: string; value: number }[];
 
   return (
     <div className="h-64">
-      <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-52 w-full overflow-visible">
-        <polyline
-          points={points.join(' ')}
-          fill="none"
-          stroke="rgb(24 24 27)"
-          strokeWidth="2"
-          vectorEffect="non-scaling-stroke"
-        />
-        {data.map((item, index) => {
-          const [x, y] = points[index].split(',').map(Number);
-          return <circle key={`${item.date}-${index}`} cx={x} cy={y} r="1.3" fill="rgb(234 88 12)" />;
-        })}
-      </svg>
+      <ResponsiveContainer width="100%" height={210}>
+        <RechartsLineChart data={data} margin={{ top: 8, right: 12, bottom: 0, left: -18 }}>
+          <CartesianGrid stroke="#e4e4e7" strokeDasharray="3 3" vertical={false} />
+          <XAxis
+            dataKey="date"
+            tick={{ fill: '#71717a', fontSize: 11 }}
+            tickLine={false}
+            axisLine={{ stroke: '#e4e4e7' }}
+            minTickGap={24}
+          />
+          <YAxis
+            allowDecimals={false}
+            tick={{ fill: '#71717a', fontSize: 11 }}
+            tickLine={false}
+            axisLine={false}
+          />
+          <Tooltip
+            cursor={{ stroke: '#a1a1aa', strokeDasharray: '3 3' }}
+            contentStyle={{
+              border: '1px solid #e4e4e7',
+              borderRadius: 6,
+              boxShadow: '0 8px 24px rgb(24 24 27 / 0.08)',
+              fontSize: 12,
+            }}
+            formatter={(value) => [numberFormatter.format(Number(value)), 'Grids']}
+            labelFormatter={(label) => `Date: ${label}`}
+          />
+          <Line
+            type="monotone"
+            dataKey="value"
+            name="Grids"
+            stroke="#18181b"
+            strokeWidth={2}
+            dot={{ r: 3, stroke: '#ea580c', strokeWidth: 2, fill: '#ffffff' }}
+            activeDot={{ r: 5, stroke: '#ea580c', strokeWidth: 2, fill: '#ffffff' }}
+          />
+        </RechartsLineChart>
+      </ResponsiveContainer>
       <div className="mt-2 flex justify-between gap-3 text-xs text-zinc-500">
         <span className="truncate">{data[0]?.date}</span>
         <span className="tabular-nums">{numberFormatter.format(data.reduce((total, item) => total + item.value, 0))} grids</span>
