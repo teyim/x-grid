@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { buildUsageEventRow, UsageEventPayload, validateUsagePayload } from '@/lib/usageMetadata';
 import { getSupabaseAdminClient } from '@/lib/supabaseAdmin';
+import { sendUsageAlertEmail } from '@/lib/usageEmail';
 
 export const runtime = 'nodejs';
 
@@ -45,6 +46,8 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+
+  await sendUsageAlertEmail(row);
 
   return NextResponse.json({ ok: true });
 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseAdminClient } from '@/lib/supabaseAdmin';
 import { buildUsageEventRow, cleanString, truncate } from '@/lib/usageMetadata';
+import { sendUsageAlertEmail } from '@/lib/usageEmail';
 
 export const runtime = 'nodejs';
 
@@ -131,6 +132,8 @@ export async function POST(request: NextRequest) {
 
   if (usageError) {
     console.error('Grid usage event insert failed:', usageError);
+  } else {
+    await sendUsageAlertEmail(usageRow);
   }
 
   return NextResponse.json({ ok: true });
