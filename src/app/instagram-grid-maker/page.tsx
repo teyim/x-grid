@@ -32,15 +32,16 @@ const faqs = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Instagram Grid Maker - Split Photos into 3x3 Grid Posts',
+  title: 'Instagram Grid Maker - Grid Maker for Instagram 3x3 Posts',
   description:
-    'Free Instagram grid maker and carousel splitter. Split one photo into a 3x3 profile grid or square carousel slides directly in your browser.',
+    'Free Instagram grid maker and grid maker for Instagram posts. Split one photo into a 3x3 profile grid or square carousel slides directly in your browser.',
   alternates: {
     canonical: pageUrl,
     languages: getLanguageAlternates('instagram'),
   },
   keywords: [
     'Instagram grid maker',
+    'grid maker for Instagram',
     'Instagram 3x3 grid',
     'Instagram photo splitter',
     'Instagram carousel splitter',
@@ -116,7 +117,7 @@ export default function InstagramGridMakerPage() {
                 Instagram Grid Maker
               </h1>
               <p className="mt-3 text-base leading-7 text-zinc-600 sm:mt-4 sm:text-lg sm:leading-8">
-                Turn one photo into a 3x3 Instagram profile grid or split a wide image into square carousel slides. Everything is processed in your browser.
+                Use this grid maker for Instagram to turn one photo into a 3x3 profile grid or split a wide image into square carousel slides. Everything is processed in your browser.
               </p>
             </div>
             <GridTool
@@ -129,8 +130,8 @@ export default function InstagramGridMakerPage() {
         <UsageStats />
 
         <SeoSections
-          title="How to split an image for Instagram"
-          intro="Use the Instagram presets when you want square tiles for a profile grid or a swipeable carousel without opening a design app."
+          title="How to use a grid maker for Instagram"
+          intro="Use the Instagram grid maker presets when you want square tiles for a profile grid or a swipeable carousel without opening a design app."
           steps={[
             {
               title: 'Pick the Instagram preset',

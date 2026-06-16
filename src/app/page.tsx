@@ -46,6 +46,7 @@ export const metadata: Metadata = {
     'split image for X',
     'Twitter image splitter',
     'Instagram grid maker',
+    'grid maker for Instagram',
     'Instagram carousel splitter',
     'photo grid maker',
   ],
