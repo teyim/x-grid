@@ -21,6 +21,7 @@ export default function UsageStats() {
 
   useEffect(() => {
     let active = true;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
     async function loadStats() {
       try {
@@ -35,11 +36,23 @@ export default function UsageStats() {
       }
     }
 
-    loadStats();
+    const scheduleStatsLoad = () => {
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(() => {
+          if (active) loadStats();
+        });
+        return;
+      }
+
+      timeoutId = globalThis.setTimeout(loadStats, 1200);
+    };
+
+    scheduleStatsLoad();
     window.addEventListener('usage-stats-updated', loadStats);
 
     return () => {
       active = false;
+      if (timeoutId) globalThis.clearTimeout(timeoutId);
       window.removeEventListener('usage-stats-updated', loadStats);
     };
   }, []);

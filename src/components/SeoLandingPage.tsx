@@ -86,7 +86,6 @@ export default function SeoLandingPage({ page }: SeoLandingPageProps) {
                   width={680}
                   height={420}
                   className="aspect-[16/10] w-full object-cover"
-                  priority
                 />
                 <figcaption className="border-t px-3 py-2 text-xs text-zinc-500">
                   Sample preview for {page.primaryKeyword}

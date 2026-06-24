@@ -80,7 +80,6 @@ export default function Navbar() {
               src={logo}
               alt=""
               className="size-8 shrink-0 object-contain"
-              priority
             />
             <span className="font-bold tracking-tight">X-Grid</span>
           </Link>

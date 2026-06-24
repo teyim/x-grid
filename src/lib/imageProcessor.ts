@@ -1,4 +1,3 @@
-import { fabric } from 'fabric';
 import { FitMode, GridMode } from './gridModes';
 import { normalizeImageFile } from './imageFiles';
 
@@ -20,12 +19,7 @@ export interface ImageAssignments {
 }
 
 export class ClientImageProcessor {
-  private canvas: fabric.Canvas | null = null;
-
-  constructor() {
-    // Initialize a temporary canvas for processing
-    this.canvas = new fabric.Canvas(document.createElement('canvas'));
-  }
+  constructor() {}
 
   private async fileToImage(file: File): Promise<HTMLImageElement> {
     const imageBlob = await normalizeImageFile(file);
@@ -45,7 +39,7 @@ export class ClientImageProcessor {
     });
   }
 
-  private async resizeImage(image: HTMLImageElement, width: number, height: number): Promise<fabric.Image> {
+  private async resizeImage(image: HTMLImageElement, width: number, height: number): Promise<HTMLImageElement> {
     const canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
@@ -70,35 +64,19 @@ export class ClientImageProcessor {
     const blob = await this.htmlCanvasToBlob(canvas);
     const normalizedImage = await this.blobToImage(blob);
 
-    return new fabric.Image(normalizedImage, {
-      left: 0,
-      top: 0,
-      width,
-      height,
-    });
+    return normalizedImage;
   }
 
-  private async createCanvas(width: number, height: number): Promise<fabric.Canvas> {
-    const canvas = new fabric.Canvas(document.createElement('canvas'));
-    canvas.setWidth(width);
-    canvas.setHeight(height);
-    canvas.backgroundColor = 'white';
+  private createCanvas(width: number, height: number): HTMLCanvasElement {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext('2d');
+    if (context) {
+      context.fillStyle = '#ffffff';
+      context.fillRect(0, 0, width, height);
+    }
     return canvas;
-  }
-
-  private async canvasToBlob(canvas: fabric.Canvas): Promise<Blob> {
-    return new Promise((resolve) => {
-      const dataURL = canvas.toDataURL({
-        format: 'jpeg',
-        quality: 0.9,
-        multiplier: 1
-      });
-      
-      // Convert data URL to blob
-      fetch(dataURL)
-        .then(res => res.blob())
-        .then(blob => resolve(blob));
-    });
   }
 
   private async htmlCanvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
@@ -180,24 +158,24 @@ export class ClientImageProcessor {
     );
   }
 
-  private async extractQuadrant(mainImage: fabric.Image, left: number, top: number, width: number, height: number): Promise<fabric.Image> {
-    const quadrantCanvas = await this.createCanvas(width, height);
-    
-    const quadrantImage = new fabric.Image(mainImage.getElement(), {
-      left: -left,
-      top: -top,
-      scaleX: mainImage.scaleX!,
-      scaleY: mainImage.scaleY!,
-    });
-    
-    quadrantCanvas.add(quadrantImage);
-    quadrantCanvas.renderAll();
-    
-    const quadrantBlob = await this.canvasToBlob(quadrantCanvas);
-    const quadrantImg = await this.blobToImage(quadrantBlob);
-    
-    quadrantCanvas.dispose();
-    return new fabric.Image(quadrantImg);
+  private async extractQuadrant(
+    mainImage: HTMLImageElement,
+    left: number,
+    top: number,
+    width: number,
+    height: number
+  ): Promise<HTMLImageElement> {
+    const quadrantCanvas = this.createCanvas(width, height);
+    const context = quadrantCanvas.getContext('2d');
+
+    if (!context) {
+      throw new Error('Canvas is not supported in this browser.');
+    }
+
+    context.drawImage(mainImage, left, top, width, height, 0, 0, width, height);
+
+    const quadrantBlob = await this.htmlCanvasToBlob(quadrantCanvas);
+    return this.blobToImage(quadrantBlob);
   }
 
   private async blobToImage(blob: Blob): Promise<HTMLImageElement> {
@@ -257,38 +235,18 @@ export class ClientImageProcessor {
       const results: ProcessedImage[] = [];
 
       for (let i = 0; i < 4; i++) {
-        const compositeCanvas = await this.createCanvas(finalWidth, finalHeight);
-        
-        // Add header
-        const headerImage = new fabric.Image(headers[i].getElement(), {
-          left: 0,
-          top: 0,
-          scaleX: headers[i].scaleX!,
-          scaleY: headers[i].scaleY!,
-        });
-        compositeCanvas.add(headerImage);
+        const compositeCanvas = this.createCanvas(finalWidth, finalHeight);
+        const context = compositeCanvas.getContext('2d');
 
-        // Add quadrant
-        const quadrantImage = new fabric.Image(quadrants[i].getElement(), {
-          left: 0,
-          top: partHeight,
-          scaleX: quadrants[i].scaleX!,
-          scaleY: quadrants[i].scaleY!,
-        });
-        compositeCanvas.add(quadrantImage);
+        if (!context) {
+          throw new Error('Canvas is not supported in this browser.');
+        }
 
-        // Add footer
-        const footerImage = new fabric.Image(footers[i].getElement(), {
-          left: 0,
-          top: partHeight * 2,
-          scaleX: footers[i].scaleX!,
-          scaleY: footers[i].scaleY!,
-        });
-        compositeCanvas.add(footerImage);
+        context.drawImage(headers[i], 0, 0, finalWidth, partHeight);
+        context.drawImage(quadrants[i], 0, partHeight, finalWidth, partHeight);
+        context.drawImage(footers[i], 0, partHeight * 2, finalWidth, partHeight);
 
-        compositeCanvas.renderAll();
-
-        const blob = await this.canvasToBlob(compositeCanvas);
+        const blob = await this.htmlCanvasToBlob(compositeCanvas);
         const url = URL.createObjectURL(blob);
         
         results.push({
@@ -296,7 +254,6 @@ export class ClientImageProcessor {
           blob,
         });
 
-        compositeCanvas.dispose();
       }
 
       return results;
@@ -333,13 +290,17 @@ export class ClientImageProcessor {
     const results: ProcessedImage[] = [];
     for (const quadrant of quadrants) {
       // Render to canvas and get blob
-      const canvas = await this.createCanvas(partWidth, partHeight);
-      canvas.add(quadrant);
-      canvas.renderAll();
-      const blob = await this.canvasToBlob(canvas);
+      const canvas = this.createCanvas(partWidth, partHeight);
+      const context = canvas.getContext('2d');
+
+      if (!context) {
+        throw new Error('Canvas is not supported in this browser.');
+      }
+
+      context.drawImage(quadrant, 0, 0, partWidth, partHeight);
+      const blob = await this.htmlCanvasToBlob(canvas);
       const url = URL.createObjectURL(blob);
       results.push({ url, blob });
-      canvas.dispose();
     }
     return results;
   }
@@ -407,10 +368,5 @@ export class ClientImageProcessor {
     return results;
   }
 
-  dispose() {
-    if (this.canvas) {
-      this.canvas.dispose();
-      this.canvas = null;
-    }
-  }
+  dispose() {}
 } 

@@ -3,7 +3,6 @@
 import { useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Bug, Lightbulb, MessageSquare, Send, Star, X } from 'lucide-react';
-import { usePostHog } from 'posthog-js/react';
 import { Button } from '@/components/ui/button';
 import {
   feedbackOptions,
@@ -13,6 +12,7 @@ import {
 } from '@/lib/feedback';
 import { CONTACT_EMAIL } from '@/lib/contact';
 import { useI18n } from '@/lib/i18n';
+import { capturePostHog, getPostHogDistinctId } from '@/lib/posthogClient';
 import { cn } from '@/lib/utils';
 
 type FeedbackModalProps = {
@@ -25,7 +25,6 @@ type SubmitState = 'idle' | 'submitting' | 'success' | 'error';
 export default function FeedbackModal({ open, onClose }: FeedbackModalProps) {
   const { locale, t } = useI18n();
   const pathname = usePathname();
-  const posthog = usePostHog();
   const [type, setType] = useState<FeedbackType>('feedback');
   const [option, setOption] = useState(feedbackOptions.feedback[0]);
   const [rating, setRating] = useState<number | null>(null);
@@ -79,7 +78,7 @@ export default function FeedbackModal({ open, onClose }: FeedbackModalProps) {
       email,
       route: pathname,
       locale,
-      posthogDistinctId: posthog?.get_distinct_id?.(),
+      posthogDistinctId: (await getPostHogDistinctId()) ?? undefined,
     };
 
     try {
@@ -94,7 +93,7 @@ export default function FeedbackModal({ open, onClose }: FeedbackModalProps) {
         throw new Error(result.error || t('feedback.error'));
       }
 
-      posthog?.capture('feedback_submitted', {
+      void capturePostHog('feedback_submitted', {
         type,
         option,
         rating,

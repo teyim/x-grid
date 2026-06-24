@@ -16,11 +16,11 @@ import {
   X,
   type LucideIcon,
 } from 'lucide-react';
-import { usePostHog } from 'posthog-js/react';
 import { Button } from '@/components/ui/button';
 import SlotPreview from './SlotPreview';
-import { ClientImageProcessor, ImageAssignments, ProcessedImage } from '@/lib/imageProcessor';
+import type { ImageAssignments, ProcessedImage } from '@/lib/imageProcessor';
 import { cn } from '@/lib/utils';
+import { capturePostHog } from '@/lib/posthogClient';
 import {
   FitMode,
   GRID_MODES,
@@ -76,7 +76,6 @@ export default function GridTool({
   const [tutorialModeId, setTutorialModeId] = useState<GridModeId | null>(null);
   const [lookModeId, setLookModeId] = useState<GridModeId | null>(null);
   const { locale, t } = useI18n();
-  const posthog = usePostHog();
   const toolStartedRef = useRef(false);
 
   const mode = getGridMode(modeId);
@@ -196,6 +195,7 @@ export default function GridTool({
     setError(null);
 
     try {
+      const { ClientImageProcessor } = await import('@/lib/imageProcessor');
       const processor = new ClientImageProcessor();
       let results: ProcessedImage[];
 
@@ -227,7 +227,7 @@ export default function GridTool({
 
       processor.dispose();
       setProcessedImages(results);
-      posthog.capture('grid_created', {
+      void capturePostHog('grid_created', {
         mode_id: mode.id,
         mode_label: mode.label,
         platform: mode.platform,
