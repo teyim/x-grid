@@ -21,6 +21,30 @@ export const pagePaths: Record<PageKind, string> = {
   instagram: '/instagram-grid-maker',
 };
 
+export const localizedPageSlugs: Partial<Record<SeoLocale, Partial<Record<PageKind, string>>>> = {
+  id: {
+    twitter: 'pembuat-grid-twitter',
+    instagram: 'pembuat-grid-instagram',
+    effect: 'buat-twitter-grid-effect',
+  },
+  'pt-br': {
+    twitter: 'criador-de-grid-twitter',
+    instagram: 'criador-de-grid-instagram',
+    effect: 'criar-twitter-grid-effect',
+  },
+  'zh-hk': {
+    twitter: 'twitter-網格工具',
+    instagram: 'instagram-網格工具',
+    effect: '建立-twitter-grid-effect',
+  },
+};
+
+export const localizedSlugToPageKind = Object.fromEntries(
+  Object.entries(localizedPageSlugs).flatMap(([locale, slugs]) =>
+    Object.entries(slugs).map(([kind, slug]) => [`${locale}/${slug}`, kind as PageKind])
+  )
+) as Record<string, PageKind>;
+
 type LocalizedPageContent = {
   title: string;
   description: string;
@@ -71,28 +95,29 @@ const zhContent: Record<PageKind, LocalizedPageContent> = {
       title: 'Twitter 網格工具',
       description: '建立 2x2 Twitter/X 圖片網格和自訂網格幻覺。',
       kicker: 'Twitter 與 X 圖片網格工具',
-      heading: 'Twitter 網格工具',
-      body: '從一張圖片建立 2x2 Twitter 圖片網格，或使用進階自訂網格幻覺。圖片只會留在你的瀏覽器。',
-      metadataTitle: 'Twitter 網格工具 - 建立 Twitter Grid Effect',
-      metadataDescription: '免費建立 Twitter/X 2x2 圖片網格、自訂網格幻覺和 Twitter grid effect。',
-      keywords: ['Twitter 網格工具', 'Twitter grid effect', 'X 網格工具'],
+      heading: '免費 Twitter 網格工具',
+      body: '從一張圖片建立 2x2 Twitter/X 圖片網格，適合香港創作者、品牌公告、活動海報和個人頁視覺。圖片只會留在你的瀏覽器。',
+      metadataTitle: '免費 Twitter 網格工具',
+      metadataDescription: '免費建立 Twitter/X 2x2 圖片網格。預覽貼文版面並在瀏覽器下載已排序圖片。',
+      keywords: ['免費 Twitter 網格工具'],
       initialMode: 'x-single',
       toolModes: ['x-single', 'x-custom'],
-      seoTitle: 'Twitter 與 X 如何顯示圖片網格',
+      seoTitle: '如何建立 Twitter 圖片網格',
       seoIntro: '此工具會產生有順序的圖片，讓 X/Twitter 貼文預覽看起來像一張大型圖片。',
       steps: [
-        { title: '選擇圖片', text: '使用單張圖片分割或 9 張圖片自訂模式。' },
-        { title: '檢查預覽', text: '下載前先確認貼文中的 2x2 顯示效果。' },
-        { title: '一起發佈', text: '把所有產生的圖片附加到同一篇貼文。' },
+        { title: '上傳視覺圖片', text: '可使用活動海報、產品圖、截圖或個人品牌視覺。' },
+        { title: '檢查 2x2 預覽', text: '下載前先確認裁切、排序和貼文顯示效果。' },
+        { title: '一起發佈', text: '把所有產生的圖片附加到同一篇 X/Twitter 貼文。' },
       ],
       sections: [
-        { title: '單張圖片分割', text: '適合海報、截圖和寬圖。' },
-        { title: '自訂網格幻覺', text: '適合建立更進階的開圖效果。' },
-        { title: '本機匯出', text: '所有 JPG 都在瀏覽器中產生。' },
+        { title: '適合香港創作者', text: '可用於活動宣傳、社群公告、作品展示和 X 個人頁視覺。' },
+        { title: '單張圖片分割', text: '最快方式是把一張圖片分成四張有順序的貼文圖片。' },
+        { title: '本機匯出', text: '所有 JPG 都在瀏覽器中產生，原圖不會上傳。' },
       ],
       faqs: [
-        { question: '這仍然適用於 Twitter 嗎？', answer: '適用。Twitter 和 X 使用相同的圖片網格概念。' },
-        { question: '需要 9 張圖片嗎？', answer: '只有自訂網格幻覺模式需要 9 張圖片。' },
+        { question: '如何建立 Twitter 圖片網格？', answer: '上傳一張圖片，選擇 X 2x2，確認預覽後下載四張圖片並一起發佈。' },
+        { question: '這適用於 X 嗎？', answer: '適用。Twitter 和 X 使用相同的多圖片網格顯示概念。' },
+        { question: '圖片會上傳到伺服器嗎？', answer: '不會。圖片會在你的瀏覽器本機處理。' },
       ],
     },
     effect: {
@@ -127,28 +152,29 @@ const zhContent: Record<PageKind, LocalizedPageContent> = {
       title: 'Instagram 網格工具',
       description: '建立 Instagram 3x3 網格和輪播圖片。',
       kicker: 'Instagram 圖片分割工具',
-      heading: 'Instagram 網格工具',
-      body: '把一張圖片變成 Instagram 3x3 個人頁網格，或把寬圖分割成輪播方形圖片。',
-      metadataTitle: 'Instagram 網格工具 - 3x3 圖片分割器',
-      metadataDescription: '免費建立 Instagram 3x3 網格和輪播圖片。所有處理都在瀏覽器完成。',
-      keywords: ['Instagram 網格工具', 'Instagram 3x3', 'Instagram 圖片分割'],
+      heading: '免費 Instagram 網格工具',
+      body: '把一張圖片變成 Instagram 3x3 個人頁網格，或把寬圖分割成輪播方形圖片，適合品牌、作品集和活動宣傳。',
+      metadataTitle: '免費 Instagram 網格工具',
+      metadataDescription: '免費建立 Instagram 3x3 個人頁網格和輪播圖片。所有圖片分割都在瀏覽器完成。',
+      keywords: ['免費 Instagram 網格工具'],
       initialMode: 'instagram-grid',
       toolModes: ['instagram-grid', 'instagram-carousel'],
-      seoTitle: '如何分割 Instagram 圖片',
-      seoIntro: '使用 Instagram 預設格式建立個人頁網格或輪播貼文。',
+      seoTitle: '如何建立 Instagram 3x3 網格',
+      seoIntro: '使用 Instagram 預設格式建立個人頁網格、puzzle feed 或輪播貼文。',
       steps: [
-        { title: '選擇格式', text: '3x3 用於個人頁網格，輪播用於寬圖。' },
+        { title: '選擇版面', text: '3x3 用於個人頁網格，輪播用於寬圖。' },
         { title: '選擇裁切', text: '填滿或完整保留圖片。' },
         { title: '下載並發佈', text: '按照檔名順序上傳。' },
       ],
       sections: [
-        { title: '最佳尺寸', text: '匯出 1080px 方形 JPG。' },
-        { title: '網格或輪播', text: '網格跨多篇貼文，輪播留在單篇貼文。' },
-        { title: '不需上傳', text: '圖片在本機處理。' },
+        { title: '適合品牌視覺', text: '可用於香港品牌、創作者作品集、活動宣傳和個人頁視覺規劃。' },
+        { title: '1080px 方形輸出', text: '匯出適合 Instagram 貼文使用的方形 JPG。' },
+        { title: '不需上傳', text: '圖片在本機處理，不會儲存在伺服器。' },
       ],
       faqs: [
-        { question: '如何建立 3x3 Instagram 網格？', answer: '上傳圖片並選擇 IG 3x3 格式。' },
-        { question: '可以建立輪播圖片嗎？', answer: '可以，選擇 IG 輪播模式。' },
+        { question: '如何建立 Instagram 3x3 網格？', answer: '上傳圖片並選擇 IG 3x3，工具會輸出九張方形圖片。' },
+        { question: 'Instagram 網格應該按甚麼順序發佈？', answer: '如果要在個人頁拼成完整圖片，通常需要由最後一張開始發佈。' },
+        { question: '可以建立輪播圖片嗎？', answer: '可以，選擇 IG 輪播模式即可把寬圖分割成方形輪播圖片。' },
       ],
     },
   };
@@ -210,10 +236,10 @@ function makeVariant(locale: SeoLocale, kind: PageKind): LocalizedPageContent {
         title: 'Twitter 그리드 만들기',
         description: '2x2 Twitter/X 이미지 그리드와 커스텀 효과를 만드세요.',
         kicker: 'Twitter 및 X 이미지 그리드 도구',
-        heading: 'Twitter 그리드 만들기',
+        heading: '무료 트위터 그리드 생성기',
         body: '이미지 한 장으로 2x2 Twitter 그리드를 만들거나 커스텀 그리드 효과를 사용하세요. 이미지는 브라우저에만 남습니다.',
-        metadataTitle: 'Twitter 그리드 만들기 - Twitter Grid Effect 생성',
-        metadataDescription: '무료로 Twitter/X 2x2 이미지 그리드와 Twitter grid effect를 만드세요.',
+        metadataTitle: '무료 트위터 그리드 생성기',
+        metadataDescription: '브라우저에서 무료로 Twitter/X 2x2 이미지 그리드를 만들고 정렬된 타일을 다운로드하세요.',
         seoTitle: 'Twitter/X 이미지 그리드 표시 방식',
         seoIntro: 'X/Twitter 피드에서 큰 이미지처럼 보이도록 정렬된 타일을 생성합니다.',
       },
@@ -232,10 +258,10 @@ function makeVariant(locale: SeoLocale, kind: PageKind): LocalizedPageContent {
         title: 'Instagram 그리드 만들기',
         description: 'Instagram 3x3 그리드와 캐러셀 타일을 만드세요.',
         kicker: 'Instagram 이미지 분할 도구',
-        heading: 'Instagram 그리드 만들기',
+        heading: '무료 인스타그램 그리드 생성기',
         body: '이미지 한 장을 Instagram 3x3 프로필 그리드 또는 캐러셀 타일로 나누세요.',
-        metadataTitle: 'Instagram 그리드 만들기 - 3x3 이미지 분할기',
-        metadataDescription: '무료 Instagram 3x3 그리드와 캐러셀 타일을 브라우저에서 만드세요.',
+        metadataTitle: '무료 인스타그램 그리드 생성기',
+        metadataDescription: '사진 한 장으로 Instagram 3x3 프로필 그리드와 캐러셀 타일을 무료로 만드세요.',
         seoTitle: 'Instagram 이미지 분할 방법',
         seoIntro: '프로필 그리드 또는 캐러셀 게시물용 정사각형 타일을 만드세요.',
       },
@@ -267,12 +293,12 @@ function makeVariant(locale: SeoLocale, kind: PageKind): LocalizedPageContent {
         title: 'Pembuat Grid Twitter',
         description: 'Buat grid gambar Twitter/X 2x2 dan efek kustom.',
         kicker: 'Alat grid foto Twitter dan X',
-        heading: 'Pembuat Grid Twitter',
-        body: 'Buat grid foto Twitter 2x2 dari satu gambar atau gunakan efek grid kustom.',
-        metadataTitle: 'Pembuat Grid Twitter - Buat Twitter Grid Effect',
-        metadataDescription: 'Buat grid Twitter/X 2x2 dan Twitter grid effect secara gratis.',
-        seoTitle: 'Cara Twitter dan X menampilkan grid foto',
-        seoIntro: 'Buat tile berurutan agar pratinjau terlihat seperti satu gambar besar.',
+        heading: 'Pembuat Grid Twitter Gratis Online',
+        body: 'Buat grid foto Twitter/X 2x2 dari satu gambar untuk post kreator, banner profil, atau promosi. Semua proses berjalan di browser.',
+        metadataTitle: 'Pembuat Grid Twitter Gratis Online',
+        metadataDescription: 'Buat grid Twitter/X 2x2 online gratis. Split gambar menjadi tile berurutan dan unduh langsung dari browser.',
+        seoTitle: 'Cara membuat grid Twitter untuk kreator Indonesia',
+        seoIntro: 'Gunakan pembuat grid Twitter untuk membagi gambar promosi, poster, atau visual profil menjadi tile yang siap diposting.',
       },
       effect: {
         title: 'Buat Twitter Grid Effect',
@@ -289,12 +315,12 @@ function makeVariant(locale: SeoLocale, kind: PageKind): LocalizedPageContent {
         title: 'Pembuat Grid Instagram',
         description: 'Buat grid Instagram 3x3 dan carousel.',
         kicker: 'Alat pemisah gambar Instagram',
-        heading: 'Pembuat Grid Instagram',
-        body: 'Ubah satu foto menjadi grid profil Instagram 3x3 atau tile carousel.',
-        metadataTitle: 'Pembuat Grid Instagram - Splitter 3x3',
-        metadataDescription: 'Buat grid Instagram 3x3 dan carousel gratis di browser.',
-        seoTitle: 'Cara memisahkan gambar untuk Instagram',
-        seoIntro: 'Gunakan preset Instagram untuk grid profil atau carousel.',
+        heading: 'Pembuat Grid Instagram Gratis Online',
+        body: 'Ubah satu foto menjadi grid profil Instagram 3x3 atau tile carousel untuk feed kreator, brand kecil, dan kampanye lokal.',
+        metadataTitle: 'Pembuat Grid Instagram Gratis Online',
+        metadataDescription: 'Buat grid Instagram 3x3 gratis di browser. Split foto menjadi tile feed atau carousel tanpa upload ke server.',
+        seoTitle: 'Cara membuat grid Instagram 3x3',
+        seoIntro: 'Gunakan pembuat grid Instagram untuk membuat puzzle feed, grid profil, atau carousel dari satu foto.',
       },
     },
     'pt-br': {
@@ -313,12 +339,12 @@ function makeVariant(locale: SeoLocale, kind: PageKind): LocalizedPageContent {
         title: 'Criador de Grade para Twitter',
         description: 'Crie grades 2x2 para Twitter/X e efeitos personalizados.',
         kicker: 'Ferramenta de grade para Twitter e X',
-        heading: 'Criador de Grade para Twitter',
-        body: 'Crie uma grade 2x2 para Twitter a partir de uma imagem ou use o modo personalizado.',
-        metadataTitle: 'Criador de Grade para Twitter - Twitter Grid Effect',
-        metadataDescription: 'Crie grades Twitter/X 2x2 e Twitter grid effect gratuitamente.',
-        seoTitle: 'Como Twitter e X exibem grades de fotos',
-        seoIntro: 'Gere tiles ordenados para o preview parecer uma imagem maior.',
+        heading: 'Criador de Grid para Twitter Grátis',
+        body: 'Crie uma grade 2x2 para Twitter/X a partir de uma imagem, com prévia e download dos tiles no navegador.',
+        metadataTitle: 'Criador de Grid para Twitter Grátis',
+        metadataDescription: 'Crie grid para Twitter/X grátis online. Divida imagens em tiles ordenados e baixe tudo no navegador.',
+        seoTitle: 'Como criar grid para Twitter',
+        seoIntro: 'Use o criador de grid para Twitter para transformar uma imagem em tiles prontos para postar.',
       },
       effect: {
         title: 'Criar Twitter Grid Effect',
@@ -335,12 +361,12 @@ function makeVariant(locale: SeoLocale, kind: PageKind): LocalizedPageContent {
         title: 'Criador de Grade para Instagram',
         description: 'Crie grades 3x3 e carrosséis para Instagram.',
         kicker: 'Ferramenta de divisão para Instagram',
-        heading: 'Criador de Grade para Instagram',
-        body: 'Transforme uma foto em grade 3x3 de perfil ou tiles de carrossel.',
-        metadataTitle: 'Criador de Grade Instagram - Splitter 3x3',
-        metadataDescription: 'Crie grade Instagram 3x3 e carrosséis grátis no navegador.',
-        seoTitle: 'Como dividir imagem para Instagram',
-        seoIntro: 'Use presets do Instagram para grade de perfil ou carrossel.',
+        heading: 'Criador de Grid para Instagram Grátis',
+        body: 'Transforme uma foto em grade 3x3 para o perfil do Instagram ou em tiles quadrados para carrossel.',
+        metadataTitle: 'Criador de Grid para Instagram Grátis',
+        metadataDescription: 'Crie grid para Instagram grátis online. Divida fotos em grade 3x3 ou carrossel direto no navegador.',
+        seoTitle: 'Como criar grid para Instagram',
+        seoIntro: 'Use presets do Instagram para criar feed puzzle, grade de perfil ou carrossel.',
       },
     },
   };
@@ -351,10 +377,7 @@ function makeVariant(locale: SeoLocale, kind: PageKind): LocalizedPageContent {
     ...base,
     ...localized,
     ...blocks,
-    keywords: [
-      ...base.keywords,
-      ...(localized ? [localized.title, localized.heading] : []),
-    ],
+    keywords: localized ? [localized.heading] : base.keywords,
   };
 }
 
@@ -453,18 +476,19 @@ function getLocalizedBlocks(
       },
       twitter: {
         steps: [
-          { title: 'Pilih gambar', text: 'Gunakan satu gambar atau mode kustom 9 gambar.' },
-          { title: 'Cek pratinjau', text: 'Pastikan tampilan 2x2 benar sebelum mengunduh.' },
-          { title: 'Posting bersama', text: 'Lampirkan semua tile ke satu posting X/Twitter.' },
+          { title: 'Unggah visual', text: 'Pilih poster, banner, screenshot, atau desain kampanye yang ingin dijadikan grid Twitter.' },
+          { title: 'Cek pratinjau 2x2', text: 'Pastikan urutan tile terlihat rapi sebelum diunduh.' },
+          { title: 'Posting di X/Twitter', text: 'Lampirkan semua tile ke satu posting agar tampil sebagai grid.' },
         ],
         sections: [
-          { title: 'Splitter satu gambar', text: 'Cocok untuk poster, screenshot, dan gambar lebar.' },
-          { title: 'Efek grid kustom', text: 'Mode 9 gambar membuat efek buka gambar yang lebih kuat.' },
-          { title: 'Ekspor lokal', text: 'Semua JPG dibuat langsung di browser.' },
+          { title: 'Untuk kreator Indonesia', text: 'Cocok untuk pengumuman komunitas, promosi produk digital, poster event, dan banner profil X.' },
+          { title: 'Grid dari satu gambar', text: 'Mode cepat membagi satu gambar menjadi empat tile berurutan untuk feed Twitter/X.' },
+          { title: 'Privat di browser', text: 'File dibuat langsung di perangkat Anda tanpa upload gambar ke server.' },
         ],
         faqs: [
-          { question: 'Masih berfungsi untuk Twitter?', answer: 'Ya. Twitter dan X memakai konsep grid gambar yang sama.' },
-          { question: 'Harus punya 9 gambar?', answer: 'Tidak. 9 gambar hanya untuk mode efek kustom.' },
+          { question: 'Bagaimana cara membuat grid Twitter?', answer: 'Unggah satu gambar, pilih X 2x2, cek pratinjau, lalu unduh empat tile untuk diposting bersama.' },
+          { question: 'Apakah bisa dipakai untuk X?', answer: 'Bisa. Twitter dan X memakai konsep grid gambar yang sama untuk posting multi-gambar.' },
+          { question: 'Apakah gambar saya diunggah?', answer: 'Tidak. Pemrosesan dilakukan di browser, jadi gambar tetap berada di perangkat Anda.' },
         ],
       },
       effect: {
@@ -485,18 +509,19 @@ function getLocalizedBlocks(
       },
       instagram: {
         steps: [
-          { title: 'Pilih format', text: '3x3 untuk profil, carousel untuk gambar lebar.' },
-          { title: 'Pilih crop', text: 'Penuhi kotak atau tampilkan gambar penuh.' },
-          { title: 'Unduh dan posting', text: 'Unggah sesuai urutan nama file.' },
+          { title: 'Pilih format feed', text: 'Gunakan 3x3 untuk puzzle feed atau carousel untuk desain lebar.' },
+          { title: 'Atur crop', text: 'Pilih cover agar tile penuh atau contain agar gambar tetap terlihat utuh.' },
+          { title: 'Unduh dan posting', text: 'Gunakan nama file berurutan saat upload ke Instagram.' },
         ],
         sections: [
-          { title: 'Ukuran praktis', text: 'Tool mengekspor JPG kotak 1080px untuk Instagram.' },
-          { title: 'Grid atau carousel', text: 'Grid memakai beberapa posting, carousel tetap dalam satu posting.' },
-          { title: 'Pemrosesan lokal', text: 'Gambar diproses secara lokal.' },
+          { title: 'Untuk feed kreator', text: 'Buat puzzle feed untuk brand lokal, toko online, portofolio, atau pengumuman event.' },
+          { title: 'Tile 1080px', text: 'Tool mengekspor JPG kotak 1080px yang praktis untuk posting Instagram.' },
+          { title: 'Tanpa upload server', text: 'Foto diproses secara lokal di browser dan tidak disimpan oleh situs.' },
         ],
         faqs: [
-          { question: 'Bagaimana membuat grid Instagram 3x3?', answer: 'Unggah gambar dan pilih format IG 3x3.' },
-          { question: 'Bisa membuat carousel?', answer: 'Bisa. Pilih mode IG Carousel.' },
+          { question: 'Bagaimana cara membuat grid Instagram 3x3?', answer: 'Unggah satu foto, pilih IG 3x3, lalu unduh sembilan tile untuk diposting ke profil.' },
+          { question: 'Urutan posting grid Instagram bagaimana?', answer: 'Untuk profil grid, biasanya tile terakhir diposting lebih dulu agar tampilan akhir tersusun rapi.' },
+          { question: 'Bisa membuat carousel Instagram?', answer: 'Bisa. Pilih mode IG Carousel untuk membagi gambar lebar menjadi slide kotak.' },
         ],
       },
     },
@@ -519,18 +544,19 @@ function getLocalizedBlocks(
       },
       twitter: {
         steps: [
-          { title: 'Escolha a imagem', text: 'Use uma imagem única ou o modo personalizado com 9 imagens.' },
-          { title: 'Confira a prévia', text: 'Veja o layout 2x2 antes de baixar.' },
-          { title: 'Publique junto', text: 'Anexe todos os tiles em um único post no X/Twitter.' },
+          { title: 'Envie o visual', text: 'Use um pôster, banner, captura de tela ou arte de campanha para criar o grid.' },
+          { title: 'Confira a prévia 2x2', text: 'Veja corte, ordem e aparência do post antes de baixar.' },
+          { title: 'Publique no X/Twitter', text: 'Anexe todos os tiles no mesmo post para formar a grade.' },
         ],
         sections: [
-          { title: 'Divisão de uma imagem', text: 'Boa para pôsteres, capturas de tela e imagens largas.' },
-          { title: 'Efeito personalizado', text: 'O modo com 9 imagens cria um efeito mais avançado ao abrir os tiles.' },
-          { title: 'Exportação local', text: 'Todos os JPGs são gerados no navegador.' },
+          { title: 'Para criadores no Brasil', text: 'Use em lançamentos, comunidades, eventos, portfólios, memes visuais e anúncios de produtos digitais.' },
+          { title: 'Grid de uma imagem', text: 'O modo rápido divide uma imagem em quatro tiles ordenados para o feed do X/Twitter.' },
+          { title: 'Exportação local', text: 'Todos os JPGs são gerados no navegador, sem enviar sua imagem ao servidor.' },
         ],
         faqs: [
-          { question: 'Ainda funciona no Twitter?', answer: 'Sim. Twitter e X usam o mesmo conceito de grade de imagens.' },
-          { question: 'Preciso de 9 imagens?', answer: 'Não. As 9 imagens são necessárias apenas no modo personalizado.' },
+          { question: 'Como criar grid para Twitter?', answer: 'Envie uma imagem, escolha X 2x2, confira a prévia e baixe os quatro tiles para postar juntos.' },
+          { question: 'Funciona para X também?', answer: 'Sim. Twitter e X usam o mesmo conceito de grade para posts com várias imagens.' },
+          { question: 'Minha imagem é enviada?', answer: 'Não. A divisão acontece no navegador e a imagem fica no seu dispositivo.' },
         ],
       },
       effect: {
@@ -551,18 +577,19 @@ function getLocalizedBlocks(
       },
       instagram: {
         steps: [
-          { title: 'Escolha o formato', text: 'Use 3x3 para perfil ou carrossel para imagens largas.' },
-          { title: 'Escolha o corte', text: 'Preencha os quadrados ou mostre a imagem inteira.' },
+          { title: 'Escolha o formato do feed', text: 'Use 3x3 para feed puzzle ou carrossel para imagens largas.' },
+          { title: 'Ajuste o corte', text: 'Preencha os quadrados ou mantenha a imagem inteira visível.' },
           { title: 'Baixe e publique', text: 'Envie seguindo a ordem dos nomes dos arquivos.' },
         ],
         sections: [
-          { title: 'Tamanho prático', text: 'A ferramenta exporta JPGs quadrados de 1080px para Instagram.' },
-          { title: 'Grade ou carrossel', text: 'A grade usa vários posts; o carrossel fica em um único post.' },
-          { title: 'Sem envio ao servidor', text: 'As imagens são processadas localmente.' },
+          { title: 'Para feed puzzle', text: 'Crie layouts para marcas brasileiras, lojas, artistas, eventos, portfólios e lançamentos.' },
+          { title: 'Tiles de 1080px', text: 'A ferramenta exporta JPGs quadrados de 1080px para posts do Instagram.' },
+          { title: 'Sem envio ao servidor', text: 'As imagens são processadas localmente e não ficam armazenadas no site.' },
         ],
         faqs: [
-          { question: 'Como criar uma grade 3x3 no Instagram?', answer: 'Envie a imagem e escolha o formato IG 3x3.' },
-          { question: 'Posso criar imagens para carrossel?', answer: 'Sim. Escolha o modo IG Carrossel.' },
+          { question: 'Como criar grid para Instagram?', answer: 'Envie uma foto, escolha IG 3x3 e baixe nove tiles quadrados para publicar no perfil.' },
+          { question: 'Qual é a ordem para postar um grid 3x3?', answer: 'Para montar a imagem no perfil, publique normalmente do último tile para o primeiro.' },
+          { question: 'Posso criar carrossel para Instagram?', answer: 'Sim. Use o modo IG Carrossel para dividir uma imagem larga em slides quadrados.' },
         ],
       },
     },
@@ -576,6 +603,12 @@ export function getLocalizedContent(locale: SeoLocale, kind: PageKind) {
 }
 
 export function getLocalizedPath(locale: SeoLocale, kind: PageKind) {
+  const localizedSlug = localizedPageSlugs[locale]?.[kind];
+
+  if (localizedSlug) {
+    return `/${locale}/${localizedSlug}`;
+  }
+
   const path = pagePaths[kind];
   return path === '/' ? `/${locale}` : `/${locale}${path}`;
 }
@@ -583,6 +616,7 @@ export function getLocalizedPath(locale: SeoLocale, kind: PageKind) {
 export function getLanguageAlternates(kind: PageKind) {
   return {
     en: `${SITE_URL}${pagePaths[kind]}`,
+    'x-default': `${SITE_URL}${pagePaths[kind]}`,
     'zh-HK': `${SITE_URL}${getLocalizedPath('zh-hk', kind)}`,
     ko: `${SITE_URL}${getLocalizedPath('ko', kind)}`,
     id: `${SITE_URL}${getLocalizedPath('id', kind)}`,
