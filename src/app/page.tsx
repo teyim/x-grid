@@ -99,8 +99,8 @@ export default function Home() {
         }}
       />
       <main>
-        <section className="border-b bg-zinc-50">
-          <div className="mx-auto max-w-6xl px-2 py-3 min-[380px]:px-3 sm:px-6 sm:py-6 lg:px-8">
+        <section className="border-b bg-[linear-gradient(180deg,#fafafa_0%,#f4f4f5_100%)]">
+          <div className="mx-auto max-w-6xl px-2 py-5 min-[380px]:px-3 sm:px-6 sm:py-8 lg:px-8">
             <HomeHeroCopy />
             <GridTool initialMode="x-single" />
           </div>

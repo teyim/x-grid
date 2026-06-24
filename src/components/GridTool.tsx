@@ -317,14 +317,21 @@ export default function GridTool({
     <section
       ref={toolRef}
       id="tool"
-      className="grid min-w-0 scroll-mt-20 gap-4 rounded-lg border bg-white p-3 shadow-sm sm:p-5 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)]"
+      className="grid min-w-0 scroll-mt-20 gap-0 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-xl shadow-zinc-950/5 lg:grid-cols-[minmax(320px,0.8fr)_minmax(0,1.2fr)]"
     >
-      <div className="min-w-0 space-y-4 sm:space-y-5">
-        <div className="rounded-md bg-zinc-50 p-3">
-          <p className="text-sm font-semibold text-zinc-950">{t('tool.title')}</p>
-          <p className="mt-1 text-sm leading-6 text-zinc-600">
+      <div className="min-w-0 space-y-5 border-b border-zinc-200 bg-white p-3 sm:p-5 lg:border-b-0 lg:border-r">
+        <div className="rounded-lg border border-zinc-200 bg-zinc-50/80 p-4">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-sm font-bold text-zinc-950">{t('tool.title')}</p>
+              <p className="mt-1 text-sm leading-6 text-zinc-600">
             {t('tool.subtitle')}
-          </p>
+              </p>
+            </div>
+            <span className="shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-bold uppercase text-emerald-700">
+              {t('tool.private')}
+            </span>
+          </div>
         </div>
 
         {hasMultiplePlatforms && (
@@ -341,32 +348,52 @@ export default function GridTool({
                 key={item.id}
                 onClick={() => selectMode(item)}
                 className={cn(
-                  'rounded-md border p-3 text-left transition hover:border-zinc-400',
+                  'group rounded-lg border p-3 text-left transition hover:-translate-y-0.5 hover:border-zinc-400 hover:shadow-sm',
                   mode.id === item.id
-                    ? 'border-zinc-950 bg-zinc-950 text-white'
-                    : 'border-zinc-200 bg-zinc-50 text-zinc-800'
+                    ? 'border-zinc-950 bg-zinc-950 text-white shadow-sm'
+                    : 'border-zinc-200 bg-white text-zinc-800'
                 )}
               >
-                <div className="flex min-w-0 items-center gap-2 text-sm font-semibold">
-                  {item.previewType === 'instagram-profile' ? (
-                    <Grid3X3 className="size-4 shrink-0" />
-                  ) : item.previewType === 'instagram-carousel' ? (
-                    <Images className="size-4 shrink-0" />
-                  ) : (
-                    <Grid2X2 className="size-4 shrink-0" />
-                  )}
-                  <span className="truncate">{getModeLabel(item.id, t)}</span>
+                <div className="flex min-w-0 items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="flex min-w-0 items-center gap-2 text-sm font-bold">
+                      {item.previewType === 'instagram-profile' ? (
+                        <Grid3X3 className="size-4 shrink-0" />
+                      ) : item.previewType === 'instagram-carousel' ? (
+                        <Images className="size-4 shrink-0" />
+                      ) : (
+                        <Grid2X2 className="size-4 shrink-0" />
+                      )}
+                      <span className="truncate">{getModeLabel(item.id, t)}</span>
+                    </div>
+                    <p
+                      className={cn(
+                        'mt-2 overflow-hidden text-xs leading-5',
+                        mode.id === item.id ? 'text-zinc-300' : 'text-zinc-500'
+                      )}
+                    >
+                      {getModeDescription(item.id, t)}
+                    </p>
+                  </div>
+                  <span
+                    className={cn(
+                      'mt-0.5 size-3 rounded-full border',
+                      mode.id === item.id ? 'border-white bg-white' : 'border-zinc-300 bg-zinc-100'
+                    )}
+                  />
                 </div>
               </button>
             ))}
           </div>
-          <div className="mt-2 flex flex-col gap-2 rounded-md bg-zinc-50 px-3 py-2 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-xs leading-5 text-zinc-600">{getModeDescription(mode.id, t)}</p>
-            <div className="flex flex-wrap gap-2">
+          <div className="mt-3 flex flex-col gap-2 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-xs font-medium leading-5 text-zinc-600">
+              {mode.outputCount} tiles · {getModeDescription(mode.id, t)}
+            </p>
+            <div className="flex flex-wrap gap-2 sm:justify-end">
               <button
                 type="button"
                 onClick={() => setTutorialModeId(mode.id)}
-                className="inline-flex shrink-0 items-center gap-1.5 rounded border border-zinc-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm hover:border-emerald-300 hover:text-emerald-700"
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm hover:border-emerald-300 hover:text-emerald-700"
               >
                 <HelpCircle className="size-3.5" />
                 {t('tool.how')}
@@ -374,7 +401,7 @@ export default function GridTool({
               <button
                 type="button"
                 onClick={() => setLookModeId(mode.id)}
-                className="inline-flex shrink-0 items-center gap-1.5 rounded border border-zinc-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm hover:border-blue-300 hover:text-blue-700"
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm hover:border-blue-300 hover:text-blue-700"
               >
                 <Eye className="size-3.5" />
                 {t('tool.howLook')}
@@ -385,17 +412,17 @@ export default function GridTool({
 
         <ToolStep label={hasMultiplePlatforms ? '3' : '2'} title={t('tool.selectImage')}>
           {mode.id !== 'x-custom' && (
-            <div className="rounded-md border border-zinc-200 bg-zinc-50 p-3">
+            <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3">
               <div className="mb-3 flex items-center justify-between gap-3">
-                <p className="text-sm font-medium text-zinc-700">{t('tool.crop')}</p>
-                <div className="grid grid-cols-2 rounded-md border bg-white p-1">
+                <p className="text-sm font-semibold text-zinc-800">{t('tool.crop')}</p>
+                <div className="grid grid-cols-2 rounded-lg border bg-white p-1 shadow-sm">
                   {(['cover', 'contain'] as FitMode[]).map((item) => (
                     <button
                       type="button"
                       key={item}
                       onClick={() => setFit(item)}
                       className={cn(
-                        'rounded px-3 py-1 text-xs font-semibold capitalize',
+                        'rounded-md px-3 py-1.5 text-xs font-semibold capitalize transition',
                         fit === item ? 'bg-zinc-950 text-white' : 'text-zinc-600'
                       )}
                     >
@@ -404,10 +431,21 @@ export default function GridTool({
                   ))}
                 </div>
               </div>
-              <Button onClick={selectSingleFile} variant="outline" className="w-full min-w-0 justify-start bg-white">
-                <ImagePlus className="size-4 shrink-0" />
-                <span className="min-w-0 truncate">{file ? file.name : getSelectLabel(mode.id, t)}</span>
-              </Button>
+              <button
+                type="button"
+                onClick={selectSingleFile}
+                className="group flex min-h-32 w-full min-w-0 flex-col items-center justify-center rounded-lg border border-dashed border-zinc-300 bg-white px-4 py-5 text-center shadow-sm transition hover:border-emerald-400 hover:bg-emerald-50/40"
+              >
+                <span className="flex size-11 items-center justify-center rounded-lg bg-zinc-950 text-white shadow-sm transition group-hover:bg-emerald-700">
+                  <ImagePlus className="size-5" />
+                </span>
+                <span className="mt-3 max-w-full truncate text-sm font-bold text-zinc-950">
+                  {file ? file.name : getSelectLabel(mode.id, t)}
+                </span>
+                <span className="mt-1 text-xs leading-5 text-zinc-500">
+                  JPG, PNG, WebP, HEIC
+                </span>
+              </button>
             </div>
           )}
 
@@ -421,11 +459,11 @@ export default function GridTool({
           )}
         </ToolStep>
 
-        <div className="flex flex-col gap-2 sm:flex-row">
+        <div className="sticky bottom-3 z-10 flex flex-col gap-2 rounded-lg border border-zinc-200 bg-white/95 p-2 shadow-lg shadow-zinc-950/10 backdrop-blur sm:flex-row lg:static lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none">
           <Button
             onClick={processImages}
             disabled={processing || (mode.id === 'x-custom' ? !allSlotsAssigned : !file)}
-            className="h-11 flex-1 text-base font-semibold"
+            className="h-11 flex-1 text-base font-bold shadow-md shadow-zinc-950/10"
           >
             {processing ? getCreatingLabel(mode.id, t) : getActionLabel(mode.id, t)}
           </Button>
@@ -447,13 +485,26 @@ export default function GridTool({
 
       <div
         ref={resultRef}
-        className="min-w-0 scroll-mt-20 rounded-md border border-zinc-200 bg-zinc-50 p-2 sm:p-4 lg:sticky lg:top-20 lg:self-start"
+        className="min-w-0 scroll-mt-20 bg-zinc-50 p-3 sm:p-5 lg:sticky lg:top-20 lg:self-start"
         aria-live="polite"
       >
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-sm font-bold text-zinc-950">{t('tool.preview')}</p>
+            <p className="mt-0.5 truncate text-xs text-zinc-500">
+              {getModeLabel(mode.id, t)} · {mode.outputCount} files
+            </p>
+          </div>
+          {processedImages && (
+            <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700">
+              {processedImages.length}/{mode.outputCount}
+            </span>
+          )}
+        </div>
         <GridResultPreview mode={mode} images={processedImages} />
         {processedImages && (
           <div className="mt-4 space-y-3">
-            <Button className="w-full" onClick={downloadAll}>
+            <Button className="h-11 w-full font-bold shadow-md shadow-zinc-950/10" onClick={downloadAll}>
               <Download className="size-4" />
               {t('tool.downloadAll')}
             </Button>
@@ -641,7 +692,7 @@ function PlatformSwitcher({
   ];
 
   return (
-    <div className="grid grid-cols-1 gap-2 rounded-lg border border-zinc-200 bg-zinc-50 p-1.5 min-[420px]:grid-cols-2">
+    <div className="grid grid-cols-1 gap-2 rounded-xl border border-zinc-200 bg-zinc-50 p-1.5 min-[420px]:grid-cols-2">
       {options.map((option) => {
         const Icon = option.icon;
         const active = activePlatform === option.platform;
@@ -652,7 +703,7 @@ function PlatformSwitcher({
             key={option.platform}
             onClick={() => onSelect(option.platform)}
             className={cn(
-              'flex min-w-0 items-center gap-3 rounded-md border p-3 text-left transition',
+              'flex min-w-0 items-center gap-3 rounded-lg border p-3 text-left transition hover:-translate-y-0.5 hover:shadow-sm',
               active
                 ? 'border-zinc-950 bg-white shadow-sm'
                 : 'border-transparent text-zinc-600 hover:bg-white'
@@ -661,7 +712,7 @@ function PlatformSwitcher({
           >
             <span
               className={cn(
-                'flex size-10 shrink-0 items-center justify-center rounded-md',
+                'flex size-10 shrink-0 items-center justify-center rounded-lg',
                 active ? 'bg-zinc-950 text-white' : 'bg-white text-zinc-700'
               )}
             >
@@ -1114,15 +1165,15 @@ function CustomGridForm({
   const progress = Math.round((assignedCount / customSlots.length) * 100);
 
   return (
-    <div className="min-w-0 rounded-md border border-zinc-200 bg-zinc-50 p-3">
+    <div className="min-w-0 rounded-lg border border-zinc-200 bg-zinc-50 p-3">
       <div className="space-y-3">
-        <Button onClick={onSelectFiles} variant="outline" className="w-full min-w-0 justify-start bg-white">
+        <Button onClick={onSelectFiles} variant="outline" className="h-11 w-full min-w-0 justify-start bg-white font-semibold shadow-sm">
           <ImagePlus className="size-4 shrink-0" />
           <span className="min-w-0 truncate">
             {files.length ? `${files.length}/9 ${t('tool.selectImage')}` : t('select.nine')}
           </span>
         </Button>
-        <div className="rounded-md bg-white p-3">
+        <div className="rounded-lg border border-zinc-200 bg-white p-3 shadow-sm">
           <div className="flex items-center justify-between gap-3 text-xs font-medium text-zinc-600">
             <span>{t('custom.progress', { assigned: assignedCount })}</span>
             <span>{progress}%</span>
@@ -1140,7 +1191,7 @@ function CustomGridForm({
         {files.length > 0 && (
           <div className="flex gap-2 overflow-x-auto pb-1">
             {files.map((item, index) => (
-              <div key={`${item.name}-${index}`} className="min-w-24 max-w-36 shrink-0 rounded border bg-white px-2 py-1.5">
+              <div key={`${item.name}-${index}`} className="min-w-24 max-w-36 shrink-0 rounded-md border bg-white px-2 py-1.5 shadow-sm">
                 <span className="block text-[10px] font-bold text-zinc-500">
                   {String(index + 1).padStart(2, '0')}
                 </span>
@@ -1152,7 +1203,7 @@ function CustomGridForm({
           </div>
         )}
       </div>
-      <div className="mt-4 rounded-md border bg-white p-3">
+      <div className="mt-4 rounded-lg border bg-white p-3 shadow-sm">
         <p className="mb-2 text-xs font-bold uppercase text-zinc-600">{t('custom.main')}</p>
         <SlotPreview
           label={t('custom.main')}
@@ -1165,7 +1216,7 @@ function CustomGridForm({
       </div>
       <div className="mt-4 grid grid-cols-1 gap-3 min-[420px]:grid-cols-2">
         {['tl', 'tr', 'bl', 'br'].map((quadrant) => (
-          <div key={quadrant} className="min-w-0 rounded-md border bg-white p-2">
+          <div key={quadrant} className="min-w-0 rounded-lg border bg-white p-2 shadow-sm">
             <p className="mb-2 text-center text-xs font-bold uppercase text-zinc-600">
               {getQuadrantLabel(quadrant, t)}
             </p>
@@ -1207,14 +1258,19 @@ function GridResultPreview({
 
   if (!images) {
     return (
-      <div className="flex min-h-[240px] flex-col items-center justify-center rounded-md border border-dashed bg-white p-4 text-center sm:min-h-[340px] sm:p-6">
-        <div className="flex size-12 items-center justify-center rounded-md bg-emerald-100 text-emerald-700">
+      <div className="flex min-h-[260px] flex-col items-center justify-center rounded-xl border border-dashed border-zinc-300 bg-white p-5 text-center shadow-inner sm:min-h-[360px] sm:p-6">
+        <div className="flex size-14 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
           {mode.previewType === 'instagram-profile' ? <Grid3X3 /> : <Images />}
         </div>
-        <p className="mt-4 text-sm font-semibold text-zinc-950">{t('tool.preview')}</p>
+        <p className="mt-4 text-base font-bold text-zinc-950">{t('tool.preview')}</p>
         <p className="mt-2 max-w-sm text-sm leading-6 text-zinc-600">
           {t('tool.previewHelp')}
         </p>
+        <div className="mt-5 grid w-full max-w-xs grid-cols-4 gap-1.5 opacity-70">
+          {Array.from({ length: Math.min(mode.outputCount, 9) }).map((_, index) => (
+            <span key={index} className="aspect-square rounded bg-zinc-100" />
+          ))}
+        </div>
       </div>
     );
   }
@@ -1222,7 +1278,7 @@ function GridResultPreview({
   if (mode.previewType === 'instagram-profile') {
     return (
       <div className="min-w-0">
-        <div className="grid grid-cols-3 gap-1 overflow-hidden rounded-md bg-white p-1">
+        <div className="grid grid-cols-3 gap-1 overflow-hidden rounded-xl border bg-white p-1.5 shadow-sm">
           {images.map((image, index) => (
             <PreviewImage key={image.url} image={image} index={index} className="aspect-square" />
           ))}
@@ -1237,7 +1293,7 @@ function GridResultPreview({
   if (mode.previewType === 'instagram-carousel') {
     return (
       <div className="min-w-0">
-        <div className="flex snap-x gap-2 overflow-x-auto rounded-md bg-white p-2">
+        <div className="flex snap-x gap-2 overflow-x-auto rounded-xl border bg-white p-2 shadow-sm">
           {images.map((image, index) => (
             <PreviewImage
               key={image.url}
@@ -1256,7 +1312,7 @@ function GridResultPreview({
 
   return (
     <>
-      <div className="min-w-0 rounded-xl bg-white p-2 shadow-sm sm:p-3">
+      <div className="min-w-0 rounded-xl border bg-white p-2 shadow-sm sm:p-3">
         <div className="mb-3 flex items-center gap-3">
           <div className="size-9 shrink-0 rounded-full bg-zinc-950 sm:size-10" />
           <div className="min-w-0">
@@ -1270,7 +1326,7 @@ function GridResultPreview({
             {t('preview.customRevealPrompt')}
           </p>
         )}
-        <div className="grid aspect-[16/9] grid-cols-2 grid-rows-2 gap-1 overflow-hidden rounded-xl bg-zinc-200">
+        <div className="grid aspect-[16/9] grid-cols-2 grid-rows-2 gap-1 overflow-hidden rounded-xl bg-zinc-200 ring-1 ring-zinc-200">
           {images.map((image, index) => (
             <PreviewImage
               key={image.url}
@@ -1348,7 +1404,7 @@ function PreviewImage({
         type="button"
         onClick={onClick}
         aria-label={ariaLabel}
-        className={cn('relative overflow-hidden bg-zinc-100 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600', className)}
+        className={cn('relative overflow-hidden rounded-sm bg-zinc-100 text-left transition hover:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600', className)}
       >
         {content}
       </button>
@@ -1356,7 +1412,7 @@ function PreviewImage({
   }
 
   return (
-    <div className={cn('relative overflow-hidden bg-zinc-100', className)}>
+    <div className={cn('relative overflow-hidden rounded-sm bg-zinc-100', className)}>
       {content}
     </div>
   );

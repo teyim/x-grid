@@ -68,7 +68,7 @@ export default function SlotPreview({
     <button
       type="button"
       className={cn(
-        'relative flex aspect-square w-full min-w-0 cursor-pointer flex-col items-center justify-center overflow-hidden rounded border bg-gray-50 p-2 text-center transition hover:border-blue-300 hover:bg-blue-50',
+        'relative flex aspect-square w-full min-w-0 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border border-dashed border-zinc-300 bg-white p-2 text-center shadow-sm transition hover:border-emerald-400 hover:bg-emerald-50/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600',
         className
       )}
       onClick={onClick}
@@ -81,7 +81,7 @@ export default function SlotPreview({
             className="absolute inset-0 h-full w-full object-cover"
             alt="selected image preview"
           />
-          <span className="absolute left-2 top-2 max-w-[calc(100%-1rem)] truncate rounded bg-white/90 px-2 py-1 text-[11px] font-bold text-zinc-900 shadow-sm">
+          <span className="absolute left-2 top-2 max-w-[calc(100%-1rem)] truncate rounded-md bg-white/90 px-2 py-1 text-[11px] font-bold text-zinc-900 shadow-sm">
             {label}
           </span>
           <span className="absolute inset-x-0 bottom-0 truncate bg-zinc-950/70 px-2 py-1.5 text-[11px] font-medium text-white">
@@ -90,7 +90,10 @@ export default function SlotPreview({
         </>
       ) : (
         <>
-          <span className="max-w-full truncate text-xs font-semibold text-gray-600">{label}</span>
+          <span className="flex size-9 items-center justify-center rounded-md bg-zinc-100 text-xs font-black text-zinc-500">
+            +
+          </span>
+          <span className="mt-2 max-w-full truncate text-xs font-bold text-zinc-700">{label}</span>
           {file && isLoading ? (
             <>
               <span className="mt-2 h-5 w-5 animate-spin rounded-full border-2 border-zinc-200 border-t-blue-600" />
@@ -108,7 +111,7 @@ export default function SlotPreview({
               </span>
             </>
           ) : (
-            <span className="mt-1 text-xs leading-4 text-gray-400">{emptyLabel}</span>
+            <span className="mt-1 text-xs leading-4 text-zinc-400">{emptyLabel}</span>
           )}
         </>
       )}
