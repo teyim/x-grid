@@ -33,21 +33,14 @@ const faqs = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Create Twitter Grid Effect - Free X Grid Maker',
+  title: 'Create Twitter Grid Effect - Free Online Tool',
   description:
-    'Create a Twitter grid effect online. Split images for X/Twitter posts, preview the layout, and download grid tiles privately in your browser.',
+    'Create Twitter grid effect layouts online. Preview the post grid and download ordered image tiles privately in your browser.',
   alternates: {
     canonical: pageUrl,
     languages: getLanguageAlternates('effect'),
   },
-  keywords: [
-    'create twitter grid effect',
-    'twitter grid effect',
-    'create twitter grid',
-    'twitter image grid effect',
-    'X grid effect',
-    'Twitter grid maker',
-  ],
+  keywords: ['create twitter grid effect'],
   openGraph: {
     title: 'Create Twitter Grid Effect',
     description:

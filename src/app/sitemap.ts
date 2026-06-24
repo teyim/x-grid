@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { landingPageSlugs } from '@/lib/landingPages';
 import { SITE_URL } from '@/lib/seo';
 import { getLocalizedPath, pagePaths, seoLocales, type PageKind } from '@/lib/localizedPages';
 
@@ -30,6 +31,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.9,
     },
+    ...landingPageSlugs.map((slug) => ({
+      url: `${SITE_URL}/${slug}`,
+      lastModified: now,
+      changeFrequency: 'weekly' as const,
+      priority: slug.startsWith('instagram') || slug === 'split-photo-for-instagram' ? 0.82 : 0.88,
+    })),
   ];
 
   const localizedPages: MetadataRoute.Sitemap = seoLocales.flatMap((locale) =>

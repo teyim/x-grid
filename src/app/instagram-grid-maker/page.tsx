@@ -32,21 +32,14 @@ const faqs = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Instagram Grid Maker - Grid Maker for Instagram 3x3 Posts',
+  title: 'Instagram Grid Maker - Free Online Grid Creator',
   description:
-    'Free Instagram grid maker and grid maker for Instagram posts. Split one photo into a 3x3 profile grid or square carousel slides directly in your browser.',
+    'Use this free Instagram grid maker to split one photo into a 3x3 profile grid, preview the layout, and download square tiles in your browser.',
   alternates: {
     canonical: pageUrl,
     languages: getLanguageAlternates('instagram'),
   },
-  keywords: [
-    'Instagram grid maker',
-    'grid maker for Instagram',
-    'Instagram 3x3 grid',
-    'Instagram photo splitter',
-    'Instagram carousel splitter',
-    'split image for Instagram',
-  ],
+  keywords: ['Instagram grid maker'],
   openGraph: {
     title: 'Instagram Grid Maker',
     description: 'Split photos into Instagram 3x3 grids and carousel slides in your browser.',

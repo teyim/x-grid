@@ -33,9 +33,9 @@ const faqs = [
 ];
 
 export const metadata: Metadata = {
-  title: 'X and Instagram Grid Maker - Split Images for Social Posts',
+  title: 'Social Grid Tool - Free Twitter Grid Maker & Instagram Grid Creator',
   description:
-    'Create X/Twitter and Instagram photo grids in your browser. Split images into X 2x2 posts, Instagram 3x3 grids, or carousel tiles with private client-side processing.',
+    'Create Twitter (X) grids and Instagram puzzle grids online for free. Split images into perfect social media grid tiles directly in your browser.',
   alternates: {
     canonical: pageUrl,
     languages: getLanguageAlternates('home'),
@@ -51,16 +51,18 @@ export const metadata: Metadata = {
     'photo grid maker',
   ],
   openGraph: {
-    title: 'X and Instagram Grid Maker',
-    description: 'Split images for X/Twitter and Instagram with a private browser-based grid maker.',
+    title: 'Social Grid Tool - Free Twitter Grid Maker & Instagram Grid Creator',
+    description:
+      'Create Twitter (X) grids and Instagram puzzle grids online for free with a private browser-based grid maker.',
     url: pageUrl,
     siteName: 'X-Grid',
     type: 'website',
   },
   twitter: {
     card: 'summary',
-    title: 'X and Instagram Grid Maker',
-    description: 'Create X/Twitter and Instagram photo grids directly in your browser.',
+    title: 'Social Grid Tool - Free Twitter Grid Maker & Instagram Grid Creator',
+    description:
+      'Create Twitter (X) grids and Instagram puzzle grids online for free.',
   },
 };
 

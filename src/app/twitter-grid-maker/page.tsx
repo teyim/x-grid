@@ -33,22 +33,14 @@ const faqs = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Twitter Grid Maker - Create Twitter Grid Effect',
+  title: 'Twitter Grid Maker - Free X Grid Creator Online',
   description:
-    'Free Twitter grid maker for 2x2 photo posts, custom X grid illusions, and Twitter grid effects. Split and download images privately in your browser.',
+    'Use this free Twitter grid maker to create 2x2 photo posts, preview the layout, and download ordered image tiles in your browser.',
   alternates: {
     canonical: pageUrl,
     languages: getLanguageAlternates('twitter'),
   },
-  keywords: [
-    'Twitter grid maker',
-    'Twitter photo grid',
-    'X grid maker',
-    'Twitter image splitter',
-    'Twitter 2x2 grid',
-    'create twitter grid effect',
-    'Twitter grid effect',
-  ],
+  keywords: ['Twitter grid maker'],
   openGraph: {
     title: 'Twitter Grid Maker',
     description: 'Create 2x2 Twitter/X photo grids, grid effects, and custom grid illusions.',
