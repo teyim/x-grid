@@ -9,10 +9,8 @@ import {
   HelpCircle,
   ImagePlus,
   Images,
-  Loader2,
   MousePointerClick,
   RefreshCcw,
-  Sparkles,
   X,
   type LucideIcon,
 } from 'lucide-react';
@@ -77,6 +75,8 @@ export default function GridTool({
   const [lookModeId, setLookModeId] = useState<GridModeId | null>(null);
   const { locale, t } = useI18n();
   const toolStartedRef = useRef(false);
+  const toolRef = useRef<HTMLElement | null>(null);
+  const resultRef = useRef<HTMLDivElement | null>(null);
 
   const mode = getGridMode(modeId);
   const activePlatform = mode.platform;
@@ -245,11 +245,24 @@ export default function GridTool({
         route: window.location.pathname,
         locale,
       });
+      scrollToGeneratedResult();
     } catch (caughtError) {
       setError(caughtError instanceof Error ? caughtError.message : 'Unable to process image.');
     } finally {
       setProcessing(false);
     }
+  };
+
+  const scrollToGeneratedResult = () => {
+    window.requestAnimationFrame(() => {
+      const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+      const target = isDesktop ? toolRef.current : resultRef.current;
+
+      target?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    });
   };
 
   const trackDownloadStarted = (downloadCount: number) => {
@@ -302,8 +315,9 @@ export default function GridTool({
 
   return (
     <section
+      ref={toolRef}
       id="tool"
-      className="grid min-w-0 gap-4 rounded-lg border bg-white p-3 shadow-sm sm:p-5 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)]"
+      className="grid min-w-0 scroll-mt-20 gap-4 rounded-lg border bg-white p-3 shadow-sm sm:p-5 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)]"
     >
       <div className="min-w-0 space-y-4 sm:space-y-5">
         <div className="rounded-md bg-zinc-50 p-3">
@@ -411,10 +425,9 @@ export default function GridTool({
           <Button
             onClick={processImages}
             disabled={processing || (mode.id === 'x-custom' ? !allSlotsAssigned : !file)}
-            className="flex-1"
+            className="h-11 flex-1 text-base font-semibold"
           >
-            {processing ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
-            {processing ? t('tool.processing') : getActionLabel(mode.id, t)}
+            {processing ? getCreatingLabel(mode.id, t) : getActionLabel(mode.id, t)}
           </Button>
           <Button variant="secondary" onClick={reset} disabled={processing}>
             <RefreshCcw className="size-4" />
@@ -432,7 +445,11 @@ export default function GridTool({
         </p>
       </div>
 
-      <div className="min-w-0 rounded-md border border-zinc-200 bg-zinc-50 p-2 sm:p-4">
+      <div
+        ref={resultRef}
+        className="min-w-0 scroll-mt-20 rounded-md border border-zinc-200 bg-zinc-50 p-2 sm:p-4 lg:sticky lg:top-20 lg:self-start"
+        aria-live="polite"
+      >
         <GridResultPreview mode={mode} images={processedImages} />
         {processedImages && (
           <div className="mt-4 space-y-3">
@@ -555,10 +572,11 @@ function getSelectLabel(modeId: GridModeId, t: ReturnType<typeof useI18n>['t']) 
 }
 
 function getActionLabel(modeId: GridModeId, t: ReturnType<typeof useI18n>['t']) {
-  if (modeId === 'instagram-grid') return t('mode.igGrid');
-  if (modeId === 'instagram-carousel') return t('mode.igCarousel');
-  if (modeId === 'x-custom') return t('mode.xCustom');
-  return t('tool.process');
+  return `${t('nav.create')} ${getModeLabel(modeId, t)}`;
+}
+
+function getCreatingLabel(modeId: GridModeId, t: ReturnType<typeof useI18n>['t']) {
+  return `Creating ${getModeLabel(modeId, t)}...`;
 }
 
 function getQuadrantLabel(quadrant: string, t: ReturnType<typeof useI18n>['t']) {
